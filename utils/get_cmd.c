@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/04 19:23:36 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/04 21:34:51 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_cmd   *fill_cmd_struct(char *line, int begin, int end)
         error();
     ret->cmd = NULL;
     ret->args = NULL;
-    ret->operator = NULL;
+    ret->files = NULL;
     ret->full = ft_substr(line, begin, end - begin);
     ret->next = NULL;
     return (ret);

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/04 18:54:23 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/04 21:35:53 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int main(int argc, char **argv, char **envp)
     char *line;
     t_env *s_env;
     t_cmd *s_cmd;
-    int     
     
     s_env = NULL;
     s_cmd = NULL;
