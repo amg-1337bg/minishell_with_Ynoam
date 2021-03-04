@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/03 09:56:26 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/04 19:23:36 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ t_cmd   *fill_cmd_struct(char *line, int begin, int end)
         error();
     ret->cmd = NULL;
     ret->args = NULL;
-    ret->operator = 0;
-    ret->fd_file = NULL;
+    ret->operator = NULL;
     ret->full = ft_substr(line, begin, end - begin);
     ret->next = NULL;
     return (ret);
@@ -90,4 +89,5 @@ void    get_cmd(t_cmd **s_cmd, char *line)
         if (line[i] == ';')
             i++;
     }
+    
 }

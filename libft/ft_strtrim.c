@@ -3,66 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 09:25:09 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/10/29 08:15:17 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/20 23:59:29 by ynoam             #+#    #+#             */
+/*   Updated: 2019/11/05 20:51:32 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		trim_checker(char const *s1, char const *set, int i, int *index)
+static int		forword(char const *forstr, char const *forset)
 {
-	int j;
-	int c;
+	int	beging;
+	int	counter;
+	int	var;
 
-	j = 0;
-	while (s1[j] != '\0')
+	beging = 0;
+	while (forstr[beging])
 	{
-		c = 0;
-		while (set[c] != '\0')
+		counter = 0;
+		var = 0;
+		while (forset[counter])
 		{
-			if (s1[*index] == set[c])
+			if (forstr[beging] == forset[counter])
 			{
-				*index += 1;
+				var++;
+				beging++;
 				break ;
 			}
-			if (s1[i] == set[c])
-			{
-				i--;
-				break ;
-			}
-			c++;
+			counter++;
 		}
-		j++;
+		if (!(forset[counter]) && !var)
+			break ;
 	}
-	return (i - *index);
+	return (beging);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+static int		backword(char const *backstr, char const *backset, int ending)
 {
-	char	*p;
-	int		length;
-	int		j;
-	int		index;
+	int	beging;
+	int	var;
+	int	counter;
 
-	index = 0;
-	if (s1 == NULL)
-		return (NULL);
-	j = ft_strlen(s1);
-	j--;
-	length = trim_checker(s1, set, j, &index);
-	p = (char*)malloc((length + 2) * sizeof(char));
-	if (p == NULL)
-		return (NULL);
-	j = 0;
-	while (j <= length)
+	beging = forword(backstr, backset);
+	while (ending > beging)
 	{
-		p[j] = (char)s1[index];
-		j++;
-		index++;
+		counter = 0;
+		var = 0;
+		while (backset[counter])
+		{
+			if (backstr[ending] == backset[counter])
+			{
+				var++;
+				ending--;
+				break ;
+			}
+			counter++;
+		}
+		if (!(backset[counter]) && !var)
+			break ;
 	}
-	p[j] = '\0';
-	return (p);
+	return (ending);
+}
+
+char			*ft_strtrim(char const *string, char const *set)
+{
+	char	*trime;
+	int		beging;
+	int		ending;
+	int		i;
+
+	if (string == NULL || set == NULL)
+		return ((char*)string);
+	beging = forword(string, set);
+	ending = beging;
+	while (string[ending])
+		ending++;
+	ending--;
+	ending = backword(string, set, ending);
+	trime = NULL;
+	if (!(trime = (char *)malloc(ending - beging + 2)))
+		return (NULL);
+	i = 0;
+	while (beging <= ending)
+		trime[i++] = string[beging++];
+	trime[i] = '\0';
+	return (trime);
 }

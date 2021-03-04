@@ -3,35 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/14 09:49:05 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/03 22:33:17 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/12 19:09:59 by ynoam             #+#    #+#             */
+/*   Updated: 2019/10/31 00:52:22 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *hay, const char *n, size_t len)
+char	*ft_strnstr(const char *father, const char *son, size_t len)
 {
-	size_t		i;
-	size_t		j;
+	const char	*string1;
+	const char	*string2;
+	size_t		variable;
+	size_t		lenthabc;
 
-	i = 0;
-	if (*n == '\0')
-		return ((char*)hay);
-	if (len == 0)
-		return (NULL);
-	while (hay[i] != '\0' && i < len)
+	if (!*son)
+		return ((char *)father);
+	lenthabc = ft_strlen(son);
+	ft_strlen(father);
+	while (len-- >= lenthabc)
 	{
-		j = 0;
-		while (hay[i + j] == n[j] && (j + i) < len)
+		string1 = son;
+		string2 = father;
+		variable = 0;
+		while (*string2 == *string1 && *string1 != '\0')
 		{
-			j++;
-			if (n[j] == '\0')
-				return ((char*)&hay[i]);
+			string2++;
+			string1++;
+			variable++;
 		}
-		i++;
+		if (variable == lenthabc)
+			return ((char *)father);
+		father++;
 	}
 	return (NULL);
 }

@@ -3,32 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/12 11:14:41 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/03 21:25:00 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/13 17:11:24 by ynoam             #+#    #+#             */
+/*   Updated: 2019/10/29 20:05:16 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t		ft_strlcpy(char *dst, const char *src, size_t size)
+size_t	ft_strlcpy(char *distination, const char *source, size_t size)
 {
-	size_t	i;
-	size_t	j;
-	int		k;
+	int		ss;
 
-	k = 0;
-	i = ft_strlen(src);
-	if (size == 0)
-		return (i);
-	j = ft_strlen(dst);
-	while (size > 1 && src[k] != '\0')
+	ss = ft_strlen(source);
+	if (size)
 	{
-		dst[k] = src[k];
-		k++;
-		size--;
+		while (*source && --size)
+			*distination++ = *source++;
+		*distination = '\0';
 	}
-	dst[k] = '\0';
-	return (i);
+	return (ss);
 }

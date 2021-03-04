@@ -3,40 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/10 10:50:03 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/03 16:24:57 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/18 11:36:15 by ynoam             #+#    #+#             */
+/*   Updated: 2019/10/28 15:32:08 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+static void	*vimmercopy(void *distination2, const void *source2, size_t len)
 {
-	unsigned char	*d;
-	unsigned char	*s;
-	int				i;
+	char		*pintertodist;
+	const char	*pintertosrc;
 
-	i = 0;
-	d = (unsigned char*)dst;
-	s = (unsigned char*)src;
-	if (d == s)
-		return (dst);
-	if (src < dst)
-	{
-		while (len)
-		{
-			d[len - 1] = s[len - 1];
-			len--;
-		}
-		return (dst);
-	}
-	while (len)
-	{
-		d[i] = s[i];
-		i++;
-		len--;
-	}
-	return (dst);
+	pintertodist = distination2;
+	pintertosrc = source2;
+	while (len--)
+		*pintertodist++ = *pintertosrc++;
+	return ((char *)distination2);
+}
+
+void		*ft_memmove(void *distination, const void *source, size_t lenth)
+{
+	char		*dst2;
+	const char	*src2;
+
+	dst2 = (char *)distination;
+	src2 = (char *)source;
+	if (!distination && !source)
+		return (0);
+	if (distination > source)
+		while (lenth--)
+			dst2[lenth] = src2[lenth];
+	else if (distination < source)
+		vimmercopy(distination, source, lenth);
+	return ((unsigned char *)distination);
 }

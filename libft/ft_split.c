@@ -3,104 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 15:51:28 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/10/29 10:24:46 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/22 18:07:09 by ynoam             #+#    #+#             */
+/*   Updated: 2019/11/05 12:34:08 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-int		hm_word(char const *s, char c)
+static int		fun(char const *s, char c)
 {
 	int i;
-	int j;
-	int checker;
 
 	i = 0;
-	j = 0;
-	checker = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] != c)
-			checker++;
-		if (s[i] == c && s[i + 1] != c && s[i + 1] != '\0')
-			j++;
+	while (s[i] != c && s[i] != 0)
 		i++;
-	}
-	if (checker == 0 && j == 0)
-		return (-1);
-	return (j);
+	return (i);
 }
 
-char	*hm_inword(char const *s, int word_len, int j)
+static void		thefreefunction(char **ptr, int j)
 {
-	int				i;
-	int				t;
-	unsigned char	*pt;
-
-	i = 0;
-	if (s == NULL)
-		return (NULL);
-	pt = (unsigned char*)malloc((word_len + 1) * sizeof(char));
-	if (pt == NULL)
-		return (NULL);
-	t = j - word_len;
-	while (i < word_len)
-	{
-		pt[i] = (char)s[t];
-		i++;
-		t++;
-	}
-	pt[i] = '\0';
-	return ((char*)pt);
+	while (j)
+		free(&ptr[j--]);
+	free(ptr);
 }
 
-void	work(char const *s, unsigned char **p, char c, int i)
+static int		thefillfun(int x, char c, char **ptrsplit, char const *s)
 {
-	int word_len;
-	int x;
-	int j;
+	int	j;
+	int z;
 
-	x = -1;
-	j = 0;
-	while ((++x) <= i)
+	j = -1;
+	while (++j < x)
 	{
-		while (s[j] != '\0')
+		while (*s++ == c)
+			;
+		if (!(ptrsplit[j] = (char *)malloc(sizeof(char) * fun(--s, c) + 1)))
 		{
-			word_len = 0;
-			while (s[j] != c && s[j] != '\0')
-			{
-				word_len++;
-				j++;
-			}
-			if (word_len == 0)
-				j++;
-			else
-				break ;
+			thefreefunction(ptrsplit, j);
+			return (0);
 		}
-		p[x] = (unsigned char*)hm_inword(s, word_len, j);
-		j++;
+		z = 0;
+		while (*s != '\0' && *s != c)
+			ptrsplit[j][z++] = *s++;
+		ptrsplit[j][z] = '\0';
 	}
-	p[x] = NULL;
+	return (1);
 }
 
-char	**ft_split(char const *s, char c)
+char			**ft_split(char const *s, char c)
 {
-	unsigned char	**p;
-	char			*trim;
-	int				i;
+	char	**ptrsplit;
+	int		j;
+	int		x;
 
+	x = 0;
 	if (s == NULL)
 		return (NULL);
-	trim = ft_strtrim(s, &c);
-	i = hm_word(trim, c);
-	p = (unsigned char**)malloc((i + 2) * sizeof(char*));
-	if (p == NULL)
+	j = -1;
+	while (s[++j])
+		if (s[j] != c && (s[j + 1] == c || s[j + 1] == '\0'))
+			x++;
+	if (!(ptrsplit = (char **)malloc(sizeof(char *) * (x + 1))))
 		return (NULL);
-	work(trim, p, c, i);
-	return ((char **)p);
+	ptrsplit[x] = NULL;
+	if (thefillfun(x, c, ptrsplit, s) == 0)
+		return (NULL);
+	return (ptrsplit);
 }

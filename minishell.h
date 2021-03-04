@@ -1,4 +1,3 @@
-#include "gnl/get_next_line.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <signal.h>
@@ -12,14 +11,27 @@
 #define binPath "/bin/pwd"
 #define Minishell "minishell > "
 
-typedef struct s_builtins_command
+typedef struct s_operator{
+    char *type; // ">" or ">>" or "<"
+    char *file;
+    struct s_operator *next;
+}              t_files;
+
+typedef struct s_args
+{
+    char *arg;
+    struct s_args *next;
+}               t_args;
+
+
+typedef struct s_command
 {
     char    *cmd;
-    char    **args;
-    int     operator;
-    char    *fd_file;
+    t_args  *args;
+    t_files *files;
     char    *full;
-    struct s_builtins_command *next;
+    int     pipe;
+    struct s_command *next;
 }           t_cmd;
 
 typedef struct s_environment
@@ -41,3 +53,4 @@ void    mdf_env(t_env *s_env, char *key, char *value);
 void    crt_env(t_env *s_env, char *key, char *value);
 void    get_cmd(t_cmd **s_cmd, char *line);
 t_cmd	*ft_lstcmd(t_cmd *lst);
+char    **create_envp(t_env *s_env);
