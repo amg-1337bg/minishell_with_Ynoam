@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/10 19:21:20 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/01 16:55:15 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/10 20:08:03 by ynoam             #+#    #+#             */
+/*   Updated: 2019/10/10 20:20:46 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-int		ft_isprint(int c)
+int	ft_isprint(int c)
 {
 	if (c >= 32 && c <= 126)
 		return (1);

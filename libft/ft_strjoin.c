@@ -3,38 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 08:44:15 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/15 11:50:28 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/20 22:47:18 by ynoam             #+#    #+#             */
+/*   Updated: 2019/11/05 17:56:29 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *string1, char const *string2)
 {
-	char	*p;
+	char	*thenew;
 	int		i;
 	int		j;
 
-	if (s1 == NULL)
-		return (NULL);
-	i = ft_strlen(s1);
-	j = ft_strlen(s2);
-	p = (char*)malloc((j + i + 1) * sizeof(char));
-	if (p == NULL)
-		return (NULL);
-	i = -1;
+	i = 0;
 	j = 0;
-	while (s1[++i] != '\0')
-		p[i] = s1[i];
-	while (s2[j] != '\0')
-	{
-		p[i] = s2[j];
-		i++;
-		j++;
-	}
-	p[i] = '\0';
-	return (p);
+	if (string1 == NULL || string2 == NULL)
+		return (ft_strdup(""));
+	i = ft_strlen(string1);
+	j = ft_strlen(string2);
+	if (!(thenew = (char *)malloc(i + j + 1)))
+		return (NULL);
+	thenew[i + j] = 0;
+	while (j--)
+		thenew[i + j] = string2[j];
+	while (i--)
+		thenew[i] = string1[i];
+	return (thenew);
 }

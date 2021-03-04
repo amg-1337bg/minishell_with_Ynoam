@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/28 08:37:22 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/02 13:54:09 by bamghoug         ###   ########.fr       */
+/*   Created: 2020/02/13 18:39:35 by ynoam             #+#    #+#             */
+/*   Updated: 2020/02/13 18:43:19 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void*))
+void	ft_putstr(char *s)
 {
-	while (lst != NULL)
-	{
-		(*f)(lst->content);
-		lst = lst->next;
-	}
+	if (s != NULL)
+		write(1, s, ft_strlen(s));
 }

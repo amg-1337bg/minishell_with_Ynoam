@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/03 09:42:11 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/04 18:54:23 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ t_cmd	*ft_lstcmd(t_cmd *lst)
 	return (lst);
 }
 
-char **create_envp(t_env *s_env, t_env *tmp)
+char **create_envp(t_env *s_env)
 {
     char **ret;
+    t_env *tmp;
     int i;
     int j;
 
@@ -54,7 +55,7 @@ char **create_envp(t_env *s_env, t_env *tmp)
     while (tmp != NULL)
     {
         ret[j] = ft_strjoin(tmp->key, "=");
-        ret[j] = ft_strjoin(ret[j], tmp->value);
+        ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
         j++;
         tmp = tmp->next;
     }
@@ -97,16 +98,17 @@ int main(int argc, char **argv, char **envp)
     char *line;
     t_env *s_env;
     t_cmd *s_cmd;
+    int     
     
-    argc = 0;
-    argv = NULL;
     s_env = NULL;
     s_cmd = NULL;
+    //write(1, argv[argc], ft_strlen(argv[argc]));
     getenvp(s_env, envp);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
         get_cmd(&s_cmd, line);
+        // use create_envp to create char** enviroment
     }
 }

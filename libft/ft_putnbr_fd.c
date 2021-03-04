@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/19 18:23:17 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/10/27 22:41:49 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/24 22:33:38 by ynoam             #+#    #+#             */
+/*   Updated: 2019/11/05 10:43:22 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,27 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	unsigned int num;
+	unsigned int	test;
+	char			nega;
+	char			copy;
 
+	nega = '-';
+	test = n;
 	if (n < 0)
 	{
-		ft_putchar_fd('-', fd);
-		num = n * -1;
+		write(fd, &nega, 1);
+		test = n * -1;
+	}
+	if (test < 10)
+	{
+		copy = test + '0';
+		write(fd, &copy, 1);
 	}
 	else
-		num = (unsigned int)n;
-	if (num == 0)
-		ft_putchar_fd(num + '0', fd);
-	if (num > 0 && num <= 9)
-		ft_putchar_fd(num + '0', fd);
-	if (num > 9)
 	{
-		ft_putnbr_fd(num / 10, fd);
-		ft_putchar_fd((num % 10) + '0', fd);
+		ft_putnbr_fd(test / 10, fd);
+		test %= 10;
+		copy = test + '0';
+		write(fd, &copy, 1);
 	}
 }

@@ -3,20 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
+#    By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/03/01 11:17:19 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/03/04 18:02:17 by bamghoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRC =	./gnl/get_next_line.c ./gnl/get_next_line_utils.c \
-		./libft/libft.a \
-		main.c ./utils/errors.c ./utils/modify_env.c ./utils/get_cmd.c
-
-FLAGS = -Wall -Wextra -Werror
+SRC =	main.c ./utils/errors.c ./utils/modify_env.c ./utils/get_cmd.c \
+		libft/libft.a
+FLAGS = -Wall -Wextra 
 
 OBJ = $(SRC:.c=.o)
 

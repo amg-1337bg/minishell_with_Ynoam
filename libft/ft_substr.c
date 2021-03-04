@@ -3,38 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/15 19:03:40 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/10/29 11:01:10 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/20 17:31:44 by ynoam             #+#    #+#             */
+/*   Updated: 2019/11/05 20:52:27 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *string, unsigned int start, size_t lenth)
 {
-	unsigned char	*p;
-	unsigned char	*ptr;
-	int				i;
+	char	*baby;
+	size_t	x;
 
-	if (s == NULL)
+	if (string == NULL)
 		return (NULL);
-	ptr = (unsigned char*)s;
-	i = 0;
-	p = (unsigned char*)malloc((len + 1) * sizeof(char));
-	if (p == NULL)
+	if (start > ft_strlen(string))
+		lenth = 0;
+	if (!(baby = malloc(lenth + 1)))
 		return (NULL);
-	if (start < ft_strlen(s))
+	x = 0;
+	while (x < lenth)
 	{
-		while (ptr[start] != '\0' && len > 0)
-		{
-			p[i] = ptr[start];
-			i++;
-			start++;
-			len--;
-		}
+		baby[x] = string[start + x];
+		x++;
 	}
-	p[i] = '\0';
-	return ((char*)p);
+	baby[x] = '\0';
+	return (baby);
 }

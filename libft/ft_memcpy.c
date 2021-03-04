@@ -3,30 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/09 19:09:22 by bamghoug          #+#    #+#             */
-/*   Updated: 2019/11/03 17:15:49 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/10/13 18:08:28 by ynoam             #+#    #+#             */
+/*   Updated: 2019/10/30 15:50:30 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *distination, const void *source, size_t len)
 {
-	const char	*s;
-	char		*d;
+	char		*pdst;
+	const char	*psrc;
 
-	d = dst;
-	s = src;
-	if (d == s)
-		return (dst);
-	while (n)
-	{
-		*d = *s;
-		d++;
-		s++;
-		n--;
-	}
-	return (dst);
+	if (distination == source)
+		return ((void *)source);
+	if (distination == NULL && source == NULL)
+		return (NULL);
+	pdst = (char *)distination;
+	psrc = source;
+	while (len--)
+		*pdst++ = *psrc++;
+	return (distination);
 }

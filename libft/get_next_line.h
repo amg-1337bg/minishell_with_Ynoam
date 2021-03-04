@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/14 11:58:37 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/02/23 09:57:17 by bamghoug         ###   ########.fr       */
+/*   Created: 2019/11/17 22:12:02 by ynoam             #+#    #+#             */
+/*   Updated: 2020/03/03 12:27:48 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# include <stdlib.h>
-# include <fcntl.h>
-# include <unistd.h>
-# include "../libft/libft.h"
+# define BUFFER_SIZE 1024
 
-int		check(char *string);
-char	*before_n(char *s);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-char	*after_n(char *s);
-size_t	ft_strlen(const char *s);
+# include <stdlib.h>
+# include <unistd.h>
+
+
+char	*ft_join(char *string1, char *string2);
+int		ft_free(char **stk);
+char	*ft_sub(char *string);
+char	*ft_from_newline(char *string);
+int		ft_search(char *source);
+size_t	len(char *str);
 int		get_next_line(int fd, char **line);
-int		work_todo(int fd, char *buf, char **line);
-int		rest_check(char *res, char **line);
 
 #endif
