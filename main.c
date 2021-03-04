@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/02/24 12:31:24 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/03 09:42:11 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,18 @@ t_env	*ft_lstlst(t_env *lst)
 	return (lst);
 }
 
-char **create_envp(t_env *tmp)
+t_cmd	*ft_lstcmd(t_cmd *lst)
+{
+	while (lst != NULL)
+	{
+		if (lst->next == NULL)
+			break ;
+		lst = lst->next;
+	}
+	return (lst);
+}
+
+char **create_envp(t_env *s_env, t_env *tmp)
 {
     char **ret;
     int i;
@@ -37,7 +48,7 @@ char **create_envp(t_env *tmp)
         i++;
     }
     j = 0;
-    tmp = g_env;
+    tmp = s_env;
     if ((ret = (char**)malloc((i + 1) * sizeof(char*))) == NULL)
         write(1, strerror(errno), ft_strlen(strerror(errno)));
     while (tmp != NULL)
@@ -51,7 +62,7 @@ char **create_envp(t_env *tmp)
     return (ret);
 }
 
-void    getenvp(char **envp)
+void    getenvp(t_env *s_env, char **envp)
 {
     int j;
     int i;
@@ -71,10 +82,10 @@ void    getenvp(char **envp)
                 fill->key = ft_substr(envp[i], 0, j);
                 fill->value = ft_strdup(&envp[i][j + 1]);
                 fill->next = NULL;
-                if ((tmp = ft_lstlst(g_env)) != NULL)
+                if ((tmp = ft_lstlst(s_env)) != NULL)
                     tmp->next = fill;
                 else
-                    g_env = fill;
+                    s_env = fill;
                 break ;
             }
         }
@@ -84,14 +95,18 @@ void    getenvp(char **envp)
 int main(int argc, char **argv, char **envp)
 {
     char *line;
+    t_env *s_env;
+    t_cmd *s_cmd;
+    
     argc = 0;
     argv = NULL;
-    
-    getenvp(envp);
+    s_env = NULL;
+    s_cmd = NULL;
+    getenvp(s_env, envp);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
-        
+        get_cmd(&s_cmd, line);
     }
 }

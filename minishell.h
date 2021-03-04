@@ -18,6 +18,7 @@ typedef struct s_builtins_command
     char    **args;
     int     operator;
     char    *fd_file;
+    char    *full;
     struct s_builtins_command *next;
 }           t_cmd;
 
@@ -33,8 +34,10 @@ t_cmd   *g_cmd;
 
 
 t_env	*ft_lstlst(t_env *lst);
-void    getenvp(char **envp);
+void    getenvp(t_env *s_env, char **envp);
 void    error();
-void    dlt_env(char *key);
-void    mdf_env(char *key, char *value);
-void    crt_env(char *key, char *value);
+void    dlt_env(t_env *s_env, char *key);
+void    mdf_env(t_env *s_env, char *key, char *value);
+void    crt_env(t_env *s_env, char *key, char *value);
+void    get_cmd(t_cmd **s_cmd, char *line);
+t_cmd	*ft_lstcmd(t_cmd *lst);

@@ -6,7 +6,7 @@
 #    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/02/24 11:38:34 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/03/01 11:17:19 by bamghoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 SRC =	./gnl/get_next_line.c ./gnl/get_next_line_utils.c \
 		./libft/libft.a \
-		main.c errors.c modify_env.c
+		main.c ./utils/errors.c ./utils/modify_env.c ./utils/get_cmd.c
 
 FLAGS = -Wall -Wextra -Werror
 
