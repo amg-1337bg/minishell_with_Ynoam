@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   modify_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:37:13 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 09:30:41 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 15:05:52 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 void    crt_env(t_env *s_env, char *key, char *value)
 {

@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/23 10:56:50 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/01 10:05:49 by bamghoug         ###   ########.fr       */
+/*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
+/*   Updated: 2021/03/05 15:06:48 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../parsing/minishell.h"
 
-void    error()
+int     execute(t_cmd *cmds, char **env)
 {
-    write (1, strerror(errno), ft_strlen(strerror(errno)));
-    write (1, "\n", 1);
+    return (0);
 }

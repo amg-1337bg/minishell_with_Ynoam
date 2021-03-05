@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
+#    By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/03/05 10:22:53 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/03/05 15:08:55 by ynoam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRC =	main.c ./utils/errors.c ./utils/modify_env.c ./utils/get_cmd.c utils/parse_cmd.c \
+SRC =	executing/*.c  parsing/*.c   \
 		libft/libft.a
 FLAGS = -Wall -Wextra 
 
@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc $(FLAGS) $(SRC) -o $(NAME)
+	gcc $(FLAGS) $(SRC)
 
 clean:
 	make clean -C ./libft
