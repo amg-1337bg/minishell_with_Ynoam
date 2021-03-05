@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 11:12:47 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 13:36:53 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,11 @@ int main(int argc, char **argv, char **envp)
     t_env *s_env;
     t_cmd *s_cmd;
     t_cmd *test;
+    int cmd_return;
     
     s_env = NULL;
     s_cmd = NULL;
+    cmd_return = 0;
     //write(1, argv[argc], ft_strlen(argv[argc]));
     getenvp(&s_env, envp);
     while(1)
@@ -124,6 +126,6 @@ int main(int argc, char **argv, char **envp)
         }
         
         // use create_envp to create char** enviroment
-        execute();
+        cmd_return = execute(s_cmd, NULL);
     }
 }
