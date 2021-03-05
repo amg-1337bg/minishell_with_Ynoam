@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/04 21:35:53 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 11:12:47 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char **create_envp(t_env *s_env)
     int j;
 
     i = 0;
+    tmp = s_env;
     while (tmp != NULL)
     {
         tmp = tmp->next;
@@ -63,7 +64,7 @@ char **create_envp(t_env *s_env)
     return (ret);
 }
 
-void    getenvp(t_env *s_env, char **envp)
+void    getenvp(t_env **s_env, char **envp)
 {
     int j;
     int i;
@@ -83,10 +84,10 @@ void    getenvp(t_env *s_env, char **envp)
                 fill->key = ft_substr(envp[i], 0, j);
                 fill->value = ft_strdup(&envp[i][j + 1]);
                 fill->next = NULL;
-                if ((tmp = ft_lstlst(s_env)) != NULL)
+                if ((tmp = ft_lstlst(*s_env)) != NULL)
                     tmp->next = fill;
                 else
-                    s_env = fill;
+                    *s_env = fill;
                 break ;
             }
         }
@@ -98,16 +99,30 @@ int main(int argc, char **argv, char **envp)
     char *line;
     t_env *s_env;
     t_cmd *s_cmd;
+    t_cmd *test;
     
     s_env = NULL;
     s_cmd = NULL;
     //write(1, argv[argc], ft_strlen(argv[argc]));
-    getenvp(s_env, envp);
+    getenvp(&s_env, envp);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
-        get_cmd(&s_cmd, line);
+        get_cmd(&s_cmd, &s_env, line);
+        test = s_cmd;
+        while (test)
+        {
+            printf("cmd = %s\n", test->cmd);
+            while (test->args)
+            {
+                printf("%10s\n", test->args);
+                test->args = test->args->next;
+            }
+            printf("full = %s\n", test->full);
+            test = test->next;
+        }
+        
         // use create_envp to create char** enviroment
         execute();
     }

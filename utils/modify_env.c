@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:37:13 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/01 10:12:19 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 09:30:41 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char    *search_env(t_env *s_env, char *key)
     tmp = s_env;
     while(tmp)
     {
-        if (ft_strncmp(tmp->key, key, ft_strlen(key)) == 0)
+        if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)) == 0)
             return (tmp->value);
         tmp = tmp->next;
     }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/04 21:34:51 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 10:21:12 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_cmd   *get_full_cmd(char *line, int *i)
 }
 
 
-void    get_cmd(t_cmd **s_cmd, char *line)
+void    get_cmd(t_cmd **s_cmd, t_env **s_env, char *line)
 {
     t_cmd   *tmp;
     t_cmd   *last;
@@ -89,5 +89,5 @@ void    get_cmd(t_cmd **s_cmd, char *line)
         if (line[i] == ';')
             i++;
     }
-    
+    cmd_parser(s_cmd, s_env);
 }
