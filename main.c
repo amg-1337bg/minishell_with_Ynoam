@@ -109,5 +109,6 @@ int main(int argc, char **argv, char **envp)
         get_next_line(0, &line);
         get_cmd(&s_cmd, line);
         // use create_envp to create char** enviroment
+        execute();
     }
 }
