@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 11:53:53 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 16:40:27 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void    get_the_cmd(t_cmd *s_cmd, t_env **s_env)
         }
     }
     tmp = s_cmd->full;
-    s_cmd->full = ft_strdup(&fullstr[i]);
+    s_cmd->full = ft_strtrim(&fullstr[i], " ");
     free(tmp);
     free(fullstr);
 }
@@ -85,7 +85,6 @@ void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
         s_cmd->args = args;
     else
         tmp->next = args;
-    free(fullstr);
     *i = j;
 }
 
@@ -97,7 +96,7 @@ void    get_args(t_cmd *s_cmd, t_env **s_env)
     i = -1;
     fullstr = s_cmd->full;
     while(fullstr[++i] != '\0')
-        get_the_arg(s_cmd, ft_strtrim(&fullstr[i], " "), &i);
+        get_the_arg(s_cmd, fullstr, &i);
 }
 
 void    cmd_parser(t_cmd **s_cmd, t_env **s_env)

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 11:12:47 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/05 16:34:06 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int main(int argc, char **argv, char **envp)
             printf("cmd = %s\n", test->cmd);
             while (test->args)
             {
-                printf("%10s\n", test->args);
+                printf("%20.10s\n", test->args->arg);
                 test->args = test->args->next;
             }
             printf("full = %s\n", test->full);
