@@ -23,4 +23,10 @@ void    cmd_parser(t_cmd **s_cmd, t_env **s_env);
 void    get_the_cmd(t_cmd *s_cmd, t_env **s_env);
 void    convert_env_to_cmd(t_cmd *s_cmd, t_env **s_env);
 
+// free_strcut.c
+
+void    free_cmd(t_cmd **s_cmd);
+void    free_files(t_files *s_files);
+void    free_args(t_args *s_args);
+
 #endif

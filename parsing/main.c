@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 18:08:30 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/06 09:43:37 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,18 +112,20 @@ int main(int argc, char **argv, char **envp)
         get_next_line(0, &line);
         get_cmd(&s_cmd, &s_env, line);
         test = s_cmd;
+        // had lwhile kat afficher dakchi li kaine struct cmd
         while (test)
         {
             printf("cmd = %s\n", test->cmd);
+            // had lwhile kat afficher l arguments
             while (test->args)
             {
-                printf("%10s\n", test->args);
+                printf("%20s\n", test->args->arg);
                 test->args = test->args->next;
             }
             printf("full = %s\n", test->full);
             test = test->next;
         }
-        
+        free_cmd(&s_cmd);
         // use create_envp to create char** enviroment
         cmd_return = execute(s_cmd, NULL);
     }

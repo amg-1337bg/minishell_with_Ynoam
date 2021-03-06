@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+         #
+#    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/03/05 15:08:55 by ynoam            ###   ########.fr        #
+#    Updated: 2021/03/06 08:37:03 by bamghoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc $(FLAGS) $(SRC)
+	gcc $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
 	make clean -C ./libft
