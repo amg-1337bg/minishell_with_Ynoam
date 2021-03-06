@@ -6,12 +6,11 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/06 08:31:56 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/06 09:43:37 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_env	*ft_lstlst(t_env *lst)
 {
@@ -113,18 +112,20 @@ int main(int argc, char **argv, char **envp)
         get_next_line(0, &line);
         get_cmd(&s_cmd, &s_env, line);
         test = s_cmd;
+        // had lwhile kat afficher dakchi li kaine struct cmd
         while (test)
         {
             printf("cmd = %s\n", test->cmd);
+            // had lwhile kat afficher l arguments
             while (test->args)
             {
-                printf("%20.10s\n", test->args->arg);
+                printf("%20s\n", test->args->arg);
                 test->args = test->args->next;
             }
             printf("full = %s\n", test->full);
             test = test->next;
         }
-        
+        free_cmd(&s_cmd);
         // use create_envp to create char** enviroment
         cmd_return = execute(s_cmd, NULL);
     }

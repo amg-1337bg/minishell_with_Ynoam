@@ -6,11 +6,11 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 16:40:27 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/06 10:59:56 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 void    convert_env_to_cmd(t_cmd *s_cmd, t_env **s_env)
 {
@@ -34,13 +34,11 @@ void    get_the_cmd(t_cmd *s_cmd, t_env **s_env)
     while(fullstr[++i] != '\0')
     {
         if (fullstr[i] == ' ')
-        {
-            s_cmd->cmd = ft_substr(fullstr, 0, i);
-            if (s_cmd->cmd[0] == '$')
-                convert_env_to_cmd(s_cmd, s_env);
             break;
-        }
     }
+    s_cmd->cmd = ft_substr(fullstr, 0, i);
+    if (s_cmd->cmd[0] == '$')
+        convert_env_to_cmd(s_cmd, s_env);
     tmp = s_cmd->full;
     s_cmd->full = ft_strtrim(&fullstr[i], " ");
     free(tmp);
@@ -58,33 +56,53 @@ t_args	*ft_lastarg(t_args *lst)
 	return (lst);
 }
 
+void    get_file(t_cmd *s_cmd, char *fullstr, int *i)
+{
+    t_files *fill;
+    int     j;
+
+    if((fill = (t_files*)malloc(sizeof(t_files))) == NULL)
+        error();
+    j = -1;
+    while (fullstr[++j] != '\0')
+    {
+        if ()
+    }
+    
+}
+
 void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
 {
     int j;
     t_args  *tmp;
-    t_args  *args;
+    t_args  *arg;
     int     quote;
     int     dquotes;
 
     j = *i;
     quote = 0;
     dquotes = 0;
-    if((args = (t_args*)malloc(sizeof(t_args))) == NULL)
+    if((arg = (t_args*)malloc(sizeof(t_args))) == NULL)
         error();
     while (fullstr[j] != '\0')
     {
         if (fullstr[j] == 34 || fullstr[j] == 39)
             check_quotes(fullstr[j], &quote, &dquotes);
-        if (fullstr[j] == ' ' && quote == 0 && dquotes == 0)
+        else if (fullstr[j] == ' ' && quote == 0 && dquotes == 0)
             break;
+        else if ((fullstr[j] == '>' || fullstr[j] == '<') && quote == 0 && dquotes == 0)
+        {
+            
+            break;
+        }
         j++;
     }
-    args->arg = ft_substr(fullstr, *i, j - (*i));
-    args->next = NULL;
+    arg->arg = ft_substr(fullstr, *i, j - (*i));
+    arg->next = NULL;
     if((tmp = ft_lastarg(s_cmd->args)) == NULL)
-        s_cmd->args = args;
+        s_cmd->args = arg;
     else
-        tmp->next = args;
+        tmp->next = arg;
     *i = j;
 }
 
