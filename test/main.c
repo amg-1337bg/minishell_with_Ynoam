@@ -26,15 +26,29 @@ int main(int argc, char *argv[], char *env[])
     cmmnds[0].pipe = 1;
 
     cmmnds[1].cmd = "/usr/bin/grep";
-    cmmnds[1].args = malloc(sizeof(char *)  * 3);
+    cmmnds[1].args = malloc(sizeof(char *)  * 4);
     cmmnds[1].args[0] = "grep";
-    cmmnds[1].args[1] = "hello";
-    cmmnds[1].args[2] = NULL;
+    cmmnds[1].args[1] = "--color"; 
+    cmmnds[1].args[2] = "hello";
+    cmmnds[1].args[3] = NULL;
     cmmnds[1].pipe = 0;
 
-    while (i != 2)
+    // cmmnds[1].cmd = "/usr/bin/vim";
+    // cmmnds[1].args = malloc(sizeof(char *)  * 4);
+    // cmmnds[1].args[0] = "vim";
+    // cmmnds[1].args[1] = "-"; 
+    // cmmnds[1].args[2] = NULL;
+    // cmmnds[1].pipe = 0;
+
+    cmmnds[1].cmd = "/bin/ls";
+    cmmnds[1].args = malloc(sizeof(char *)  * 2);
+    cmmnds[1].args[0] = "ls";
+    cmmnds[1].args[1] = NULL;
+    cmmnds[1].pipe = 0;
+
+    int fd[2];
+    while (i != 3)
     {
-        int fd[2];
         if (cmmnds[i].pipe == 1)
         {
             pipe(fd);
@@ -44,7 +58,7 @@ int main(int argc, char *argv[], char *env[])
         {
             if (cmmnds[i].pipe == 1)
             {
-                dup2(fd[1], STDOUT_FILENO);
+                dup2(fd[1], STDOUT_FILENO); // write to the pipe
                 close(fd[0]);
                 close(fd[1]);
             }
@@ -54,8 +68,12 @@ int main(int argc, char *argv[], char *env[])
                 close(fd[0]);
                 close(fd[1]);
             }
-            execv(cmmnds[i].cmd,cmmnds[i].args); 
-
+            execve(cmmnds[i].cmd,cmmnds[i].args, env); 
+        }
+        if (cmmnds[i].pipe == 0)
+        {
+            close(fd[0]);
+            close(fd[1]);
         }
         waitpid(pid, &returnValue, 0);
         i++;
@@ -63,5 +81,6 @@ int main(int argc, char *argv[], char *env[])
     }
     if (returnValue == 256)
         returnValue = 1;
+    // while(1);
     return (returnValue);
 }
