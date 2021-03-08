@@ -44,7 +44,7 @@ int main(int argc, char *argv[], char *env[])
     cmmnds[2].args[0] = "ls";
     cmmnds[2].args[1] = NULL;
     cmmnds[2].pipe = 0;
-
+ 
     int fd[2];
     while (i != 3)
     {
