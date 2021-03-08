@@ -12,11 +12,10 @@ typedef struct s_command
 
 int main(int argc, char *argv[], char *env[])
 {
-    int thereIsAPipe = 0;
     int pid;
     int returnValue;
     int i = 0;
-    t_cmd cmmnds[2];
+    t_cmd cmmnds[3];
     cmmnds[0].cmd = "/bin/echo";
     cmmnds[0].args = malloc(sizeof(char *)  * 4);
     cmmnds[0].args[0] = "echo";
@@ -31,7 +30,7 @@ int main(int argc, char *argv[], char *env[])
     cmmnds[1].args[1] = "--color"; 
     cmmnds[1].args[2] = "hello";
     cmmnds[1].args[3] = NULL;
-    cmmnds[1].pipe = 0;
+    cmmnds[1].pipe = 1;
 
     // cmmnds[1].cmd = "/usr/bin/vim";
     // cmmnds[1].args = malloc(sizeof(char *)  * 4);
@@ -40,11 +39,11 @@ int main(int argc, char *argv[], char *env[])
     // cmmnds[1].args[2] = NULL;
     // cmmnds[1].pipe = 0;
 
-    cmmnds[1].cmd = "/bin/ls";
-    cmmnds[1].args = malloc(sizeof(char *)  * 2);
-    cmmnds[1].args[0] = "ls";
-    cmmnds[1].args[1] = NULL;
-    cmmnds[1].pipe = 0;
+    cmmnds[2].cmd = "/bin/ls";
+    cmmnds[2].args = malloc(sizeof(char *)  * 2);
+    cmmnds[2].args[0] = "ls";
+    cmmnds[2].args[1] = NULL;
+    cmmnds[2].pipe = 0;
 
     int fd[2];
     while (i != 3)
