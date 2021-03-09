@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/06 10:59:56 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/09 17:01:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,72 @@ t_args	*ft_lastarg(t_args *lst)
 	return (lst);
 }
 
+char     *get_file_path(char *fullstr)
+{
+    char    *ret;
+
+    ret = ft_strtrim(fullstr, " ");
+    return (ret);
+}
+
+int     space_count(char *str)
+{
+    int i;
+    
+    i = 0;
+    while (str[i] != '\0' && str[i] == ' ')
+        i++;
+    return (i);
+}
+
+t_files	*ft_lastfile(t_files *lst)
+{
+	while (lst != NULL)
+	{
+		if (lst->next == NULL)
+			break ;
+		lst = lst->next;
+	}
+	return (lst);
+}
+
 void    get_file(t_cmd *s_cmd, char *fullstr, int *i)
 {
     t_files *fill;
+    t_files *tmp;
     int     j;
+    int     path_begin;
 
     if((fill = (t_files*)malloc(sizeof(t_files))) == NULL)
         error();
-    j = -1;
-    while (fullstr[++j] != '\0')
+    j = 1;
+    if (fullstr[0] == '<')
+        fill->type = ft_strdup("<");
+    else if (fullstr[0] == '>')
     {
-        if ()
+        if(fullstr[1] == '>')
+        {
+            fill->type = ft_strdup(">>");
+            j++;            
+        }
+        else
+            fill->type = ft_strdup(">");
     }
-    
+    j += space_count(&fullstr[j]);
+    path_begin = j;
+    while (fullstr[j] != '\0')
+    {
+        if(fullstr[j] == ' ')
+            break;
+        j++;
+    }
+    fill->file = ft_substr(fullstr, path_begin, j - path_begin);
+    fill->next = NULL;
+    if((tmp = ft_lastfile(s_cmd->files)) == NULL)
+        s_cmd->files = fill;
+    else
+        tmp->next = fill;
+    *i += j;
 }
 
 void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
@@ -92,8 +145,8 @@ void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
             break;
         else if ((fullstr[j] == '>' || fullstr[j] == '<') && quote == 0 && dquotes == 0)
         {
-            
-            break;
+            get_file(s_cmd, &fullstr[j], i);
+            return ;
         }
         j++;
     }

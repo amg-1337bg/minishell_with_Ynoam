@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/06 09:43:37 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/09 17:05:37 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,19 @@ int main(int argc, char **argv, char **envp)
         {
             printf("cmd = %s\n", test->cmd);
             // had lwhile kat afficher l arguments
+            printf("/*****arguments*****/\n");
             while (test->args)
             {
                 printf("%20s\n", test->args->arg);
                 test->args = test->args->next;
+            }
+
+            //had lwhile kat afficher lredirection
+            printf("/******redirection*****/\n");
+            while (test->files)
+            {
+                printf("%20%type %s file = %s\n", test->files->type, test->files->file);
+                test->files = test->files->next;
             }
             printf("full = %s\n", test->full);
             test = test->next;
