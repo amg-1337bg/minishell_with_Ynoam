@@ -12,32 +12,35 @@
 
 #include "../parsing/minishell.h"
 
+int     how_much_pipes(t_cmd *cmds)
+{
+        int i;
+
+        i = 0;
+        while(cmds->pipe == 1)
+            i++;
+        return (i);
+}
+
 void    ft_creat_file(char *filename)
 {
     open(filename, O_WRONLY |  O_CREAT | O_TRUNC, 00644);
 }
 int     execute(t_cmd *cmds, char **env)
 {
-    while (cmds != NULL)
-    {
-        // // if there is a pipe
-        // if (cmds->pipe == 1)
-        // {
-        //     int fd[2];
-        //     pipe(fd);
-        // }
-        // // fork
-        // int pid = fork();
-        // if (pid == 0)
-        // {
-        //     // child 
-        //     // execute
-        //     execve();
-        // }
-        // else
-        // {
-        //     // parent
-        // }
+        // how_much_semicolon(cmds);
+        while(1)
+        {
+            int i;
+            i = how_much_pipes(cmds);
+            int fd[i][2];
+            
+            while(i--)
+            {
+
+            }
+
+        }
         
 
 
@@ -48,8 +51,6 @@ int     execute(t_cmd *cmds, char **env)
 
 
 
-        // repeat
-        cmds = cmds->next;
-    }
+
     return (0);
 }
