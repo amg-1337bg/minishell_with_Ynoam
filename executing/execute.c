@@ -28,22 +28,17 @@ void    ft_creat_file(char *filename)
 }
 int     execute(t_cmd *cmds, char **env)
 {
-        // // fork
-        // int pid = fork();
-        // if (pid == 0)
-        // {
-        //     // child 
-        //     // execute
-        //     execve();
-        // }
-        // else
-        // {
-        //     // parent
-        // }
         // how_much_semicolon(cmds);
         while(1)
         {
-            how_much_pipes(cmds);
+            int i;
+            i = how_much_pipes(cmds);
+            int fd[i][2];
+            
+            while(i--)
+            {
+
+            }
 
         }
         

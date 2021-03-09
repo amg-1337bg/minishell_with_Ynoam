@@ -14,12 +14,20 @@ typedef struct s_command
 int main(int argc, char *argv[], char *env[])
 {
     int i;
-    if (fork() == 0)
+    int pid;
+    int returnvalue;
+    pid = fork();
+    if (pid == 0)
     {
         int fd[2];
         pipe(fd);
-        
-        exit();
+        pid = fork();
+        if (pid == 0)
+        {
+
+        }
+        exit(0);
     }
-    wait(&i);
+    waitpid(pid, &returnvalue, 0);
+    return (returnvalue);
 }
