@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 15:06:18 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/10 16:58:23 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_cmd   *fill_cmd_struct(char *line, int begin, int end)
     ret->args = NULL;
     ret->files = NULL;
     ret->full = ft_substr(line, begin, end - begin);
+    ret->pipe = NULL;
     ret->next = NULL;
     return (ret);
 }

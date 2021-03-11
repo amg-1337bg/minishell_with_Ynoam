@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/09 17:05:37 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/11 15:56:35 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,18 @@ int main(int argc, char **argv, char **envp)
                 printf("%20%type %s file = %s\n", test->files->type, test->files->file);
                 test->files = test->files->next;
             }
-            printf("full = %s\n", test->full);
+
+            printf("/******PIPE*****/\n");
+            while (test->pipe)
+            {
+                printf("pipe full = %s\n",test->pipe->full);
+                test->pipe = test->next->next;
+            }
+            // printf("full = %s\n", test->full);
             test = test->next;
         }
         free_cmd(&s_cmd);
         // use create_envp to create char** enviroment
-        cmd_return = execute(s_cmd, NULL);
+        // cmd_return = execute(s_cmd, NULL);
     }
 }

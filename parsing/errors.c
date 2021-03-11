@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 10:56:50 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/05 15:06:22 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/11 18:18:40 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 void    error()
 {
-    write (1, strerror(errno), ft_strlen(strerror(errno)));
-    write (1, "\n", 1);
+    write (2, strerror(errno), ft_strlen(strerror(errno)));
+    write (2, "\n", 1);
 }

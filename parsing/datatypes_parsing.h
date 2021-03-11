@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   datatypes_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 14:38:21 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/06 15:41:07 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/11 09:57:08 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ typedef struct s_operator{
 
 typedef struct s_args
 {
-    char *arg;
-    struct s_args *next;
+    char            *arg;
+    struct s_args   *next;
 }               t_args;
 
 // commands
@@ -37,7 +37,7 @@ typedef struct s_command
     t_args  *args;
     t_files *files;
     char    *full;
-    int     pipe;    // 1 if exist 0 if not
+    struct s_command *pipe;
     struct s_command *next;
 }           t_cmd;
 

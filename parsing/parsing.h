@@ -29,4 +29,8 @@ void    free_cmd(t_cmd **s_cmd);
 void    free_files(t_files *s_files);
 void    free_args(t_args *s_args);
 
+
+//  clean_replace.c
+
+void    clean_arg(t_cmd *s_cmd);
 #endif

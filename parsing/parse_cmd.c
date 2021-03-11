@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/09 17:01:32 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/11 17:50:23 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,50 @@ void    get_file(t_cmd *s_cmd, char *fullstr, int *i)
     *i += j;
 }
 
-void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
+void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, char *str, int *i)
+{
+    t_cmd   *pipe_cmd;
+    t_cmd   *tmp;
+    int     quote;
+    int     dquote;
+    char    *fullstr;
+    char    *tmp_full;
+
+    quote = 0;
+    dquote = 0;
+    fullstr = ft_strtrim(&str[*i + 1], " ");
+    *i = -1;
+    printf ("str = %s\n" , fullstr);
+    while (fullstr[++(*i)] != '\0')
+    {
+        if(fullstr[*i] == 39 || fullstr[*i] == 34)
+            check_quotes(fullstr[*i], &quote, &dquote);
+        else if(fullstr[*i] == '|' && quote == 0 && dquote == 0)
+        {
+            pipe_cmd = (t_cmd*)malloc(sizeof(t_cmd));
+            pipe_cmd->full = ft_substr(fullstr, 0, *i);
+            pipe_cmd->next = NULL;
+            if((tmp = ft_lstcmd(s_cmd->pipe)) == NULL)
+                s_cmd->pipe = pipe_cmd;
+            else
+                tmp = pipe_cmd;
+            tmp_full = fullstr;
+            fullstr = ft_strdup(fullstr[*i]);
+            free(tmp_full);
+            *i = 0;
+        }
+    }
+    pipe_cmd = (t_cmd*)malloc(sizeof(t_cmd));
+    pipe_cmd->full = ft_substr(fullstr, 0, *i);
+    pipe_cmd->next = NULL;
+    if((tmp = ft_lstcmd(s_cmd->pipe)) == NULL)
+        s_cmd->pipe = pipe_cmd;
+    else
+        tmp = pipe_cmd;
+    free(fullstr);
+}
+
+void    get_the_arg(t_cmd *s_cmd, t_env **s_env, char *fullstr, int *i)
 {
     int j;
     t_args  *tmp;
@@ -135,11 +178,9 @@ void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
     j = *i;
     quote = 0;
     dquotes = 0;
-    if((arg = (t_args*)malloc(sizeof(t_args))) == NULL)
-        error();
     while (fullstr[j] != '\0')
     {
-        if (fullstr[j] == 34 || fullstr[j] == 39)
+        if ((fullstr[j] == 34 || fullstr[j] == 39) && fullstr[j - 1] != '\\')
             check_quotes(fullstr[j], &quote, &dquotes);
         else if (fullstr[j] == ' ' && quote == 0 && dquotes == 0)
             break;
@@ -147,9 +188,17 @@ void    get_the_arg(t_cmd *s_cmd, char *fullstr, int *i)
         {
             get_file(s_cmd, &fullstr[j], i);
             return ;
+        } 
+        else if (fullstr[j] == '|' && quote == 0 && dquotes == 0)
+        {
+            get_pipe_cmd(s_cmd, s_env, fullstr, &j);
+            *i = ft_strlen(fullstr) - 1;
+            return ;
         }
         j++;
     }
+    if((arg = (t_args*)malloc(sizeof(t_args))) == NULL)
+        error();
     arg->arg = ft_substr(fullstr, *i, j - (*i));
     arg->next = NULL;
     if((tmp = ft_lastarg(s_cmd->args)) == NULL)
@@ -167,7 +216,7 @@ void    get_args(t_cmd *s_cmd, t_env **s_env)
     i = -1;
     fullstr = s_cmd->full;
     while(fullstr[++i] != '\0')
-        get_the_arg(s_cmd, fullstr, &i);
+        get_the_arg(s_cmd, s_env, fullstr, &i);
 }
 
 void    cmd_parser(t_cmd **s_cmd, t_env **s_env)
@@ -179,6 +228,7 @@ void    cmd_parser(t_cmd **s_cmd, t_env **s_env)
     {
         get_the_cmd(tmp, s_env);
         get_args(tmp, s_env);
+        // clean_arg(tmp);
         tmp = tmp->next;
     }
 }
