@@ -29,18 +29,18 @@ void    ft_creat_file(char *filename)
 int     execute(t_cmd *cmds, char **env)
 {
         // how_much_semicolon(cmds);
-        while(1)
-        {
-            int i;
-            i = how_much_pipes(cmds);
-            int fd[i][2];
+        // while(1)
+        // {
+        //     int i;
+        //     i = how_much_pipes(cmds);
+        //     int fd[i][2];
             
-            while(i--)
-            {
+        //     while(i--)
+        //     {
 
-            }
+        //     }
 
-        }
+        // }
         
 
 

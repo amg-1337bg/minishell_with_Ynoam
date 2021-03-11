@@ -13,21 +13,30 @@ typedef struct s_command
 
 int main(int argc, char *argv[], char *env[])
 {
-    int i;
+    int fd[2];
     int pid;
-    int returnvalue;
+    pipe(fd);
     pid = fork();
     if (pid == 0)
     {
-        int fd[2];
-        pipe(fd);
-        pid = fork();
-        if (pid == 0)
-        {
-
-        }
-        exit(0);
+        dup2(fd[1], STDOUT_FILENO);
+        close(fd[0]);
+        close(fd[1]);
+        char *args[]= {"cat", "/dev/random", NULL};
+        execve("/bin/cat", args, NULL);
     }
-    waitpid(pid, &returnvalue, 0);
-    return (returnvalue);
+    pid = fork();
+    if (pid == 0)
+    {
+        dup2(fd[0], STDIN_FILENO);
+        close(fd[0]);
+        close(fd[1]);
+        char *args[]= {"head", NULL};
+        execve("/usr/bin/head", args, NULL);
+    }
+    int result;
+    waitpid(pid, &result, 0);
+    close(fd[0]);
+    close(fd[1]);
+    while(1);
 }
