@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/11 15:56:35 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/14 12:18:00 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,13 @@ int main(int argc, char **argv, char **envp)
             printf("/******PIPE*****/\n");
             while (test->pipe)
             {
-                printf("pipe full = %s\n",test->pipe->full);
+                printf("pipe cmd = %s\n",test->pipe->cmd);
+                while (test->pipe->args)
+                {
+                    printf("%20s\n", test->pipe->args->arg);
+                    test->pipe->args = test->pipe->args->next;
+                }
+                
                 test->pipe = test->next->next;
             }
             // printf("full = %s\n", test->full);

@@ -22,6 +22,7 @@ void    check_quotes(char c, int *quote, int *dquote);
 void    cmd_parser(t_cmd **s_cmd, t_env **s_env);
 void    get_the_cmd(t_cmd *s_cmd, t_env **s_env);
 void    convert_env_to_cmd(t_cmd *s_cmd, t_env **s_env);
+void    get_cmd_args(t_cmd *s_cmd, t_env **env, int from, int *i);
 
 // free_strcut.c
 
