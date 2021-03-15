@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/10 16:58:23 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/15 18:15:43 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ t_cmd   *get_full_cmd(char *line, int *i)
     *i = j;
     return (ret);
 }
-
 
 void    get_cmd(t_cmd **s_cmd, t_env **s_env, char *line)
 {

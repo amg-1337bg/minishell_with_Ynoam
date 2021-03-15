@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/14 12:37:05 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/15 11:12:08 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
     path_begin = j;
     while (fullstr[j] != '\0')
     {
-        if(fullstr[j] == ' ' || fullstr[j] == '<' || fullstr[j] == '>')
+        if(fullstr[j] == ' ' || fullstr[j] == '<' || fullstr[j] == '>' || fullstr[j] == '|')
             break;
         j++;
     }
@@ -141,13 +141,13 @@ void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
     pipe_cmd->args = NULL;
     pipe_cmd->full = ft_strdup(s_cmd->full);
     pipe_cmd->files = NULL;
+    pipe_cmd->pipe = NULL;
     pipe_cmd->next = NULL;
-    (*i) += space_count(&pipe_cmd->full[*i]);
-    printf ("pipe = |%s|\n", &pipe_cmd->full[*i]);
+    (*i) += space_count(&pipe_cmd->full[*i + 1]);
     while(pipe_cmd->full[++(*i)] != '\0')
     {
         if(from == -1)
-            from = i;
+            from = *i;
         if (pipe_cmd->full[(*i)] == '\'' || pipe_cmd->full[(*i)] == '"')
             check_quotes(s_cmd->full[(*i)], &quote, &dquote);
         else if ((pipe_cmd->full[(*i)] == '>' || pipe_cmd->full[(*i)] == '<') && quote == 0 && dquote == 0)
@@ -169,12 +169,12 @@ void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
             break;
     }
     if(from != -1)
-        get_cmd_args(pipe_cmd, s_env, from, &i);
+        get_cmd_args(pipe_cmd, s_env, from, i);
     if((tmp_cmd = ft_lstcmd(s_cmd->pipe)) == NULL)
         s_cmd->pipe = pipe_cmd;
     else
         tmp_cmd->next = pipe_cmd;
-    (*i) -= 1;
+    // (*i) -= 1;
 }
 
 // void    get_the_arg(t_cmd *s_cmd, t_env **s_env, char *fullstr, int *i)
@@ -274,6 +274,7 @@ void    get_args(t_cmd *s_cmd, t_env **s_env)
         else if (s_cmd->full[i] == '|' && quote == 0 && dquote == 0)
         {
             get_pipe_cmd(s_cmd, s_env, &i);
+            from = -1;
         }
     }
     if(from != -1)
