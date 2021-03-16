@@ -6,13 +6,13 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/15 11:12:08 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/16 14:59:11 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    convert_env_to_cmd(t_cmd *s_cmd, t_env **s_env)
+void    convert_cmd_to_env(t_cmd *s_cmd, t_env **s_env)
 {
     char    *tmp;
     char    *value;
@@ -38,7 +38,7 @@ void    get_the_cmd(t_cmd *s_cmd, t_env **s_env)
     }
     s_cmd->cmd = ft_substr(fullstr, 0, i);
     if (s_cmd->cmd[0] == '$')
-        convert_env_to_cmd(s_cmd, s_env);
+        convert_cmd_to_env(s_cmd, s_env);
     tmp = s_cmd->full;
     s_cmd->full = ft_strtrim(&fullstr[i], " ");
     free(tmp);
@@ -289,9 +289,9 @@ void    cmd_parser(t_cmd **s_cmd, t_env **s_env)
     while (tmp)
     {
         get_args(tmp, s_env);
+        clean_replace(tmp, s_env);
         // get_the_cmd(tmp, s_env);
         // get_args(tmp, s_env);
-        // clean_arg(tmp);
         tmp = tmp->next;
     }
 }

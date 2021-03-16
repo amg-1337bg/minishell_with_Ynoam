@@ -6,68 +6,127 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/14 11:25:13 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/16 16:18:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    quote_dquotes(t_args *arg, int *i, char c)
+void    rm_char(char **str, int char_index)
 {
-    char    *new_arg;
     char    *tmp;
-    int     j;
+    char    *tmp1;
+    char    *tmp3;
 
-    j = *i;
-    new_arg = NULL;
-    while (arg->arg[++j] != '\0')
-    {
-        if(j != 0 && arg->arg[j] == c && arg->arg[j - 1] != '\\')
-            break;
-    }
-    if((*i) != 0 && arg->arg[*i - 1] == 92)
-    {
-        if(arg->arg[j - 1] == 92)
-        {
-            new_arg = ft_substr(arg->arg, *i, (j - 1) - *i);
-            tmp = new_arg;
-            new_arg = ft_strjoin(new_arg, &c);
-            free(tmp);
-            // printf ("new arg = %s\n", new_arg);
-        }
-        else
-        {
-            printf("No multiline commands\n");
-            return ;
-        }
-    }
+    tmp = *str;
+    if(char_index == 0)
+        *str = ft_strdup(&tmp[char_index + 1]);
     else
-        new_arg = ft_substr(arg->arg, *i + 1, j - (*i + 1));
-    tmp = new_arg;
-    new_arg = ft_strjoin(new_arg, ft_strdup(&arg->arg[j + 1]));
+    {
+        *str = ft_substr(*str, 0, char_index);
+        tmp1 = *str;
+        tmp3 = ft_strdup(&tmp[char_index + 1]);
+        *str = ft_strjoin(*str, tmp3);
+        free(tmp1);
+        free(tmp3);
+    }
     free(tmp);
-    tmp = arg->arg;
-    arg->arg = new_arg;
-    free(tmp);
-    *i = j;
 }
 
-void    clean_arg(t_cmd *s_cmd)
+void    found_dquote(char **str, int *dquote_ind)
+{
+    int i;
+
+    i = *dquote_ind;
+    while (str[0][++i] != '\0')
+    {
+        if(str[0][i] == '"')
+        {
+            if(i != 0 && str[0][i - 1] == '\\')
+            {
+                rm_char(str, i - 1);
+                i -= 1;
+                *dquote_ind -= 2;
+            }
+            else
+            {
+                rm_char(str, i);
+                rm_char(str, *dquote_ind);
+                *dquote_ind -= 3;
+                return ;
+            }
+        }
+    }
+}
+
+void    found_quote(char **str, int *quote_ind)
+{
+    int i;
+
+    i = *quote_ind;
+    while (str[0][++i] != '\0')
+    {
+        if(str[0][i] == '\'')
+        {
+            if(i != 0 && str[0][i - 1] == '\\')
+            {
+                rm_char(str, i - 1);
+                i -= 1;
+                *quote_ind -= 1;
+            }
+            else
+            {
+                rm_char(str, i);
+                rm_char(str, *quote_ind);
+                *quote_ind -= 2;
+                return ;
+            }
+        }
+    }
+}
+
+void    looking_for_quotes(char **str, t_env **s_env)
+{
+    int i;
+
+    i = -1;
+    while(str[0][++i] != '\0')
+    {
+        if(str[0][i] == '"')
+        {
+            if (i != 0 && str[0][i - 1] == '\\')
+            {
+                rm_char(&str[0], i - 1);
+                i -= 1;
+            }
+            else
+                found_dquote(&str[0], &i);
+            printf("%s\n", &str[0][i]);
+        }
+        else if(str[0][i] == '\'')
+        {
+            if (i != 0 && str[0][i - 1] == '\\')
+            {
+                rm_char(str[0], i - 1);
+                i -= 1;
+            }
+            else
+                found_quote(&str[0], &i);
+        }
+    }
+}
+
+void    clean_replace(t_cmd *s_cmd, t_env **s_env)
 {
     int     i;
-    t_args  *tmp_arg;
+    t_args  *tmp;
 
-    tmp_arg = s_cmd->args;
     i = -1;
-    while (tmp_arg)
+    looking_for_quotes(&s_cmd->cmd, s_env);
+    tmp = s_cmd->args;
+    while (tmp)
     {
-        while (tmp_arg->arg[++i] != '\0')
-        {
-            if(tmp_arg->arg[i] == '"')
-                quote_dquotes(tmp_arg, &i, '"');
-            else if(tmp_arg->arg[i] == '\'')
-                quote_dquotes(tmp_arg, &i, '\'');
-        }
-        tmp_arg = tmp_arg->next;
+        looking_for_quotes(&tmp->arg, s_env);
+        tmp = tmp->next;
     }
 }

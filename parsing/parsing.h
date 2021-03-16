@@ -21,7 +21,7 @@ void    check_quotes(char c, int *quote, int *dquote);
 // parse_cmd.c
 void    cmd_parser(t_cmd **s_cmd, t_env **s_env);
 void    get_the_cmd(t_cmd *s_cmd, t_env **s_env);
-void    convert_env_to_cmd(t_cmd *s_cmd, t_env **s_env);
+void    convert_cmd_to_env(t_cmd *s_cmd, t_env **s_env);
 void    get_cmd_args(t_cmd *s_cmd, t_env **env, int from, int *i);
 
 // free_strcut.c
@@ -33,5 +33,5 @@ void    free_args(t_args *s_args);
 
 //  clean_replace.c
 
-void    clean_arg(t_cmd *s_cmd);
+void    clean_replace(t_cmd *s_cmd, t_env **s_env);
 #endif

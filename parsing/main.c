@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/15 18:08:50 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/16 16:10:50 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void    getenvp(t_env **s_env, char **envp)
 
 void    signal_detected(int sig)
 {
-    write(1, "\n", 1);
+    write(1, "\n", 2);
     write(1, Minishell, ft_strlen(Minishell));
 }
 
@@ -112,7 +112,6 @@ int main(int argc, char **argv, char **envp)
     s_cmd = NULL;
     cmd_return = 0;
     getenvp(&s_env, envp);
-    signal(SIGINT, signal_detected);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));
