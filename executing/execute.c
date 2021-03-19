@@ -31,10 +31,21 @@ int     pipe_count(t_cmd *command)
 
 int     is_builtin(char *command)
 {
-    return (0);
+	if (ft_strncmp(command, "echo", ft_strlen(command)))
+    	return (TRUE);
+	else if (ft_strncmp(command, "cd", ft_strlen(command)))
+    	return (TRUE);
+	else if (ft_strncmp(command, "export", ft_strlen(command)))
+    	return (TRUE);
+	else if (ft_strncmp(command, "env", ft_strlen(command)))
+    	return (TRUE);
+	else if (ft_strncmp(command, "exit", ft_strlen(command)))
+    	return (TRUE);
+	return (FALSE);
 }
 int     exec_builtin(t_cmd *cmds)
 {
+	printf("i am a built in command\n");
     return (0);
 }
 
@@ -45,18 +56,22 @@ int     exec_pipe(t_cmd *cmds)
 
 int     exec_normal(t_cmd *cmds)
 {
+
 	return (0);
 }
 int     execute(t_cmd *cmds, char **env)
 {
     int ret;
 
+	printf("hello1\n");
     ret = 0;
+
+
     while(cmds !=  NULL)
     {
         if (cmds->pipe != NULL)// piped commands
             ret = exec_pipe(cmds);
-        else if (is_builtin(cmds->cmd) == 1)// Normal and builtin command
+        else if (is_builtin(cmds->cmd) == TRUE)// Normal and builtin command
             ret = exec_builtin(cmds);
         else // normal and not builtin command
             ret = exec_normal(cmds);
