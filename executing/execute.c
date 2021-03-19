@@ -12,20 +12,55 @@
 
 #include "../parsing/minishell.h"
 
-
-void handle_sigint(int sig) 
-{ 
-    printf("Caught signal %d\n", sig); 
-    exit(0);
-}
-void    ft_creat_file(char *filename)
+int    ft_creat_file(char *filename)
 {
-    open(filename, O_WRONLY |  O_CREAT | O_TRUNC, 00644);
+    return (open(filename, O_WRONLY |  O_CREAT | O_TRUNC, 00644));
+}
+int     pipe_count(t_cmd *command)
+{
+    int i;
+
+    i = 0;
+    while (command->pipe != NULL)
+    {
+        command = command->pipe;
+        i++;
+    }
+    return (i);
+}
+
+int     is_builtin(char *command)
+{
+    return (0);
+}
+int     exec_builtin(t_cmd *cmds)
+{
+    return (0);
+}
+
+int     exec_pipe(t_cmd *cmds)
+{
+    return (0);
+}
+
+int     exec_normal(t_cmd *cmds)
+{
+	return (0);
 }
 int     execute(t_cmd *cmds, char **env)
 {
+    int ret;
 
-
-
-    return (0);
+    ret = 0;
+    while(cmds !=  NULL)
+    {
+        if (cmds->pipe != NULL)// piped commands
+            ret = exec_pipe(cmds);
+        else if (is_builtin(cmds->cmd) == 1)// Normal and builtin command
+            ret = exec_builtin(cmds);
+        else // normal and not builtin command
+            ret = exec_normal(cmds);
+        cmds = cmds->next;
+    }
+    return (ret);
 }
