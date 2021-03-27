@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/16 16:18:32 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/25 10:46:21 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,15 @@ void    rm_char(char **str, int char_index)
 void    found_dquote(char **str, int *dquote_ind)
 {
     int i;
+    int just_char;
 
     i = *dquote_ind;
+    just_char = -1;
     while (str[0][++i] != '\0')
     {
         if(str[0][i] == '"')
         {
-            if(i != 0 && str[0][i - 1] == '\\')
+            if(i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             {
                 rm_char(str, i - 1);
                 i -= 1;
@@ -54,6 +56,14 @@ void    found_dquote(char **str, int *dquote_ind)
                 rm_char(str, *dquote_ind);
                 *dquote_ind -= 3;
                 return ;
+            }
+        }
+        else if (str[0][i] == '\\')
+        {
+            if(str[0][i + 1] == '\\')
+            {
+                rm_char(&str[0], i);
+                just_char = i;
             }
         }
     }
@@ -88,20 +98,21 @@ void    found_quote(char **str, int *quote_ind)
 void    looking_for_quotes(char **str, t_env **s_env)
 {
     int i;
+    int just_char;
 
     i = -1;
+    just_char = -1;
     while(str[0][++i] != '\0')
     {
         if(str[0][i] == '"')
         {
-            if (i != 0 && str[0][i - 1] == '\\')
+            if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             {
                 rm_char(&str[0], i - 1);
                 i -= 1;
             }
             else
                 found_dquote(&str[0], &i);
-            printf("%s\n", &str[0][i]);
         }
         else if(str[0][i] == '\'')
         {
@@ -113,20 +124,35 @@ void    looking_for_quotes(char **str, t_env **s_env)
             else
                 found_quote(&str[0], &i);
         }
+        else if (str[0][i] == '\\')
+        {
+            if(str[0][i + 1] == '\\')
+            {
+                rm_char(&str[0], i);
+                just_char = i;
+            }
+        }
     }
 }
 
 void    clean_replace(t_cmd *s_cmd, t_env **s_env)
 {
     int     i;
-    t_args  *tmp;
+    t_args  *tmp_args;
+    t_files *tmp_file;
 
     i = -1;
     looking_for_quotes(&s_cmd->cmd, s_env);
-    tmp = s_cmd->args;
-    while (tmp)
+    tmp_args = s_cmd->args;
+    while (tmp_args)
     {
-        looking_for_quotes(&tmp->arg, s_env);
-        tmp = tmp->next;
+        looking_for_quotes(&tmp_args->arg, s_env);
+        tmp_args = tmp_args->next;
+    }
+    tmp_file = s_cmd->files;
+    while (tmp_file)
+    {
+        looking_for_quotes(&tmp_file->file, s_env);
+        tmp_file = tmp_file->next;
     }
 }
