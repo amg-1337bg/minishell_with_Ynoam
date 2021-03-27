@@ -14,6 +14,17 @@
 
 void    error()
 {
-    write (2, strerror(errno), ft_strlen(strerror(errno)));
-    write (2, "\n", 1);
+	write (2, strerror(errno), ft_strlen(strerror(errno)));
+	write (2, "\n", 1);
+}
+
+
+// Ynoam
+void	put_error(char *errorstr,char *filename)
+{
+	ft_putstr_fd("minishell: ",2);
+	ft_putstr_fd(filename,2);
+	ft_putstr_fd(": ",2);
+	ft_putstr_fd(errorstr,2);
+	ft_putstr_fd("\n",2);
 }

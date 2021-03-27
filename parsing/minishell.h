@@ -12,6 +12,8 @@
 
 #define binPath "/bin/pwd"
 #define Minishell "minishell > "
+#define CMD_NOT_FOUND "command not found"
+#define NO_SUCH_FILE_OR_DIR "No such file or directory"
 
 #include "parsing.h"
 #include "../executing/executing.h"
