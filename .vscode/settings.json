@@ -1,7 +1,14 @@
 {
     "files.associations": {
         "minishell.h": "c",
-        "executing.h": "c"
+        "executing.h": "c",
+        "errno.h": "c",
+        "termios.h": "c",
+        "_types.h": "c",
+        "libft.h": "c",
+        "signal.h": "c",
+        "wait.h": "c",
+        "stdlib.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

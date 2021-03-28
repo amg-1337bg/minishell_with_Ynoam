@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/24 11:39:26 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/28 09:29:28 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,45 +116,49 @@ int main(int argc, char **argv, char **envp)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
-        get_cmd(&s_cmd, &s_env, line);
-        test = s_cmd;
-        // had lwhile kat afficher dakchi li kaine struct cmd
-        while (test)
-        {
-            printf("cmd = %s\n", test->cmd);
-            // had lwhile kat afficher l arguments
-            printf("/*****arguments*****/\n");
-            while (test->args)
-            {
-                printf("%20s\n", test->args->arg);
-                test->args = test->args->next;
-            }
-
-            //had lwhile kat afficher lredirection
-            printf("/******redirection*****/\n");
-            while (test->files)
-            {
-                printf("%20%type %s file = %s\n", test->files->type, test->files->file);
-                test->files = test->files->next;
-            }
-
-            printf("/******PIPE*****/\n");
-            while (test->pipe)
-            {
-                printf("pipe cmd = %s\n",test->pipe->cmd);
-                while (test->pipe->args)
+        if(get_cmd(&s_cmd, &s_env, line) < 0)
+            printf("minishell: syntax error near unexpected token `%s'\n", line);
+        else
+        {    
+            test = s_cmd;
+            // had lwhile kat afficher dakchi li kaine struct cmd
+            while (test)
+            { 
+                printf("cmd = %s\n", test->cmd);
+                // had lwhile kat afficher l arguments
+                printf("/*****arguments*****/\n");
+                while (test->args)
                 {
-                    printf("%20s\n", test->pipe->args->arg);
-                    test->pipe->args = test->pipe->args->next;
+                    printf("%20s\n", test->args->arg);
+                    test->args = test->args->next;
                 }
-                
-                test->pipe = test->pipe->next;
+
+                //had lwhile kat afficher lredirection
+                printf("/******redirection*****/\n");
+                while (test->files)
+                {
+                    printf("%20%type %s file = %s\n", test->files->type, test->files->file);
+                    test->files = test->files->next;
+                }
+
+                printf("/******PIPE*****/\n");
+                while (test->pipe)
+                {
+                    printf("pipe cmd = %s\n",test->pipe->cmd);
+                    while (test->pipe->args)
+                    {
+                        printf("%20s\n", test->pipe->args->arg);
+                        test->pipe->args = test->pipe->args->next;
+                    }
+                    
+                    test->pipe = test->pipe->next;
+                }
+                // printf("full = %s\n", test->full);
+                test = test->next;
             }
-            // printf("full = %s\n", test->full);
-            test = test->next;
+            // use create_envp to create char** enviroment
+            // cmd_return = execute(s_cmd, NULL);
+            free_cmd(&s_cmd);
         }
-        // use create_envp to create char** enviroment
-        // cmd_return = execute(s_cmd, NULL);
-        free_cmd(&s_cmd);
     }
 }

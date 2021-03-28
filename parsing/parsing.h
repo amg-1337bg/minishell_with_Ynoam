@@ -9,7 +9,7 @@ void    error();
 void    dlt_env(t_env *s_env, char *key);
 void    mdf_env(t_env *s_env, char *key, char *value);
 void    crt_env(t_env *s_env, char *key, char *value);
-void    get_cmd(t_cmd **s_cmd, t_env **s_env, char *line);
+int     get_cmd(t_cmd **s_cmd, t_env **s_env, char *line);
 char    *search_env(t_env *s_env, char *key);
 t_cmd	*ft_lstcmd(t_cmd *lst);
 char    **create_envp(t_env *s_env);
@@ -19,7 +19,7 @@ char    **create_envp(t_env *s_env);
 void    check_quotes(char c, int *quote, int *dquote);
 
 // parse_cmd.c
-void    cmd_parser(t_cmd **s_cmd, t_env **s_env);
+int     cmd_parser(t_cmd **s_cmd, t_env **s_env);
 void    get_the_cmd(t_cmd *s_cmd, t_env **s_env);
 void    convert_cmd_to_env(t_cmd *s_cmd, t_env **s_env);
 void    get_cmd_args(t_cmd *s_cmd, t_env **env, int from, int *i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/25 10:27:23 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/28 09:28:20 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ void    get_cmd_args(t_cmd *s_cmd, t_env **env, int from, int *i)
     *i += space_count(&s_cmd->full[*i]) - 1;
 }
 
-void    get_args(t_cmd *s_cmd, t_env **s_env)
+int    get_args(t_cmd *s_cmd, t_env **s_env)
 {
     int     i;
     int     quote;
@@ -277,18 +277,22 @@ void    get_args(t_cmd *s_cmd, t_env **s_env)
             from = -1;
         }
     }
+    if(quote != 0 || dquote != 0)
+        return (-1);
     if(from != -1)
         get_cmd_args(s_cmd, s_env, from, &i);
+    return (0);
 }
 
-void    cmd_parser(t_cmd **s_cmd, t_env **s_env)
+int    cmd_parser(t_cmd **s_cmd, t_env **s_env)
 {
     t_cmd   *tmp;
     
     tmp = *s_cmd;
     while (tmp)
     {
-        get_args(tmp, s_env);
+        if (get_args(tmp, s_env) < 0)
+            return (-1);
         clean_replace(tmp, s_env);
         // get_the_cmd(tmp, s_env);
         // get_args(tmp, s_env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 22:12:02 by ynoam             #+#    #+#             */
-/*   Updated: 2020/03/03 12:27:48 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/27 12:51:08 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/ioctl.h>
 
 
 char	*ft_join(char *string1, char *string2);
