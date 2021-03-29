@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/28 09:28:20 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/29 16:02:19 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,26 +124,36 @@ void    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
     *i = j - 1;
 }
 
-void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
+void    initializ_pipecmd(t_cmd **pipe_cmd, t_cmd *s_cmd)
+{
+    if ((*pipe_cmd = (t_cmd*)malloc(sizeof(t_cmd))) == NULL)
+        error();
+    pipe_cmd[0]->cmd = NULL;
+    pipe_cmd[0]->args = NULL;
+    pipe_cmd[0]->full = ft_strdup(s_cmd->full);
+    pipe_cmd[0]->files = NULL;
+    pipe_cmd[0]->pipe = NULL;
+    pipe_cmd[0]->next = NULL;
+}
+
+int    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
 {
     t_cmd   *pipe_cmd;
     t_cmd   *tmp_cmd;
     int     quote;
     int     dquote;
     int     from;
-
+    
     quote = 0;
     dquote = 0;
     from = -1;
-    if ((pipe_cmd = (t_cmd*)malloc(sizeof(t_cmd))) == NULL)
-        error();
-    pipe_cmd->cmd = NULL;
-    pipe_cmd->args = NULL;
-    pipe_cmd->full = ft_strdup(s_cmd->full);
-    pipe_cmd->files = NULL;
-    pipe_cmd->pipe = NULL;
-    pipe_cmd->next = NULL;
-    (*i) += space_count(&pipe_cmd->full[*i + 1]);
+    (*i) += space_count(&s_cmd->full[*i + 1]);
+    initializ_pipecmd(&pipe_cmd, s_cmd);
+    if (pipe_cmd->full[(*i) + 1] == '\0')
+    {
+        printed_errors(No_MultilineCmd, "|");
+        return (-1);
+    }
     while(pipe_cmd->full[++(*i)] != '\0')
     {
         if(from == -1)
@@ -154,7 +164,11 @@ void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
         {
             if (from != (*i))
             {
-                get_cmd_args(pipe_cmd, s_env, from, i);
+                if (get_cmd_args(pipe_cmd, from, i) != 0)
+                {
+                    printed_errors(Syntax_error, &pipe_cmd->full[*i]);
+                    return -1;
+                }
                 from = ++(*i);
             }
             get_file(pipe_cmd, pipe_cmd->full, from, i);
@@ -162,19 +176,29 @@ void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
         }
         else if(s_cmd->full[(*i)] == ' ' && quote == 0 && dquote == 0)
         {
-            get_cmd_args(pipe_cmd, s_env, from, i);
+            if (get_cmd_args(pipe_cmd, from, i) != 0)
+            {
+                printed_errors(Syntax_error, &pipe_cmd->full[*i]);
+                return (Syntax_error);
+            }
             from = -1;
         }
         else if (s_cmd->full[(*i)] == '|' && quote == 0 && dquote == 0)
+        {
+            from = -1;
             break;
+        }
     }
     if(from != -1)
-        get_cmd_args(pipe_cmd, s_env, from, i);
+    {
+        if (get_cmd_args(pipe_cmd, from, i) != 0)
+            return -1;
+    }
     if((tmp_cmd = ft_lstcmd(s_cmd->pipe)) == NULL)
         s_cmd->pipe = pipe_cmd;
     else
         tmp_cmd->next = pipe_cmd;
-    // (*i) -= 1;
+    return (0);
 }
 
 // void    get_the_arg(t_cmd *s_cmd, t_env **s_env, char *fullstr, int *i)
@@ -218,18 +242,25 @@ void    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
 //     *i = j;
 // }
 
-void    get_cmd_args(t_cmd *s_cmd, t_env **env, int from, int *i)
+int    get_cmd_args(t_cmd *s_cmd, int from, int *i)
 {
-    t_args *args;
-    t_args *tmp_arg;
+    t_args  *args;
+    t_args  *tmp_arg;
+    char    *str;
     
+    str = ft_substr(s_cmd->full, from, (*i) - from);
+    // if(str[0] == '\0' || str == NULL)
+    // {
+    //     free(str);
+    //     return (Syntax_error);
+    // }
     if (s_cmd->cmd == NULL)
-        s_cmd->cmd = ft_substr(s_cmd->full, from, (*i) - from);
+        s_cmd->cmd = str;
     else
     {
         if((args = (t_args*)malloc(sizeof(t_args))) == NULL)
             error();
-        args->arg = ft_substr(s_cmd->full, from, (*i) - from);
+        args->arg = str;
         args->next = NULL;
         if((tmp_arg = ft_lastarg(s_cmd->args)) == NULL)
             s_cmd->args = args;
@@ -237,6 +268,7 @@ void    get_cmd_args(t_cmd *s_cmd, t_env **env, int from, int *i)
             tmp_arg->next = args;
     }
     *i += space_count(&s_cmd->full[*i]) - 1;
+    return (0);
 }
 
 int    get_args(t_cmd *s_cmd, t_env **s_env)
@@ -260,7 +292,11 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
         {
             if (from != i)
             {
-                get_cmd_args(s_cmd, s_env, from, &i);
+                if (get_cmd_args(s_cmd, from, &i) != 0)
+                {
+                    printed_errors(Syntax_error, &s_cmd->full[i]);
+                    return -1;
+                }
                 from = ++i;
             }
             get_file(s_cmd, s_cmd->full, from, &i);
@@ -268,31 +304,43 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
         }
         else if(s_cmd->full[i] == ' ' && quote == 0 && dquote == 0)
         {
-            get_cmd_args(s_cmd, s_env, from, &i);
+            if (get_cmd_args(s_cmd, from, &i) != 0)
+            {
+                printed_errors(Syntax_error, &s_cmd->full[i]);
+                return -1;
+            }
             from = -1;
         }
         else if (s_cmd->full[i] == '|' && quote == 0 && dquote == 0)
         {
-            get_pipe_cmd(s_cmd, s_env, &i);
+            if(get_pipe_cmd(s_cmd, s_env, &i) != 0)
+                return -1;
             from = -1;
         }
     }
     if(quote != 0 || dquote != 0)
         return (-1);
     if(from != -1)
-        get_cmd_args(s_cmd, s_env, from, &i);
+    {
+        if (get_cmd_args(s_cmd, from, &i) != 0)
+        {
+            printed_errors(Syntax_error, &s_cmd->full[i]);
+            return (-1);
+        }
+    }
     return (0);
 }
 
 int    cmd_parser(t_cmd **s_cmd, t_env **s_env)
 {
     t_cmd   *tmp;
+    int     error;
     
     tmp = *s_cmd;
     while (tmp)
     {
-        if (get_args(tmp, s_env) < 0)
-            return (-1);
+        if ((error = get_args(tmp, s_env)) != 0)
+            return (error);
         clean_replace(tmp, s_env);
         // get_the_cmd(tmp, s_env);
         // get_args(tmp, s_env);

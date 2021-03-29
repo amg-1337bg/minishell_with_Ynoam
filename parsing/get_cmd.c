@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/28 09:29:19 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/29 15:19:46 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int    get_cmd(t_cmd **s_cmd, t_env **s_env, char *line)
     while (line[i] != '\0')
     {
         if((tmp = get_full_cmd(line, &i)) == NULL)
-            return (-1);
+            return (Syntax_error);
         if((last = ft_lstcmd(*s_cmd)) == NULL)
             *s_cmd = tmp;
         else
@@ -92,7 +92,7 @@ int    get_cmd(t_cmd **s_cmd, t_env **s_env, char *line)
         if (line[i] == ';')
             i++;
     }
-    if (cmd_parser(s_cmd, s_env) < 0)
+    if (cmd_parser(s_cmd, s_env) != 0)
         return(-1);
     return (0);
 }
