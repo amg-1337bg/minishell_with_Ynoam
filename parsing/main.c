@@ -117,42 +117,6 @@ int main(int argc, char **argv, char **envp)
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
         get_cmd(&s_cmd, &s_env, line);
-        test = s_cmd;
-        // had lwhile kat afficher dakchi li kaine struct cmd
-        while (test)
-        {
-            printf("cmd = %s\n", test->cmd);
-            // had lwhile kat afficher l arguments
-            printf("/*****arguments*****/\n");
-            while (test->args)
-            {
-                printf("%20s\n", test->args->arg);
-                test->args = test->args->next;
-            }
-
-            //had lwhile kat afficher lredirection
-            printf("/******redirection*****/\n");
-            while (test->files)
-            {
-                printf("%20%type %s file = %s\n", test->files->type, test->files->file);
-                test->files = test->files->next;
-            }
-
-            printf("/******PIPE*****/\n");
-            while (test->pipe)
-            {
-                printf("pipe cmd = %s\n",test->pipe->cmd);
-                while (test->pipe->args)
-                {
-                    printf("%20s\n", test->pipe->args->arg);
-                    test->pipe->args = test->pipe->args->next;
-                }
-                
-                test->pipe = test->pipe->next;
-            }
-            // printf("full = %s\n", test->full);
-            test = test->next;
-        }
         cmd_return = execute(s_cmd, create_envp(s_env));
         free_cmd(&s_cmd);
     }
