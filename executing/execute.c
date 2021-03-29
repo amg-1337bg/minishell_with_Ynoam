@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/07 18:14:27 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/29 12:42:15 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int    ft_creat_file(char *filename, int trunc)
 {
     return (open(filename, O_WRONLY |  O_CREAT | trunc, 00644));
 }
+
 int     pipe_count(t_cmd *command)
 {
     int i;
-
     i = 0;
     while (command->pipe != NULL)
     {
@@ -51,7 +51,6 @@ int     is_builtin(char *command)
         return (1);
     else if (!ft_strncmp(command, "exit", ft_strlen("exit") + 1))
         return (1);
-    
     return (0);
 }
 int     exec_builtin(t_cmd *cmds)
@@ -70,33 +69,97 @@ int     is_path(char *cmd)
 {
     int i;
 
-    i = ft_strlen(cmd);
-    if ((i > 2 && cmd[0] == '.' && cmd[1] == '/') || (i > 3 && cmd[0] == '.' && cmd[1] == '/'))
-    {
-        return(1);
-    }
-
+	i = ft_strlen(cmd);
+	if ((i > 2 && cmd[0] == '.' && cmd[1] == '/') || (i > 3 && cmd[0] == '.' &&
+				cmd[1] == '.' && cmd[2] == '/') || (i > 1 && cmd[0] == '/'))
+		return (1);
+	return (0);
 }
-int     exec_normal(t_cmd *cmds, char **env)
+
+char	**search_env_for_path(char **env)
 {
-    int pid;
-    int fd[2];
+	int	i;
 
-    if (is_path(cmds->cmd)) // command not in path variable
+	i = 0;
+	while(env[i])
+	{
+		if (!ft_strncmp(env[i], "PATH=", ft_strlen("PATH=")))
+			return(ft_split(&env[i][5], ':'));
+		i++;
+	}
+	return (NULL);
+}
+
+int		find_exec(char *cmd, char **path)
+{
+	STRUCT_DIR  *de;
+	DIR         
+
+	while(*path)
+	{
+		path++;
+	}
+}
+
+char    **create_args(t_cmd *cmd)
+{
+    t_args  *tmp_args;
+    char    **argv;
+    int     i;
+    int     j;
+
+    tmp_args = cmd->args;
+    i = 1;
+    while(tmp_args)
     {
-        pipe(fd);
-        if (fork() == 0)
-        {
+        tmp_args = tmp_args->next;
+        i++;
+    }
+    tmp_args = cmd->args;
+    argv = malloc(i * sizeof(char*));
+    j = 0;
+    while(j < i)
+    {
+        argv[j] = tmp_args->arg;
+        tmp_args = tmp_args->next;
+        j++;
+    }
+    argv[j] = NULL;
+    return (argv);
+}
 
-            close_pipe(fd);
-        }
-        close_pipe(fd);
+int     exec_normal(t_cmd *cmd, char **env)
+{
+    char    **paths;
+    char    *path;
+    int     ret;
+
+    if (is_path(cmd->cmd)) // command not in path variable
+    {
+		if (check_for_errors(cmd->cmd) == TRUE) // bash: ../: is a directory...
+		{
+			put_error();
+			return (126);
+		}
+		return (fork_and_exec(cmd));
     }
     else // command in path variable
     {
-        return (127);
+        if (fork() == 0)
+        {
+            paths = search_env_for_path(env); // LEAK: search return
+            while(*paths)
+            {
+                execve((path = ft_strjoin()), create_args(cmd), env);
+                ft_free(path);
+                paths++;
+            }
+			put_error("command not found", cmd->cmd);
+			exit(127);
+        }
+        wait(&ret);
     }
-    return (0);
+    return (ret);
 }
 
 int     execute(t_cmd *cmds, char **env)

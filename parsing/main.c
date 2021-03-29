@@ -6,7 +6,11 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/03/29 15:06:58 by bamghoug         ###   ########.fr       */
+=======
+/*   Updated: 2021/03/29 10:58:40 by ynoam            ###   ########.fr       */
+>>>>>>> 7bd937090c53f810826134774f9059af1590d260
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +161,10 @@ int main(int argc, char **argv, char **envp)
             // use create_envp to create char** enviroment
             // cmd_return = execute(s_cmd, NULL)
         }
+<<<<<<< HEAD
+=======
+        cmd_return = execute(s_cmd, create_envp(s_env));
+>>>>>>> 7bd937090c53f810826134774f9059af1590d260
         free_cmd(&s_cmd);
     }
 }
