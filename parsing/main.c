@@ -153,8 +153,7 @@ int main(int argc, char **argv, char **envp)
             // printf("full = %s\n", test->full);
             test = test->next;
         }
-        create_envp();
-        // cmd_return = execute(s_cmd, NULL);
+        cmd_return = execute(s_cmd, create_envp(s_env));
         free_cmd(&s_cmd);
     }
 }

@@ -101,10 +101,38 @@ int		find_exec(char *cmd, char **path)
 	}
 }
 
+char    **create_args(t_cmd *cmd)
+{
+    t_args  *tmp_args;
+    char    **argv;
+    int     i;
+    int     j;
+
+    tmp_args = cmd->args;
+    i = 1;
+    while(tmp_args)
+    {
+        tmp_args = tmp_args->next;
+        i++;
+    }
+    tmp_args = cmd->args;
+    argv = malloc(i * sizeof(char*));
+    j = 0;
+    while(j < i)
+    {
+        argv[j] = tmp_args->arg;
+        tmp_args = tmp_args->next;
+        j++;
+    }
+    argv[j] = NULL;
+    return (argv);
+}
+
 int     exec_normal(t_cmd *cmd, char **env)
 {
-    char **paths;
-    char *path;
+    char    **paths;
+    char    *path;
+    int     ret;
 
     if (is_path(cmd->cmd)) // command not in path variable
     {
@@ -122,17 +150,16 @@ int     exec_normal(t_cmd *cmd, char **env)
             paths = search_env_for_path(env); // LEAK: search return
             while(*paths)
             {
-                execve((path = ft_strjoin()), creat_args(cmd), env);
+                execve((path = ft_strjoin()), create_args(cmd), env);
+                ft_free(path);
                 paths++;
             }
+			put_error("command not found", cmd->cmd);
+			exit(127);
         }
-		else
-		{
-			put_error("command not found");
-			return (127);
-		}
+        wait(&ret);
     }
-    return (0);
+    return (ret);
 }
 
 int     execute(t_cmd *cmds, char **env)
