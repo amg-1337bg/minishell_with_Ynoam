@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/25 10:46:21 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/30 09:26:37 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,16 @@ void    found_quote(char **str, int *quote_ind)
     }
 }
 
+void    looking_for_dollar(char **str)
+{
+    
+}
+
+void    dollar_founded(char **str, int *i)
+{
+    
+}
+
 void    looking_for_quotes(char **str, t_env **s_env)
 {
     int i;
@@ -131,6 +141,16 @@ void    looking_for_quotes(char **str, t_env **s_env)
                 rm_char(&str[0], i);
                 just_char = i;
             }
+        }
+        else if(str[0][i] == '$')
+        {
+            if (i != 0 && str[0][i - 1] == '\\')
+            {
+                rm_char(str[0], i - 1);
+                i -= 1;
+            }
+            // else
+            //     dollar_founded(str, &i);
         }
     }
 }
