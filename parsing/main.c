@@ -6,11 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/03/29 15:06:58 by bamghoug         ###   ########.fr       */
-=======
 /*   Updated: 2021/03/29 10:58:40 by ynoam            ###   ########.fr       */
->>>>>>> 7bd937090c53f810826134774f9059af1590d260
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,55 +116,9 @@ int main(int argc, char **argv, char **envp)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
-<<<<<<< HEAD
         get_cmd(&s_cmd, &s_env, line);
-=======
-        if(get_cmd(&s_cmd, &s_env, line) == 0)
-        {
-            test = s_cmd;
-            // had lwhile kat afficher dakchi li kaine struct cmd
-            while (test)
-            { 
-                printf("cmd = %s\n", test->cmd);
-                // had lwhile kat afficher l arguments
-                printf("/*****arguments*****/\n");
-                while (test->args)
-                {
-                    printf("%20s\n", test->args->arg);
-                    test->args = test->args->next;
-                }
-
-                //had lwhile kat afficher lredirection
-                printf("/******redirection*****/\n");
-                while (test->files)
-                {
-                    printf("%20%type %s file = %s\n", test->files->type, test->files->file);
-                    test->files = test->files->next;
-                }
-
-                printf("/******PIPE*****/\n");
-                while (test->pipe)
-                {
-                    printf("pipe cmd = %s\n",test->pipe->cmd);
-                    while (test->pipe->args)
-                    {
-                        printf("%20s\n", test->pipe->args->arg);
-                        test->pipe->args = test->pipe->args->next;
-                    }
-                    
-                    test->pipe = test->pipe->next;
-                }
-                // printf("full = %s\n", test->full);
-                test = test->next;
-            }
-            // use create_envp to create char** enviroment
-            // cmd_return = execute(s_cmd, NULL)
-        }
-<<<<<<< HEAD
-=======
->>>>>>> 77214ea5f9a69c3eab21bdfe276c436f1be6456b
         cmd_return = execute(s_cmd, create_envp(s_env));
->>>>>>> 7bd937090c53f810826134774f9059af1590d260
+
         free_cmd(&s_cmd);
     }
 }
