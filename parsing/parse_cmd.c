@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/29 16:02:19 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 08:57:17 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,11 +277,15 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
     int     quote;
     int     dquote;
     int     from;
+    char    *fullstr;
 
     i = -1;
     quote = 0;
     dquote = 0;
     from = -1;
+    fullstr = s_cmd->full;
+    s_cmd->full = ft_strtrim(s_cmd->full, " ");
+    free(fullstr);
     while(s_cmd->full[++i] != '\0')
     {
         if(from == -1)
@@ -335,10 +339,14 @@ int    cmd_parser(t_cmd **s_cmd, t_env **s_env)
 {
     t_cmd   *tmp;
     int     error;
+    char    *tofree;
     
     tmp = *s_cmd;
     while (tmp)
     {
+        tofree = tmp->full;
+        tmp->full = ft_strtrim(tmp->full, " ");
+        free(tofree);
         if ((error = get_args(tmp, s_env)) != 0)
             return (error);
         clean_replace(tmp, s_env);

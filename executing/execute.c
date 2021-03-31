@@ -70,8 +70,8 @@ int     is_path(char *cmd)
     int i;
 
 	i = ft_strlen(cmd);
-	if ((i > 2 && cmd[0] == '.' && cmd[1] == '/') || (i > 3 && cmd[0] == '.' &&
-				cmd[1] == '.' && cmd[2] == '/') || (i > 1 && cmd[0] == '/'))
+	if ((i >= 2 && cmd[0] == '.' && cmd[1] == '/') || (i >= 3 && cmd[0] == '.' &&
+				cmd[1] == '.' && cmd[2] == '/') || (i >= 1 && cmd[0] == '/'))
 		return (1);
 	return (0);
 }
@@ -83,22 +83,11 @@ char	**search_env_for_path(char **env)
 	i = 0;
 	while(env[i])
 	{
-		if (!ft_strncmp(env[i], "PATH=", ft_strlen("PATH=")))
-			return(ft_split(&env[i][5], ':'));
+		if (!ft_strncmp(env[i], "PATH=", 5))
+			return(ft_split(&(env[i][5]), ':'));
 		i++;
 	}
 	return (NULL);
-}
-
-int		find_exec(char *cmd, char **path)
-{
-	STRUCT_DIR  *de;
-	DIR         
-
-	while(*path)
-	{
-		path++;
-	}
 }
 
 char    **create_args(t_cmd *cmd)
@@ -116,8 +105,9 @@ char    **create_args(t_cmd *cmd)
         i++;
     }
     tmp_args = cmd->args;
-    argv = malloc(i * sizeof(char*));
-    j = 0;
+    argv = malloc((i + 1) * sizeof(char*));
+    argv[0] = cmd->cmd;
+    j = 1;
     while(j < i)
     {
         argv[j] = tmp_args->arg;
@@ -133,26 +123,39 @@ int     exec_normal(t_cmd *cmd, char **env)
     char    **paths;
     char    *path;
     int     ret;
+    DIR     *dir;
+    int i = 0;
 
     if (is_path(cmd->cmd)) // command not in path variable
     {
-		if (check_for_errors(cmd->cmd) == TRUE) // bash: ../: is a directory...
-		{
-			put_error();
-			return (126);
-		}
-		return (fork_and_exec(cmd));
+        if ((dir = opendir(cmd->cmd)) != NULL)
+        {
+            put_error("is a directory", cmd->cmd);
+            closedir(dir);
+            return (126);
+        }
+        if (fork() == 0)
+        {
+            execve(cmd->cmd, create_args(cmd), env);
+			put_error("No such file or directory", cmd->cmd);
+			exit(127);
+        }
+        wait(&ret);
+        return (ret);
     }
     else // command in path variable
     {
         if (fork() == 0)
         {
             paths = search_env_for_path(env); // LEAK: search return
-            while(*paths)
+            while(paths[i])
             {
-                execve((path = ft_strjoin()), create_args(cmd), env);
-                ft_free(path);
-                paths++;
+                path = ft_strjoin(ft_strjoin(paths[i], "/"), cmd->cmd);
+                char **str;
+                str = create_args(cmd);
+                execve(path, create_args(cmd), env);
+                // ft_free(path);
+                i++;
             }
 			put_error("command not found", cmd->cmd);
 			exit(127);

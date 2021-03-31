@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/30 09:26:50 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 08:54:16 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ int main(int argc, char **argv, char **envp)
             // use create_envp to create char** enviroment
             // cmd_return = execute(s_cmd, NULL)
         }
+        printf("***************************Execution*************************\n");
         cmd_return = execute(s_cmd, create_envp(s_env));
         free_cmd(&s_cmd);
     }
