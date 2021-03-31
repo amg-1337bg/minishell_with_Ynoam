@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 08:57:17 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 10:25:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,15 +277,11 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
     int     quote;
     int     dquote;
     int     from;
-    char    *fullstr;
 
     i = -1;
     quote = 0;
     dquote = 0;
     from = -1;
-    fullstr = s_cmd->full;
-    s_cmd->full = ft_strtrim(s_cmd->full, " ");
-    free(fullstr);
     while(s_cmd->full[++i] != '\0')
     {
         if(from == -1)
@@ -322,8 +318,6 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
             from = -1;
         }
     }
-    if(quote != 0 || dquote != 0)
-        return (-1);
     if(from != -1)
     {
         if (get_cmd_args(s_cmd, from, &i) != 0)
@@ -349,9 +343,11 @@ int    cmd_parser(t_cmd **s_cmd, t_env **s_env)
         free(tofree);
         if ((error = get_args(tmp, s_env)) != 0)
             return (error);
-        clean_replace(tmp, s_env);
+        if (clean_replace(tmp, s_env) != 0)
+            return (-1);
         // get_the_cmd(tmp, s_env);
         // get_args(tmp, s_env);
         tmp = tmp->next;
     }
+    return (0);
 }

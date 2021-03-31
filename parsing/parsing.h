@@ -34,5 +34,5 @@ void    printed_errors(int error_code, char *str);
 void    error();
 //  clean_replace.c
 
-void    clean_replace(t_cmd *s_cmd, t_env **s_env);
+int    clean_replace(t_cmd *s_cmd, t_env **s_env);
 #endif
