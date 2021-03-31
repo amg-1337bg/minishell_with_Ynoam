@@ -28,9 +28,40 @@ void    close_pipe(int fd[])
     close(fd[1]);
 }
 
-int    ft_creat_file(char *filename, int trunc)
+int		creat_file_or_openit(char *filename, int trunc)
 {
     return (open(filename, O_WRONLY |  O_CREAT | trunc, 00644));
+}
+
+int		open_file_for_read(char *filename)
+{
+	return (open(filename, O_RDONLY));
+}
+
+int		create_files(t_files *files)
+{
+	int	ret;
+
+	if (fork() == 0)
+	{
+		while (files)
+		{
+			if (files->type[0] == '>')
+				creat_file_or_openit(files->file, 0);
+			else if (files->type[0] == '>' && files->type[1] == '>')
+				creat_file_or_openit(files->file, 0);
+			else if (files->type[0] == '<')
+				if (open_file_for_read(files->file) == -1)
+				{
+					put_error(strerror(errno), files->file);
+					exit(1);
+				}
+			files = files->next;
+		}
+		exit(0);
+	}
+	wait(&ret);
+	return (return_value(ret));
 }
 
 int     pipe_count(t_cmd *command)
@@ -147,7 +178,7 @@ int     exec_normal(t_cmd *cmd, char **env)
         else if (fork() == 0)
         {
             execve(cmd->cmd, create_args(cmd), env);
-			put_error("No such file or directory", cmd->cmd);
+			put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }
         wait(&ret);
@@ -186,14 +217,18 @@ int		execute(t_cmd *cmds, char **env)
         {
             ret = exec_pipe(cmds);
         }
-        else if (is_builtin(cmds->cmd) == 1)// Normal and builtin command
+        else if (cmds->cmd && is_builtin(cmds->cmd))// Normal and builtin command
         {
             ret = exec_builtin(cmds);
         }
-        else // normal and not builtin command
+        else if (cmds->cmd && is_builtin(cmds->cmd))// normal and not builtin command
         {
             ret = exec_normal(cmds, env);
         }
+		else if (cmds->cmd == NULL)
+		{
+			ret = create_files(cmds->files);
+		}
         cmds = cmds->next;
     }
     return (ret);

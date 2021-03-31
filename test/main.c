@@ -3,19 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-  
+#include <fcntl.h>
+#include <sys/errno.h>
+#include <string.h>
 int main(void)
 {
-     struct dirent *de;  // Pointer for directory entry
-  
-     DIR *dr = opendir("main.c");
-     if (dr == NULL)  // opendir returns NULL if couldn't open directory
-     {
-         printf("Could not open current directory" );
-         return 0;
-     }
-     while ((de = readdir(dr)) != NULL)
-             printf("%s\n", de->d_name);
-     closedir(dr);    
+	printf("%d\n", open("file99", O_RDONLY));
+	write (2, strerror(errno), strlen(strerror(errno)));
+	write (2, "\n", 1);
+	//printf("%d\n", close(-1));
      return 0;
 }
