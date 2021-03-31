@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 12:13:25 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 15:15:25 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void    initializ_pipecmd(t_cmd **pipe_cmd, t_cmd *s_cmd)
     pipe_cmd[0]->next = NULL;
 }
 
-int    get_pipe_cmd(t_cmd *s_cmd, t_env **s_env, int *i)
+int    get_pipe_cmd(t_cmd *s_cmd, int *i)
 {
     t_cmd   *pipe_cmd;
     t_cmd   *tmp_cmd;
@@ -271,7 +271,7 @@ int    get_cmd_args(t_cmd *s_cmd, int from, int *i)
     return (0);
 }
 
-int    get_args(t_cmd *s_cmd, t_env **s_env)
+int    get_args(t_cmd *s_cmd)
 {
     int     i;
     int     quote;
@@ -313,7 +313,7 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
         }
         else if (s_cmd->full[i] == '|' && quote == 0 && dquote == 0)
         {
-            if(get_pipe_cmd(s_cmd, s_env, &i) != 0)
+            if(get_pipe_cmd(s_cmd, &i) != 0)
                 return -1;
             from = -1;
         }
@@ -329,7 +329,7 @@ int    get_args(t_cmd *s_cmd, t_env **s_env)
     return (0);
 }
 
-int    cmd_parser(t_cmd **s_cmd, t_env **s_env)
+int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
 {
     t_cmd   *tmp;
     int     error;
@@ -341,7 +341,7 @@ int    cmd_parser(t_cmd **s_cmd, t_env **s_env)
         tofree = tmp->full;
         tmp->full = ft_strtrim(tmp->full, " ");
         free(tofree);
-        if ((error = get_args(tmp, s_env)) != 0)
+        if ((error = get_args(tmp)) != 0)
             return (error);
         if (clean_replace(tmp, s_env) != 0)
             return (-1);

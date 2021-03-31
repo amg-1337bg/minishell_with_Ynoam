@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 12:18:45 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 16:35:43 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void    rm_char(char **str, int char_index)
     free(tmp);
 }
 
-int    found_dquote(char **str, int *dquote_ind)
+int    found_dquote(char **str, t_env *s_env, int *dquote_ind)
 {
     int i;
     int just_char;
@@ -53,6 +53,7 @@ int    found_dquote(char **str, int *dquote_ind)
             {
                 rm_char(str, i);
                 rm_char(str, *dquote_ind);
+                looking_for_dollar(str, s_env, *dquote_ind, &i);
                 *dquote_ind = i - 2;
                 return (0);
             }
@@ -84,31 +85,65 @@ int    found_quote(char **str, int *quote_ind)
     return (-1);
 }
 
-void    looking_for_dollar(char **str)
+void    looking_for_dollar(char **str, t_env *s_env, int from, int *to)
 {
+    int diff;
     
+    while (from < to && str[0][from] != '\0')
+    {
+        if (str[0][from] == '$')
+        {
+            diff = from;
+            dollar_founded(str, s_env, &from, -2);
+            *to += from - diff;
+        }
+        from++;
+    }
 }
 
-void    dollar_founded(char **str, int *i)
+char    *insert_var_value(char *after, char *value, char *before, int *i)
 {
-    int begin;
+    char    *ret;
+    char    *tmp;
+
+    tmp = ft_strjoin(after, value);
+    ret = ft_strjoin(tmp, before);
+    free(tmp);
+    free(after);
+    free(before);
+    return (ret);
+}
+
+void    dollar_founded(char **str, t_env *s_env, int *i, int just_char)
+{
+    int     begin;
+    char    *value;
+    char    *key;
+    char    *tmp;
 
     begin = *i;
-    if(begin != 0 && str[0][begin - 1] == '\\')
+    if(begin != 0 && str[0][begin - 1] == '\\' && (just_char != -2 && just_char != begin - 1))
     {
         rm_char(str, begin - 1);
         *i -= 1;
         return;
     }
-    else
+    while (str[0][++begin] != '\0')
     {
-        while (str[0][++begin] != '\0')
-        {
-            if(ft_isalnum(str[0][begin]) != 0 && str[0][begin] != '_' && str[0][begin] != ' ')
-                break ;
-        }
-        
+        if(ft_isalnum(str[0][begin]) != 1 && str[0][begin] != '_')
+            break ;
     }
+    key = ft_substr(str[0], (*i) + 1, begin - ((*i) + 1));
+    if (ft_strlen(key) == 0)
+    {
+        free(key);
+        return ;
+    }
+    value = ft_strdup(search_env(s_env, key));
+    tmp = str[0];
+    str[0] = insert_var_value(ft_substr(str[0], 0, *i), value, ft_strdup(&str[0][begin]), i);
+    free(tmp);
+    *i += ft_strlen(value) - 1;
 }
 
 int    looking_for_quotes(char **str, t_env **s_env)
@@ -129,7 +164,7 @@ int    looking_for_quotes(char **str, t_env **s_env)
             }
             else
             {
-                if (found_dquote(&str[0], &i) == -1)
+                if (found_dquote(&str[0], s_env, &i) == -1)
                     return (-1);
             }
         }
@@ -152,14 +187,12 @@ int    looking_for_quotes(char **str, t_env **s_env)
             just_char = i;
         }
         else if (str[0][i] == '$')
-        {
-            dollar_founded(str, &i);
-        }
+            dollar_founded(str, s_env, &i, just_char);
     }
     return (0);
 }
 
-int    clean_replace(t_cmd *s_cmd, t_env **s_env)
+int    clean_replace(t_cmd *s_cmd, t_env *s_env)
 {
     int     i;
     t_args  *tmp_args;

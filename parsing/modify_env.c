@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:37:13 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/15 11:10:20 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 15:58:06 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,5 @@ char    *search_env(t_env *s_env, char *key)
             return (tmp->value);
         tmp = tmp->next;
     }
-    return (NULL);
+    return ("\0");
 }

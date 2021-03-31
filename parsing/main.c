@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 12:17:36 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 15:12:50 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int main(int argc, char **argv, char **envp)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
-        get_cmd(&s_cmd, &s_env, line);
+        get_cmd(&s_cmd, s_env, line);
         // {
             test = s_cmd;
             // had lwhile kat afficher dakchi li kaine struct cmd
