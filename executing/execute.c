@@ -12,6 +12,16 @@
 
 #include "../parsing/minishell.h"
 
+int		return_value(int ret)
+{
+	if (WIFEXITED(ret))
+		return (WEXITSTATUS(ret));
+	else if (WIFSTOPPED(ret))
+		return (WSTOPSIG(ret));
+	else if (WIFSIGNALED(ret))
+		return (WTERMSIG(ret));
+	return (0);
+}
 void    close_pipe(int fd[])
 {
     close(fd[0]);
@@ -121,7 +131,7 @@ char    **create_args(t_cmd *cmd)
 int     exec_normal(t_cmd *cmd, char **env)
 {
     char    **paths;
-    char    *path;
+    char    *onepath;
     int     ret;
     DIR     *dir;
     int i = 0;
@@ -134,7 +144,7 @@ int     exec_normal(t_cmd *cmd, char **env)
             closedir(dir);
             return (126);
         }
-        if (fork() == 0)
+        else if (fork() == 0)
         {
             execve(cmd->cmd, create_args(cmd), env);
 			put_error("No such file or directory", cmd->cmd);
@@ -150,22 +160,22 @@ int     exec_normal(t_cmd *cmd, char **env)
             paths = search_env_for_path(env); // LEAK: search return
             while(paths[i])
             {
-                path = ft_strjoin(ft_strjoin(paths[i], "/"), cmd->cmd);
+                onepath = ft_strjoin(ft_strjoin(paths[i], "/"), cmd->cmd);
                 char **str;
                 str = create_args(cmd);
-                execve(path, create_args(cmd), env);
-                // ft_free(path);
+                execve(onepath, create_args(cmd), env);
+                ft_free(&onepath);
                 i++;
             }
 			put_error("command not found", cmd->cmd);
 			exit(127);
         }
         wait(&ret);
+		return (return_value(ret));
     }
-    return (ret);
 }
 
-int     execute(t_cmd *cmds, char **env)
+int		execute(t_cmd *cmds, char **env)
 {
     int ret;
 
