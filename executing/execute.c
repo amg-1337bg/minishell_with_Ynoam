@@ -221,12 +221,13 @@ int		execute(t_cmd *cmds, char **env)
         {
             ret = exec_builtin(cmds);
         }
-        else if (cmds->cmd && is_builtin(cmds->cmd))// normal and not builtin command
+        else if (cmds->cmd && !is_builtin(cmds->cmd))// normal and not builtin command
         {
             ret = exec_normal(cmds, env);
         }
 		else if (cmds->cmd == NULL)
 		{
+			printf("work1\n");
 			ret = create_files(cmds->files);
 		}
         cmds = cmds->next;
