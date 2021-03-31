@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 15:15:25 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 16:44:52 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_files	*ft_lastfile(t_files *lst)
 	return (lst);
 }
 
-void    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
+int    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
 {
     t_files *fill;
     t_files *tmp;
@@ -116,12 +116,15 @@ void    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
     }
     fill->file = ft_substr(fullstr, path_begin, j - path_begin);
     fill->next = NULL;
+    if (ft_strlen(fill->file) == 0)
+        return -1;
     if((tmp = ft_lastfile(s_cmd->files)) == NULL)
         s_cmd->files = fill;
     else
         tmp->next = fill;
     j += space_count(&fullstr[j]);
     *i = j - 1;
+    return (0);
 }
 
 void    initializ_pipecmd(t_cmd **pipe_cmd, t_cmd *s_cmd)
