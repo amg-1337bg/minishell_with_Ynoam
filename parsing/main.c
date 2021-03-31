@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 10:26:01 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 11:42:09 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ void    getenvp(t_env **s_env, char **envp)
 
 void    signal_detected(int sig)
 {
-    write(1, "\n", 2);
-    write(1, Minishell, ft_strlen(Minishell));
+    write(1,"\b\b", 2);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -105,6 +104,9 @@ int main(int argc, char **argv, char **envp)
     t_env *s_env;
     t_cmd *s_cmd;
     t_cmd *test;
+    t_args *test_arg;
+    t_files *test_file;
+    t_cmd   *test_pipe;
     int cmd_return;
     int     sign = 0;
     
@@ -112,6 +114,7 @@ int main(int argc, char **argv, char **envp)
     s_cmd = NULL;
     cmd_return = 0;
     getenvp(&s_env, envp);
+    signal(SIGQUIT, signal_detected);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));
@@ -125,31 +128,34 @@ int main(int argc, char **argv, char **envp)
                 printf("cmd = %s\n", test->cmd);
                 // had lwhile kat afficher l arguments
                 printf("/*****arguments*****/\n");
-                while (test->args)
+                test_arg = test->args;
+                while (test_arg)
                 {
-                    printf("%20s\n", test->args->arg);
-                    test->args = test->args->next;
+                    printf("%20s\n", test_arg->arg);
+                    test_arg= test_arg->next;
                 }
 
                 //had lwhile kat afficher lredirection
                 printf("/******redirection*****/\n");
-                while (test->files)
+                test_file = test->files;
+                while (test_file)
                 {
-                    printf("%20%type %s file = %s\n", test->files->type, test->files->file);
-                    test->files = test->files->next;
+                    printf("%20%type %s file = %s\n", test_file->type, test_file->file);
+                    test_file = test_file->next;
                 }
 
                 printf("/******PIPE*****/\n");
-                while (test->pipe)
+                test_pipe = test->pipe;
+                while (test_pipe)
                 {
-                    printf("pipe cmd = %s\n",test->pipe->cmd);
-                    while (test->pipe->args)
+                    printf("pipe cmd = %s\n",test_pipe->cmd);
+                    test_arg = test_pipe->args;
+                    while (test_arg)
                     {
-                        printf("%20s\n", test->pipe->args->arg);
-                        test->pipe->args = test->pipe->args->next;
+                        printf("%20s\n", test_arg->arg);
+                        test_arg = test_arg->next;
                     }
-                    
-                    test->pipe = test->pipe->next;
+                    test_pipe = test_pipe->next;
                 }
                 // printf("full = %s\n", test->full);
                 test = test->next;
