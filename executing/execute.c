@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/29 12:42:15 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/03/31 18:47:42 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,34 @@ int		open_file_for_read(char *filename)
 	return (open(filename, O_RDONLY));
 }
 
+char    **create_args(t_cmd *cmd)
+{
+    t_args  *tmp_args;
+    char    **argv;
+    int     i;
+    int     j;
+
+    tmp_args = cmd->args;
+    i = 1;
+    while(tmp_args)
+    {
+        tmp_args = tmp_args->next;
+        i++;
+    }
+    tmp_args = cmd->args;
+    argv = malloc((i + 1) * sizeof(char*));
+    argv[0] = cmd->cmd;
+    j = 1;
+    while(j < i)
+    {
+        argv[j] = tmp_args->arg;
+        tmp_args = tmp_args->next;
+        j++;
+    }
+    argv[j] = NULL;
+    return (argv);
+}
+
 int		create_files(t_files *files)
 {
     int ret;
@@ -50,7 +78,7 @@ int		create_files(t_files *files)
             {
                 if (creat_file_or_openit(files->file, 0) == -1)
                 {
-					put_error(strerror(errno), files->file, NULL);
+					put_error(strerror(errno), files->file);
 					exit(1);
 				}
             }
@@ -58,7 +86,7 @@ int		create_files(t_files *files)
             {
 				if (creat_file_or_openit(files->file, 0) == -1)
 				{
-					put_error(strerror(errno), files->file, NULL);
+					put_error(strerror(errno), files->file);
 					exit(1);
 				}
             }
@@ -66,7 +94,7 @@ int		create_files(t_files *files)
             {
                 if (open_file_for_read(files->file) == -1)
 				{
-					put_error(strerror(errno), files->file, NULL);
+					put_error(strerror(errno), files->file);
 					exit(1);
 				}
             }
@@ -109,7 +137,7 @@ int     is_builtin(char *command)
     return (0);
 }
 
-int     exec_builtin(t_cmd *cmd)
+int     exec_builtin(t_cmd *cmd, char **env)
 {
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
         //return (echo(cmd));
@@ -117,7 +145,7 @@ int     exec_builtin(t_cmd *cmd)
     else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
         printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
-        printf("i am a built in command\n");
+        return (pwd());
     else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1))
         printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
@@ -125,7 +153,7 @@ int     exec_builtin(t_cmd *cmd)
     else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
         printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
-        printf("i am a built in command\n");
+        return (ft_exit(create_args(cmd)));
     return (0);
 }
 
@@ -160,33 +188,7 @@ char	**search_env_for_path(char **env)
 	return (NULL);
 }
 
-char    **create_args(t_cmd *cmd)
-{
-    t_args  *tmp_args;
-    char    **argv;
-    int     i;
-    int     j;
 
-    tmp_args = cmd->args;
-    i = 1;
-    while(tmp_args)
-    {
-        tmp_args = tmp_args->next;
-        i++;
-    }
-    tmp_args = cmd->args;
-    argv = malloc((i + 1) * sizeof(char*));
-    argv[0] = cmd->cmd;
-    j = 1;
-    while(j < i)
-    {
-        argv[j] = tmp_args->arg;
-        tmp_args = tmp_args->next;
-        j++;
-    }
-    argv[j] = NULL;
-    return (argv);
-}
 
 int     exec_normal(t_cmd *cmd, char **env)
 {
@@ -200,14 +202,14 @@ int     exec_normal(t_cmd *cmd, char **env)
     {
         if ((dir = opendir(cmd->cmd)) != NULL)
         {
-            put_error("is a directory", cmd->cmd, NULL);
+            put_error("is a directory", cmd->cmd);
             closedir(dir);
             return (126);
         }
         else if (fork() == 0)
         {
             execve(cmd->cmd, create_args(cmd), env);
-			put_error(strerror(errno), cmd->cmd, NULL);
+			put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }
         wait(&ret);
@@ -227,7 +229,7 @@ int     exec_normal(t_cmd *cmd, char **env)
                 ft_free(&onepath);
                 i++;
             }
-			put_error("command not found", cmd->cmd, NULL);
+			put_error("command not found", cmd->cmd);
 			exit(127);
         }
         wait(&ret);
@@ -248,7 +250,7 @@ int		execute(t_cmd *cmds, char **env)
         }
         else if (cmds->cmd && is_builtin(cmds->cmd) && (ret = create_files(cmds->files)) == 0)// Normal and builtin command
         {
-            ret = exec_builtin(cmds);
+            ret = exec_builtin(cmds, env);
         }
         else if (cmds->cmd && !is_builtin(cmds->cmd) && (ret = create_files(cmds->files)) == 0)// normal and not builtin command
         {
