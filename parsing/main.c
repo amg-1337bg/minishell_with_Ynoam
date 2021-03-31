@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 11:42:09 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 12:17:36 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void    getenvp(t_env **s_env, char **envp)
 
 void    signal_detected(int sig)
 {
-    write(1,"\b\b", 2);
+    write(1,"\b\b  \b\b", 6);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -119,8 +119,8 @@ int main(int argc, char **argv, char **envp)
     {
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
-        if (get_cmd(&s_cmd, &s_env, line) == 0)
-        {
+        get_cmd(&s_cmd, &s_env, line);
+        // {
             test = s_cmd;
             // had lwhile kat afficher dakchi li kaine struct cmd
             while (test)
@@ -164,9 +164,9 @@ int main(int argc, char **argv, char **envp)
             // cmd_return = execute(s_cmd, NULL)
         printf("***************************Execution*************************\n");
         cmd_return = execute(s_cmd, create_envp(s_env));
-        }
-        else
-            printf("ERROR\n");
+        // }
+        // else
+        //     printf("ERROR\n");
         free_cmd(&s_cmd);
     }
 }

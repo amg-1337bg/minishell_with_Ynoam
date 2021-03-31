@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 10:49:30 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/03/31 12:18:45 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int    looking_for_quotes(char **str, t_env **s_env)
 
     i = -1;
     just_char = -1;
-    while(str[0][++i] != '\0')
+    while(str[0] != NULL && str[0][++i] != '\0')
     {
         if(str[0][i] == '"')
         {
