@@ -40,22 +40,36 @@ int		open_file_for_read(char *filename)
 
 int		create_files(t_files *files)
 {
-	int	ret;
+    int ret;
 
-	if (fork() == 0)
+    if (fork() == 0)
 	{
-		while (files)
+        while (files)
 		{
 			if (files->type[0] == '>')
-				creat_file_or_openit(files->file, 0);
-			else if (files->type[0] == '>' && files->type[1] == '>')
-				creat_file_or_openit(files->file, 0);
-			else if (files->type[0] == '<')
-				if (open_file_for_read(files->file) == -1)
-				{
-					put_error(strerror(errno), files->file);
+            {
+                if (creat_file_or_openit(files->file, 0) == -1)
+                {
+					put_error(strerror(errno), files->file, NULL);
 					exit(1);
 				}
+            }
+			else if (files->type[0] == '>' && files->type[1] == '>')
+            {
+				if (creat_file_or_openit(files->file, 0) == -1)
+				{
+					put_error(strerror(errno), files->file, NULL);
+					exit(1);
+				}
+            }
+			else if (files->type[0] == '<')
+            {
+                if (open_file_for_read(files->file) == -1)
+				{
+					put_error(strerror(errno), files->file, NULL);
+					exit(1);
+				}
+            }
 			files = files->next;
 		}
 		exit(0);
@@ -94,9 +108,24 @@ int     is_builtin(char *command)
         return (1);
     return (0);
 }
-int     exec_builtin(t_cmd *cmds)
+
+int     exec_builtin(t_cmd *cmd)
 {
-    printf("i am a built in command\n");
+    if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
+        //return (echo(cmd));
+        printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
+        printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
+        printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1))
+        printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
+        printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
+        printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
+        printf("i am a built in command\n");
     return (0);
 }
 
@@ -171,14 +200,14 @@ int     exec_normal(t_cmd *cmd, char **env)
     {
         if ((dir = opendir(cmd->cmd)) != NULL)
         {
-            put_error("is a directory", cmd->cmd);
+            put_error("is a directory", cmd->cmd, NULL);
             closedir(dir);
             return (126);
         }
         else if (fork() == 0)
         {
             execve(cmd->cmd, create_args(cmd), env);
-			put_error(strerror(errno), cmd->cmd);
+			put_error(strerror(errno), cmd->cmd, NULL);
 			exit(127);
         }
         wait(&ret);
@@ -198,7 +227,7 @@ int     exec_normal(t_cmd *cmd, char **env)
                 ft_free(&onepath);
                 i++;
             }
-			put_error("command not found", cmd->cmd);
+			put_error("command not found", cmd->cmd, NULL);
 			exit(127);
         }
         wait(&ret);
@@ -217,20 +246,22 @@ int		execute(t_cmd *cmds, char **env)
         {
             ret = exec_pipe(cmds);
         }
-        else if (cmds->cmd && is_builtin(cmds->cmd))// Normal and builtin command
+        else if (cmds->cmd && is_builtin(cmds->cmd) && (ret = create_files(cmds->files)) == 0)// Normal and builtin command
         {
             ret = exec_builtin(cmds);
         }
-        else if (cmds->cmd && !is_builtin(cmds->cmd))// normal and not builtin command
+        else if (cmds->cmd && !is_builtin(cmds->cmd) && (ret = create_files(cmds->files)) == 0)// normal and not builtin command
         {
             ret = exec_normal(cmds, env);
         }
 		else if (cmds->cmd == NULL)
 		{
-			printf("work1\n");
+            printf("only create files\n");
 			ret = create_files(cmds->files);
 		}
         cmds = cmds->next;
     }
+    ft_putstr_fd("\033[38;5;6m",2); // print the return value of the last command
+    ft_putstr_fd(ft_itoa(ret), 2);
     return (ret);
 }

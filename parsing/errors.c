@@ -29,8 +29,13 @@ void    printed_errors(int error_code, char *str)
 }
 
 // Ynoam
-void	put_error(char *errorstr,char *filename)
+void	put_error(char *errorstr,char *filename, char *builtin)
 {
+	if (builtin != NULL)
+	{
+		ft_putstr_fd(builtin, 2);
+		ft_putstr_fd(": ", 2);
+	}
 	ft_putstr_fd("minishell: ",2);
 	ft_putstr_fd(filename,2);
 	ft_putstr_fd(": ",2);
