@@ -6,11 +6,40 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/31 18:47:42 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 11:57:38 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
+
+int		creat_file_or_openit(char *filename, int trunc)
+{
+    return (open(filename, O_WRONLY |  O_CREAT | trunc, 00644));
+}
+
+int		open_file_for_read(char *filename)
+{
+	return (open(filename, O_RDONLY));
+}
+
+int     *change_stdin_stdout(t_files *files)
+{
+    int fd[2];
+
+    fd[0] = 0;
+    fd[1] = 1;
+    while (files)
+    {
+        if (files->type[0] == '>')
+            fd[0] = creat_file_or_openit(files->file, 0);
+        else if (files->type[0] == '>' && files->type[1] == '>')
+            fd[0] = creat_file_or_openit(files->file, O_TRUNC);
+        else if (files->type[0] == '<')
+            fd[1] = open_file_for_read(files->file);
+        files = files->next;
+    }
+    return (fd);
+}
 
 int		return_value(int ret)
 {
@@ -28,15 +57,8 @@ void    close_pipe(int fd[])
     close(fd[1]);
 }
 
-int		creat_file_or_openit(char *filename, int trunc)
-{
-    return (open(filename, O_WRONLY |  O_CREAT | trunc, 00644));
-}
 
-int		open_file_for_read(char *filename)
-{
-	return (open(filename, O_RDONLY));
-}
+
 
 char    **create_args(t_cmd *cmd)
 {
@@ -141,7 +163,7 @@ int     exec_builtin(t_cmd *cmd, char **env)
 {
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
         //return (echo(cmd));
-        printf("i am a built in command\n");
+        ft_echo()
     else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
         printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
@@ -208,8 +230,9 @@ int     exec_normal(t_cmd *cmd, char **env)
         }
         else if (fork() == 0)
         {
+            change_stdin_stdout(t_files * files);
             execve(cmd->cmd, create_args(cmd), env);
-			put_error(strerror(errno), cmd->cmd);
+            put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }
         wait(&ret);
@@ -219,6 +242,7 @@ int     exec_normal(t_cmd *cmd, char **env)
     {
         if (fork() == 0)
         {
+            change_stdin_stdout(t_files * files);
             paths = search_env_for_path(env); // LEAK: search return
             while(paths[i])
             {
@@ -240,6 +264,7 @@ int     exec_normal(t_cmd *cmd, char **env)
 int		execute(t_cmd *cmds, char **env)
 {
     int ret;
+    int *fd;
 
     ret = 0;
     while(cmds !=  NULL)
@@ -258,7 +283,6 @@ int		execute(t_cmd *cmds, char **env)
         }
 		else if (cmds->cmd == NULL)
 		{
-            printf("only create files\n");
 			ret = create_files(cmds->files);
 		}
         cmds = cmds->next;
