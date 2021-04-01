@@ -4,6 +4,6 @@
 #include <dirent.h> 
 
 void	put_error(char *errorstr, char *filename);
-int     execute(t_cmd *cmds, char **env);
+int     execute(t_cmd *cmds, t_env *env);
 
 #endif
