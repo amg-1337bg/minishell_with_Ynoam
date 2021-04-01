@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 16:35:43 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/04/01 10:05:33 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int    found_quote(char **str, int *quote_ind)
         {
             rm_char(str, i);
             rm_char(str, *quote_ind);
-            *quote_ind = i - 2;
+            *quote_ind = i - 3;
             return (0);
         }
     }

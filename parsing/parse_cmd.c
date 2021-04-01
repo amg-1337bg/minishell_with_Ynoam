@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 16:44:52 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/04/01 09:57:21 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,13 @@ t_files	*ft_lastfile(t_files *lst)
 	}
 	return (lst);
 }
+
+// char    *get_redir_type(char *fullstr, int *j)
+// {
+//     char    *ret;
+
+//     if(fullstr)
+// }
 
 int    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
 {
@@ -346,6 +353,7 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
         free(tofree);
         if ((error = get_args(tmp)) != 0)
             return (error);
+        printf("%s\n", tmp->args->arg);
         if (clean_replace(tmp, s_env) != 0)
             return (-1);
         // get_the_cmd(tmp, s_env);
