@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 11:53:38 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 12:07:12 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ int    clean_replace(t_cmd *s_cmd, t_env *s_env)
     int     i;
     t_args  *tmp_args;
     t_files *tmp_file;
+    t_cmd   *tmp_pipe;
 
     i = -1;
     if (looking_for_quotes(&s_cmd->cmd, s_env) != 0)
@@ -207,7 +208,6 @@ int    clean_replace(t_cmd *s_cmd, t_env *s_env)
     {
         if(looking_for_quotes(&tmp_args->arg, s_env) != 0)
             return (-1);
-        printf("%s\n", tmp_args->arg);
         tmp_args = tmp_args->next;
     }
     tmp_file = s_cmd->files;
@@ -216,6 +216,26 @@ int    clean_replace(t_cmd *s_cmd, t_env *s_env)
         if (looking_for_quotes(&tmp_file->file, s_env) != -1)
             return (-1);
         tmp_file = tmp_file->next;
+    }
+    tmp_pipe = s_cmd->pipe;
+    if (tmp_pipe != NULL)
+    {
+        if (looking_for_quotes(&tmp_pipe->cmd, s_env) != 0)
+            return (-1);
+        tmp_args = tmp_pipe->args;
+        while (tmp_args)
+        {
+            if(looking_for_quotes(&tmp_args->arg, s_env) != 0)
+                return (-1);
+            tmp_args = tmp_args->next;
+        }
+        tmp_file = tmp_pipe->files;
+        while (tmp_file)
+        {
+            if (looking_for_quotes(&tmp_file->file, s_env) != -1)
+                return (-1);
+            tmp_file = tmp_file->next;
+        }    
     }
     return (0);
 }
