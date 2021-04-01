@@ -6,11 +6,52 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/31 18:47:42 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 12:14:275:52 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
+
+int		creat_file_or_openit(char *filename, int trunc)
+{
+    return (open(filename, O_WRONLY |  O_CREAT | trunc, 00644));
+}
+
+int		open_file_for_read(char *filename)
+{
+	return (open(filename, O_RDONLY));
+}
+
+int     *change_stdin_stdout(t_files *files)
+{
+    int     fd[2];
+    char    *filein;
+    char    *fileout;
+    int     trunc;
+
+    fd[0] = 0;
+    fd[1] = 1;
+    trunc = 0;
+    fileout = NULL;
+    filein = NULL;
+    while (files)
+    {
+        if (files->type[0] == '>' && (trunc = 0) == 0)
+            fileout = files->file;
+        else if (files->type[0] == '>' && files->type[1] == '>' && (trunc = 1) == 1)
+            fileout = files->file;
+        else if (files->type[0] == '<')
+            filein = files->file;
+        files = files->next;
+    }
+    if (fileout && !trunc)
+        fd[1] = creat_file_or_openit(fileout, 0);
+    else if (fileout && trunc)
+        fd[1] = creat_file_or_openit(fileout, O_TRUNC);
+    else if (filein)
+        fd[0] = open_file_for_read(filein);
+    return (fd);
+}
 
 int		return_value(int ret)
 {
@@ -26,16 +67,6 @@ void    close_pipe(int fd[])
 {
     close(fd[0]);
     close(fd[1]);
-}
-
-int		creat_file_or_openit(char *filename, int trunc)
-{
-    return (open(filename, O_WRONLY |  O_CREAT | trunc, 00644));
-}
-
-int		open_file_for_read(char *filename)
-{
-	return (open(filename, O_RDONLY));
 }
 
 char    **create_args(t_cmd *cmd)
@@ -197,6 +228,7 @@ int     exec_normal(t_cmd *cmd, char **env)
     int     ret;
     DIR     *dir;
     int i = 0;
+    int     *fd;
 
     if (is_path(cmd->cmd)) // command not in path variable
     {
@@ -208,8 +240,11 @@ int     exec_normal(t_cmd *cmd, char **env)
         }
         else if (fork() == 0)
         {
+            fd = change_stdin_stdout(cmd->files);
+            dup2(fd[0], STDIN_FILENO);
+            dup2(fd[1], STDOUT_FILENO);
             execve(cmd->cmd, create_args(cmd), env);
-			put_error(strerror(errno), cmd->cmd);
+            put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }
         wait(&ret);
@@ -219,6 +254,11 @@ int     exec_normal(t_cmd *cmd, char **env)
     {
         if (fork() == 0)
         {
+            fd = change_stdin_stdout(cmd->files);
+            printf("STDIN = %d\n", fd[0]);
+            printf("STDOUT = %d\n", fd[1]);
+            dup2(fd[0], STDIN_FILENO);
+            dup2(fd[1], STDOUT_FILENO);
             paths = search_env_for_path(env); // LEAK: search return
             while(paths[i])
             {
@@ -240,6 +280,7 @@ int     exec_normal(t_cmd *cmd, char **env)
 int		execute(t_cmd *cmds, char **env)
 {
     int ret;
+    int *fd;
 
     ret = 0;
     while(cmds !=  NULL)
@@ -258,7 +299,6 @@ int		execute(t_cmd *cmds, char **env)
         }
 		else if (cmds->cmd == NULL)
 		{
-            printf("only create files\n");
 			ret = create_files(cmds->files);
 		}
         cmds = cmds->next;

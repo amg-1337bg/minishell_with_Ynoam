@@ -6,13 +6,13 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/05 17:55:00 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 11:26:48 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int echo(int argc, char *argv[])
+int		ft_echo(int argc, char *argv[])
 {
 	int i;
 	int flag;
