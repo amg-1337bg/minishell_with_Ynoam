@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 10:12:21 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 14:58:34 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,11 +159,11 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
     from = -1;
     (*i) += space_count(&s_cmd->full[*i + 1]);
     initializ_pipecmd(&pipe_cmd, s_cmd);
-    if (pipe_cmd->full[(*i) + 1] == '\0')
-    {
-        printed_errors(No_MultilineCmd, "|");
-        return (-1);
-    }
+    // if (pipe_cmd->full[(*i) + 1] == '\0')
+    // {
+    //     printed_errors(No_MultilineCmd, "|");
+    //     return (-1);
+    // }
     while(pipe_cmd->full[++(*i)] != '\0')
     {
         if(from == -1)
@@ -208,6 +208,7 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
         s_cmd->pipe = pipe_cmd;
     else
         tmp_cmd->next = pipe_cmd;
+    (*i) -= 1;
     return (0);
 }
 
@@ -323,6 +324,15 @@ int    get_args(t_cmd *s_cmd)
         }
         else if (s_cmd->full[i] == '|' && quote == 0 && dquote == 0)
         {
+            if (from != i)
+            {
+                if (get_cmd_args(s_cmd, from, &i) != 0)
+                {
+                    printed_errors(Syntax_error, &s_cmd->full[i]);
+                    return -1;
+                }
+                from = ++i;
+            }
             if(get_pipe_cmd(s_cmd, &i) != 0)
                 return -1;
             from = -1;
@@ -351,7 +361,6 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
         tofree = tmp->full;
         tmp->full = ft_strtrim(tmp->full, " ");
         free(tofree);
-        // printf("%s\n", tmp->full);
         if ((error = get_args(tmp)) != 0)
             return (error);
         if (clean_replace(tmp, s_env) != 0)
