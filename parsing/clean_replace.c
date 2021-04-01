@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 10:05:33 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 11:53:38 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int    found_quote(char **str, int *quote_ind)
         {
             rm_char(str, i);
             rm_char(str, *quote_ind);
-            *quote_ind = i - 3;
+            *quote_ind = i - 2;
             return (0);
         }
     }
@@ -170,15 +170,16 @@ int    looking_for_quotes(char **str, t_env **s_env)
         }
         else if(str[0][i] == '\'')
         {
-            if (i != 0 && str[0][i - 1] == '\\')
+            if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             {
-                rm_char(str[0], i - 1);
+                rm_char(&str[0], i - 1);
                 i -= 1;
             }
             else
             {
                 if (found_quote(&str[0], &i) == -1)
                     return (-1);
+                just_char = i;
             }
         }
         else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
@@ -206,6 +207,7 @@ int    clean_replace(t_cmd *s_cmd, t_env *s_env)
     {
         if(looking_for_quotes(&tmp_args->arg, s_env) != 0)
             return (-1);
+        printf("%s\n", tmp_args->arg);
         tmp_args = tmp_args->next;
     }
     tmp_file = s_cmd->files;

@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 09:55:32 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 10:08:14 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int    get_cmd(t_cmd **s_cmd, t_env *s_env, char *line)
         if (line[i] == ';')
             i++;
     }
-    printf("%s\n", tmp->full);
     if (cmd_parser(s_cmd, s_env) != 0)
         return(-1);
     return (0);

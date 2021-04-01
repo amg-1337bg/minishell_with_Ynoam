@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 09:57:21 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 10:12:21 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,9 +351,9 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
         tofree = tmp->full;
         tmp->full = ft_strtrim(tmp->full, " ");
         free(tofree);
+        // printf("%s\n", tmp->full);
         if ((error = get_args(tmp)) != 0)
             return (error);
-        printf("%s\n", tmp->args->arg);
         if (clean_replace(tmp, s_env) != 0)
             return (-1);
         // get_the_cmd(tmp, s_env);
