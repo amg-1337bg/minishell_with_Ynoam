@@ -22,35 +22,33 @@ int		open_file_for_read(char *filename)
 	return (open(filename, O_RDONLY));
 }
 
-int     *change_stdin_stdout(t_files *files)
+void    change_stdin_stdout(t_files *files, int *fd)
 {
-    int     fd[2];
-    char    *filein;
-    char    *fileout;
+    char    *stdin_file;
+    char    *stdout_file;
     int     trunc;
 
     fd[0] = 0;
     fd[1] = 1;
     trunc = 0;
-    fileout = NULL;
-    filein = NULL;
+    stdout_file = NULL;
+    stdin_file = NULL;
     while (files)
     {
-        if (files->type[0] == '>' && (trunc = 0) == 0)
-            fileout = files->file;
+        if (files->type[0] == '>' && files->type[1] == 0 && (trunc = 0) == 0)
+            stdout_file = files->file;
         else if (files->type[0] == '>' && files->type[1] == '>' && (trunc = 1) == 1)
-            fileout = files->file;
+            stdout_file = files->file;
         else if (files->type[0] == '<')
-            filein = files->file;
+            stdin_file = files->file;
         files = files->next;
     }
-    if (fileout && !trunc)
-        fd[1] = creat_file_or_openit(fileout, 0);
-    else if (fileout && trunc)
-        fd[1] = creat_file_or_openit(fileout, O_TRUNC);
-    else if (filein)
-        fd[0] = open_file_for_read(filein);
-    return (fd);
+    if (stdout_file && !trunc)
+        fd[1] = creat_file_or_openit(stdout_file, 0);
+    else if (stdout_file && trunc)
+        fd[1] = creat_file_or_openit(stdout_file, O_TRUNC);
+    else if (stdin_file)
+        fd[0] = open_file_for_read(stdin_file);
 }
 
 int		return_value(int ret)
@@ -105,7 +103,7 @@ int		create_files(t_files *files)
 	{
         while (files)
 		{
-			if (files->type[0] == '>')
+			if (files->type[0] == '>' && files->type[1] == 0)
             {
                 if (creat_file_or_openit(files->file, 0) == -1)
                 {
@@ -168,27 +166,33 @@ int     is_builtin(char *command)
     return (0);
 }
 
-int     exec_builtin(t_cmd *cmd, char **env)
+int     exec_builtin(t_cmd *cmd, t_env *env)
 {
+    int     *fd;
+    int     ret;
+
+    fd = malloc(sizeof(int) * 2);
+    ret = 0;
+    change_stdin_stdout(cmd->files, fd);
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
-        //return (echo(cmd));
-        printf("i am a built in command\n");
+        ret = ft_echo(create_args(cmd), fd);
     else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
-        printf("i am a built in command\n");
+        ret = printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
-        return (pwd());
+        ret = pwd(fd);
     else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1))
-        printf("i am a built in command\n");
+        ret = printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
-        printf("i am a built in command\n");
+        ret = printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
-        printf("i am a built in command\n");
+        ret = printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
-        return (ft_exit(create_args(cmd)));
-    return (0);
+        ret = ft_exit(create_args(cmd));
+    free(fd);
+    return (ret);
 }
 
-int     exec_pipe(t_cmd *cmds)
+int     exec_pipe(t_cmd *cmds, t_env *env)
 {
     printf("there is a pipe\n");
     return (0);
@@ -221,7 +225,7 @@ char	**search_env_for_path(char **env)
 
 
 
-int     exec_normal(t_cmd *cmd, char **env)
+int     exec_normal(t_cmd *cmd, t_env *env)
 {
     char    **paths;
     char    *onepath;
@@ -230,6 +234,7 @@ int     exec_normal(t_cmd *cmd, char **env)
     int i = 0;
     int     *fd;
 
+    fd = malloc(sizeof(int) * 2);
     if (is_path(cmd->cmd)) // command not in path variable
     {
         if ((dir = opendir(cmd->cmd)) != NULL)
@@ -240,10 +245,10 @@ int     exec_normal(t_cmd *cmd, char **env)
         }
         else if (fork() == 0)
         {
-            fd = change_stdin_stdout(cmd->files);
+            change_stdin_stdout(cmd->files, fd);
             dup2(fd[0], STDIN_FILENO);
             dup2(fd[1], STDOUT_FILENO);
-            execve(cmd->cmd, create_args(cmd), env);
+            execve(cmd->cmd, create_args(cmd), create_envp(env));
             put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }
@@ -254,18 +259,16 @@ int     exec_normal(t_cmd *cmd, char **env)
     {
         if (fork() == 0)
         {
-            fd = change_stdin_stdout(cmd->files);
-            printf("STDIN = %d\n", fd[0]);
-            printf("STDOUT = %d\n", fd[1]);
+            change_stdin_stdout(cmd->files, fd);
             dup2(fd[0], STDIN_FILENO);
             dup2(fd[1], STDOUT_FILENO);
-            paths = search_env_for_path(env); // LEAK: search return
+            paths = ft_split(search_env(env, "PATH"), ':');
             while(paths[i])
             {
                 onepath = ft_strjoin(ft_strjoin(paths[i], "/"), cmd->cmd);
                 char **str;
                 str = create_args(cmd);
-                execve(onepath, create_args(cmd), env);
+                execve(onepath, create_args(cmd), create_envp(env));
                 ft_free(&onepath);
                 i++;
             }
@@ -273,11 +276,12 @@ int     exec_normal(t_cmd *cmd, char **env)
 			exit(127);
         }
         wait(&ret);
+        free(fd);
 		return (return_value(ret));
     }
 }
 
-int		execute(t_cmd *cmds, char **env)
+int		execute(t_cmd *cmds, t_env *env)
 {
     int ret;
     int *fd;
@@ -287,7 +291,7 @@ int		execute(t_cmd *cmds, char **env)
     {
         if (cmds->pipe)// piped commands
         {
-            ret = exec_pipe(cmds);
+            ret = exec_pipe(cmds, env);
         }
         else if (cmds->cmd && is_builtin(cmds->cmd) && (ret = create_files(cmds->files)) == 0)// Normal and builtin command
         {
