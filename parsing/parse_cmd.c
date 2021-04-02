@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 14:58:34 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/02 11:15:20 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,11 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
         }
         else if (s_cmd->full[(*i)] == '|' && quote == 0 && dquote == 0)
         {
-            from = -1;
+            if (from == (*i))
+            {
+                from = -1;
+                (*i) -= 1;
+            }
             break;
         }
     }
@@ -208,7 +212,6 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
         s_cmd->pipe = pipe_cmd;
     else
         tmp_cmd->next = pipe_cmd;
-    (*i) -= 1;
     return (0);
 }
 
@@ -308,7 +311,7 @@ int    get_args(t_cmd *s_cmd)
                     printed_errors(Syntax_error, &s_cmd->full[i]);
                     return -1;
                 }
-                from = ++i;
+                i++;
             }
             get_file(s_cmd, s_cmd->full, from, &i);
             from = -1;
@@ -331,7 +334,7 @@ int    get_args(t_cmd *s_cmd)
                     printed_errors(Syntax_error, &s_cmd->full[i]);
                     return -1;
                 }
-                from = ++i;
+                i++;
             }
             if(get_pipe_cmd(s_cmd, &i) != 0)
                 return -1;

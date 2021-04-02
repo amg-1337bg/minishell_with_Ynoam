@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 18:41:45 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/02 11:07:18 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ int main(int argc, char **argv, char **envp)
     s_cmd = NULL;
     cmd_return = 0;
     getenvp(&s_env, envp);
-    signal(SIGQUIT, signal_detected);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));
