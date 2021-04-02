@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 14:58:34 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 15:30:51 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
         s_cmd->pipe = pipe_cmd;
     else
         tmp_cmd->next = pipe_cmd;
-    (*i) -= 1;
+    // (*i) -= 1;
     return (0);
 }
 
