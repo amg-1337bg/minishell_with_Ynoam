@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/02 11:07:18 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/02 17:04:47 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_cmd	*ft_lstcmd(t_cmd *lst)
 	return (lst);
 }
 
-char **create_envp(t_env *s_env)
+char **create_envp(t_env *s_env, char *command)
 {
     char **ret;
     t_env *tmp;
@@ -71,13 +71,12 @@ void    getenvp(t_env **s_env, char **envp)
     t_env *fill;
 
     i = -1;
-    while(envp[++i] != NULL)
+    while (envp[++i] != NULL)
     {
         j = -1;
-        if ((fill = (t_env*)malloc(sizeof(t_env))) == NULL)
+        if ((fill = (t_env *)malloc(sizeof(t_env))) == NULL)
             write(1, strerror(errno), ft_strlen(strerror(errno)));
-        while(envp[i][++j] != '\0')
-        {
+        while (envp[i][++j] != '\0')
             if (envp[i][j] == '=')
             {
                 fill->key = ft_substr(envp[i], 0, j);
@@ -87,9 +86,8 @@ void    getenvp(t_env **s_env, char **envp)
                     tmp->next = fill;
                 else
                     *s_env = fill;
-                break ;
+                break;
             }
-        }
     }
 }
 

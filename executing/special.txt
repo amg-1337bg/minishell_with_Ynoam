@@ -1,2 +1,8 @@
 cd / | echo
 echo hello | grep hell
+HOME
+OLDPWD
+PWD
+SHELL
+SHLVL
+_
