@@ -44,9 +44,9 @@ void    change_stdin_stdout(t_files *files, int *fd)
         files = files->next;
     }
     if (stdout_file && !trunc)
-        fd[1] = creat_file_or_openit(stdout_file, 0);
-    else if (stdout_file && trunc)
         fd[1] = creat_file_or_openit(stdout_file, O_TRUNC);
+    else if (stdout_file && trunc)
+        fd[1] = creat_file_or_openit(stdout_file, O_APPEND);
     else if (stdin_file)
         fd[0] = open_file_for_read(stdin_file);
 }

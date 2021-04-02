@@ -1,1 +1,2 @@
 cd / | echo
+echo hello | grep hell
