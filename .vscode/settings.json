@@ -1,7 +1,23 @@
+<<<<<<< HEAD
 {
     "files.associations": {
         "minishell.h": "c",
         "executing.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
+=======
+{
+    "files.associations": {
+        "minishell.h": "c",
+        "executing.h": "c",
+        "errno.h": "c",
+        "termios.h": "c",
+        "_types.h": "c",
+        "libft.h": "c",
+        "signal.h": "c",
+        "wait.h": "c",
+        "stdlib.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+>>>>>>> 3bcf84087d2bc0269e1d5297f0b2371b8974bfa2
 }
