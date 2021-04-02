@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/01 19:10:14 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/02 12:15:42 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,9 @@ int		ft_echo(char *argv[], int *fd)
 	}
 	if (flag == 0)
 		ft_putstr_fd("\n", fd[1]);
+ 	if (fd[0] != 0)
+		close(fd[0]);
+	if (fd[1] != 1)
+		close(fd[1]);
 	return (0);
 }

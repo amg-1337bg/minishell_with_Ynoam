@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 12:07:12 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/02 11:57:37 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,7 @@ int    looking_for_quotes(char **str, t_env **s_env)
         }
         else if (str[0][i] == '$')
             dollar_founded(str, s_env, &i, just_char);
+            
     }
     return (0);
 }
