@@ -18,6 +18,12 @@
         "wait.h": "c",
         "stdlib.h": "c"
     },
+<<<<<<< HEAD
     "C_Cpp.errorSquiggles": "Disabled"
 >>>>>>> 3bcf84087d2bc0269e1d5297f0b2371b8974bfa2
+=======
+    "C_Cpp.errorSquiggles": "Disabled",
+    "42header.username": "ynoam",
+    "42header.email": "ynoam@student.1337.ma"
+>>>>>>> 8b6608a9b193e83e36787d3e50d84920e406f7f5
 }

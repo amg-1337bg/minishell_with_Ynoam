@@ -12,8 +12,8 @@
 
 NAME = minishell
 
-SRC =	executing/*.c  parsing/*.c   \
-		libft/libft.a
+SRC =	executing/*.c  parsing/*.c \
+		builtin/*.c libft/libft.a 
 FLAGS = -Wall -Wextra 
 
 OBJ = $(SRC:.c=.o)

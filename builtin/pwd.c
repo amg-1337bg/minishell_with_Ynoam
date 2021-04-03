@@ -6,22 +6,27 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 21:02:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/05 17:55:33 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/01 16:17:33 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int	pwd(void)
+int		pwd(int	*fd)
 {
-	char	*pwd_buff;
+	char *path;
 
-	pwd_buff = NULL;
-	if ((pwd_buff = malloc(sizeof(char) * 1024)) == NULL)
-		return (EXIT_FAILURE);
-	getcwd(pwd_buff, 1024);
-	ft_putstr_fd(pwd_buff, 1);
-	ft_putstr_fd("\n", 1);
-	free(pwd_buff);
-	return (EXIT_SUCCESS);
+	if ((path = getcwd(NULL, 0)) == NULL)
+	{
+		put_error(strerror(errno), "pwd");
+		return (1);
+	}
+	ft_putstr_fd(path, fd[1]);
+	ft_putstr_fd("\n", fd[1]);
+	free(path);
+	if (fd[0] != 0)
+		close(fd[0]);
+	if (fd[1] != 1)
+		close(fd[1]);
+	return (0);
 }

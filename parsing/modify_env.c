@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   modify_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:37:13 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/15 11:10:20 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/04/01 18:45:39 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,10 @@ char    *search_env(t_env *s_env, char *key)
     tmp = s_env;
     while(tmp)
     {
-        if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)) == 0)
+        if (!ft_strncmp(tmp->key, key, ft_strlen(tmp->key))
+            && ft_strlen(tmp->key) == ft_strlen(key))
             return (tmp->value);
         tmp = tmp->next;
     }
-    return (NULL);
+    return ("");
 }

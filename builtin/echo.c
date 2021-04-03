@@ -6,33 +6,44 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/05 17:55:00 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/02 12:15:42 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int echo(int argc, char *argv[])
+int		ft_echo(char *argv[], int *fd)
 {
 	int i;
+	int j;
 	int flag;
 
-	i = 1;
 	flag = 0;
-	if (argc == 1)
+	i = 1;
+	while (argv[1] && argv[i])
 	{
-		write(1, "\n", 1);
-		return (0);
-	}
-	if (argv[1][0] == '-' && argv[1][1] == 'n' && ++flag)
+		j = 2;
+		if (ft_strlen(argv[i]) > 2 && argv[i][0] == '-' && argv[i][1] == 'n')
+			while (argv[i][j] == 'n')
+				j++;
+		if (argv[i][j] == '\0')
+			flag = 1;
+		if (argv[i][j] != '\0')
+			break ;
 		i++;
-	while (i < argc - 1)
-	{
-		ft_putstr_fd(argv[i++], 1);
-		ft_putstr_fd(" ", 1);
 	}
-	ft_putstr_fd(argv[i], 1);
+	while(argv[1] && argv[i])
+	{
+		ft_putstr_fd(argv[i], fd[1]);
+		if (argv[i + 1] != NULL)
+			ft_putstr_fd(" ", fd[1]);
+		i++;
+	}
 	if (flag == 0)
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", fd[1]);
+ 	if (fd[0] != 0)
+		close(fd[0]);
+	if (fd[1] != 1)
+		close(fd[1]);
 	return (0);
 }
