@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/02 11:15:20 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/03 10:16:37 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,17 +291,22 @@ int    get_args(t_cmd *s_cmd)
     int     quote;
     int     dquote;
     int     from;
+    int     just_char;
 
     i = -1;
     quote = 0;
     dquote = 0;
     from = -1;
+    just_char = -1;
     while(s_cmd->full[++i] != '\0')
     {
         if(from == -1)
             from = i;
         if (s_cmd->full[i] == '\'' || s_cmd->full[i] == '"')
-            check_quotes(s_cmd->full[i], &quote, &dquote);
+        {
+            if(s_cmd->full[i - 1] == '\\' && just_char == i - 1)
+                check_quotes(s_cmd->full[i], &quote, &dquote);
+        }
         else if ((s_cmd->full[i] == '>' || s_cmd->full[i] == '<') && quote == 0 && dquote == 0)
         {
             if (from != i)
@@ -336,10 +341,15 @@ int    get_args(t_cmd *s_cmd)
                 }
                 i++;
             }
-            if(get_pipe_cmd(s_cmd, &i) != 0)
-                return -1;
+            if(s_cmd->full[i - 1] == '\\' && just_char == i - 1)
+            {
+                if(get_pipe_cmd(s_cmd, &i) != 0)
+                    return -1;
+            }
             from = -1;
         }
+        else if (s_cmd->full[i] == '\\' && s_cmd->full[i + 1] == '\\')
+            just_char = i + 1;
     }
     if(from != -1)
     {

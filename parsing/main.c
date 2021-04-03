@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/02 17:04:47 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/03 15:27:45 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_cmd	*ft_lstcmd(t_cmd *lst)
 	return (lst);
 }
 
-char **create_envp(t_env *s_env, char *command)
+char **create_envp(t_env *s_env)
 {
     char **ret;
     t_env *tmp;
@@ -93,7 +93,7 @@ void    getenvp(t_env **s_env, char **envp)
 
 void    signal_detected(int sig)
 {
-    write(1,"\b\b  \b\b", 6);
+    write(1,"\033[D",3);
 }
 
 int main(int argc, char **argv, char **envp)

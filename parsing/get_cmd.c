@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/01 10:08:14 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/03 10:18:42 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,28 @@ t_cmd   *get_full_cmd(char *line, int *i)
     int j;
     int quote;
     int dquote;
+    int just_char;
     t_cmd *ret;
 
     j = *i;
     quote = 0;
     dquote = 0;
     ret = NULL;
-    // if (line[*i] == ';')
-    //     return (NULL);
+    just_char = -1;
     while (line[j] != '\0')
     {
         if(line[j] == 39 || line[j] == 34)
-            check_quotes(line[j], &quote, &dquote);
+        {
+            if (line[j - 1] == '\\' && just_char == j - 1)
+                check_quotes(line[j], &quote, &dquote);
+        }
         else if(line[j] == ';')
         {
             if (quote == 0 && dquote == 0)
                 break;
         }
+        else if(line[j] == '\\' && line[j + 1] == '\\')
+            just_char = j + 1;
         j++;
     }
     ret = fill_cmd_struct(line, *i, j);

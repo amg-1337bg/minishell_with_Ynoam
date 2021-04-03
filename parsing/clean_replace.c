@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/02 11:57:37 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/03 10:13:51 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,11 @@ int    looking_for_quotes(char **str, t_env **s_env)
                     return (-1);
                 just_char = i;
             }
+        }
+        else if (str[0][i] == '|' && str[0][i - 1] == '\\' && just_char == i - 1)
+        {
+            rm_char(str, i - 1);
+            i -= 1;
         }
         else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
         {
