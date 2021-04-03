@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/03 10:18:42 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/03 16:38:49 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_cmd   *get_full_cmd(char *line, int *i)
         }
         else if(line[j] == ';')
         {
-            if (quote == 0 && dquote == 0)
+            if (quote == 0 && dquote == 0 && line[j - 1] != '\\')
                 break;
         }
         else if(line[j] == '\\' && line[j + 1] == '\\')
