@@ -16,6 +16,8 @@ char    **create_envp(t_env *s_env);
 // get_cmd
 
 void    check_quotes(char c, int *quote, int *dquote);
+int     quote_detected(char *line, int *j, int just_char);
+
 
 // parse_cmd.c
 int     cmd_parser(t_cmd **s_cmd, t_env *s_env);

@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/03 16:38:49 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/04 11:26:53 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,40 @@ void    check_quotes(char c, int *quote, int *dquote)
         else
             *dquote = 0;
     }
+}
+
+int     quote_detected(char *line, int *j, int just_char)
+{
+    char c;
+
+    c = line[*j];
+    if (*j != 0 && line[*j - 1] != '\\' || (line[*j - 1] == '\\' && just_char == *j - 1))
+    {
+        if(c == '\'')
+        {
+            while (line[++(*j)] != '\0')
+            {
+                if (line[*j] == c)
+                    return (1);
+            }
+        }
+        else
+        {
+            while (line[++(*j)] != '\0')
+            {
+                if (line[*j] == '\\' && line[*j + 1] == '\\')
+                    just_char = *j + 1;
+                else if (line[*j] == '"')
+                {
+                    if (line[*j - 1] == '\\' && just_char == *j - 1)
+                        return (1);
+                    else if (line[*j] != '\\')
+                        return (1);
+                }
+            }
+        }
+    }
+    return (0);
 }
 
 t_cmd   *fill_cmd_struct(char *line, int begin, int end)
@@ -61,14 +95,11 @@ t_cmd   *get_full_cmd(char *line, int *i)
     while (line[j] != '\0')
     {
         if(line[j] == 39 || line[j] == 34)
-        {
-            if (line[j - 1] == '\\' && just_char == j - 1)
-                check_quotes(line[j], &quote, &dquote);
-        }
+            quote_detected(line, &j, just_char);
         else if(line[j] == ';')
         {
-            if (quote == 0 && dquote == 0 && line[j - 1] != '\\')
-                break;
+            if (line[j - 1] != '\\' || just_char == j - 1)
+                break ;
         }
         else if(line[j] == '\\' && line[j + 1] == '\\')
             just_char = j + 1;
