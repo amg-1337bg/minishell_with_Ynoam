@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/05 10:48:10 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/05 17:51:39 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,39 +98,39 @@ int    get_file(t_cmd *s_cmd, char *fullstr, int j, int *i)
     t_files *tmp;
     int     path_begin;
 
-    if((fill = (t_files*)malloc(sizeof(t_files))) == NULL)
-        error();
-    if (fullstr[j] == '<')
-        fill->type = ft_strdup("<");
-    else if (fullstr[j] == '>')
-    {
-        if(fullstr[j + 1] == '>')
-        {
-            fill->type = ft_strdup(">>");
-            j++;
-        }
-        else
-            fill->type = ft_strdup(">");
-    }
-    j++;
-    j += space_count(&fullstr[j]);
-    path_begin = j;
-    while (fullstr[j] != '\0')
-    {
-        if(fullstr[j] == ' ' || fullstr[j] == '<' || fullstr[j] == '>' || fullstr[j] == '|')
-            break;
-        j++;
-    }
-    fill->file = ft_substr(fullstr, path_begin, j - path_begin);
-    fill->next = NULL;
-    if (ft_strlen(fill->file) == 0)
-        return -1;
-    if((tmp = ft_lastfile(s_cmd->files)) == NULL)
-        s_cmd->files = fill;
-    else
-        tmp->next = fill;
-    j += space_count(&fullstr[j]);
-    *i = j - 1;
+    // if((fill = (t_files*)malloc(sizeof(t_files))) == NULL)
+    //     error();
+    // if (fullstr[j] == '<')
+    //     fill->type = ft_strdup("<");
+    // else if (fullstr[j] == '>')
+    // {
+    //     if(fullstr[j + 1] == '>')
+    //     {
+    //         fill->type = ft_strdup(">>");
+    //         j++;
+    //     }
+    //     else
+    //         fill->type = ft_strdup(">");
+    // }
+    // j++;
+    // j += space_count(&fullstr[j]);
+    // path_begin = j;
+    // while (fullstr[j] != '\0')
+    // {
+    //     if(fullstr[j] == ' ' || fullstr[j] == '<' || fullstr[j] == '>' || fullstr[j] == '|')
+    //         break;
+    //     j++;
+    // }
+    // fill->file = ft_substr(fullstr, path_begin, j - path_begin);
+    // fill->next = NULL;
+    // if (ft_strlen(fill->file) == 0)
+    //     return -1;
+    // if((tmp = ft_lastfile(s_cmd->files)) == NULL)
+    //     s_cmd->files = fill;
+    // else
+    //     tmp->next = fill;
+    // j += space_count(&fullstr[j]);
+    // *i = j - 1;
     return (0);
 }
 
@@ -285,7 +285,93 @@ int    get_cmd_args(t_cmd *s_cmd, int from, int *i)
     return (0);
 }
 
-int    get_args(t_cmd *s_cmd)
+char    *get_redir_type(t_cmd *s_cmd, int *i)
+{
+    char    c;
+    char    *res;
+
+    c = s_cmd->full[(*i)];
+    if (c == '<')
+    {
+        (*i)++;
+        return (ft_strdup("<"));
+    }
+    else
+    {
+        if (s_cmd->full[(*i) + 1] == '>')
+        {
+            (*i) += 2;
+            return (ft_strdup(">>"));
+        }
+        else
+        {
+            (*i)++;   
+            return (ft_strdup(">"));
+        }
+    }    
+}
+
+char    *get_filename(t_cmd *s_cmd, int *i, int just_char)
+{
+    char    *ret;
+    int     from;
+    
+    printf("hello %s\n", &s_cmd->full[(*i)]);
+    (*i) += space_count(&s_cmd->full[(*i)]);
+    from = *i;
+    printf("%s\n", &s_cmd->full[*i]);
+    while (s_cmd->full[*i] != '\0')
+    {
+        if(s_cmd->full[*i] == 39 || s_cmd->full[*i] == 34)
+            quote_detected(s_cmd->full[*i], i, just_char);
+        else if(s_cmd->full[*i] == '\\' && s_cmd->full[*i + 1] == '\\')
+            just_char = *i + 1;
+        else if (s_cmd->full[*i] == '>' || s_cmd->full[*i] == '<')
+        {
+            if (s_cmd->full[*i - 1] == '\\' && just_char == *i - 1)
+                break ;
+            else if (s_cmd->full[*i - 1] != '\\')
+                break ;    
+        }
+        else if (s_cmd->full[*i] == ' ')
+            break ;
+        (*i)++;
+    }
+    ret = ft_substr(s_cmd->full, from, *i - from);
+    return (ret);
+}
+
+int     get_redirection(t_cmd *s_cmd, int *i, int from, int just_char)
+{
+    t_files *fill;
+    t_files *tmp;
+
+    if(*i == 0 || s_cmd->full[*i - 1] != '\\' || (s_cmd->full[*i - 1] == '\\' && just_char == *i - 1))
+    {
+        if (from != (*i))
+        {
+            if (get_cmd_args(s_cmd, from, i) != 0);
+            // {
+            //     printed_errors(Syntax_error, &s_cmd->full[i]);
+            //     return -1;
+            // }
+            (*i)++;
+        }
+        fill = (t_files*)malloc(sizeof(t_files));
+        fill->type = get_redir_type(s_cmd, i);
+        fill->file = get_filename(s_cmd, i, just_char);
+        fill->next = NULL;
+        if((tmp = ft_lastfile(s_cmd->files)) == NULL)
+            s_cmd->files = fill;
+        else
+            tmp->next = fill;
+        (*i) += space_count(&s_cmd->full[*i]) - 1;
+        return (1);
+    }
+    return (0);
+}
+
+int     get_args(t_cmd *s_cmd)
 {
     int     i;
     int     quote;
@@ -304,19 +390,10 @@ int    get_args(t_cmd *s_cmd)
             from = i;
         if (s_cmd->full[i] == '\'' || s_cmd->full[i] == '"')
             quote_detected(s_cmd->full, &i, just_char);
-        else if ((s_cmd->full[i] == '>' || s_cmd->full[i] == '<') && quote == 0 && dquote == 0)
+        else if (s_cmd->full[i] == '>' || s_cmd->full[i] == '<')
         {
-            if (from != i)
-            {
-                if (get_cmd_args(s_cmd, from, &i) != 0)
-                {
-                    printed_errors(Syntax_error, &s_cmd->full[i]);
-                    return -1;
-                }
-                i++;
-            }
-            get_file(s_cmd, s_cmd->full, from, &i);
-            from = -1;
+            if (get_redirection(s_cmd, &i, from, just_char) != 0)
+                from = -1;
         }
         else if(s_cmd->full[i] == ' ' && quote == 0 && dquote == 0)
         {
@@ -375,8 +452,6 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
             return (error);
         if (clean_replace(tmp, s_env) != 0)
             return (-1);
-        // get_the_cmd(tmp, s_env);
-        // get_args(tmp, s_env);
         tmp = tmp->next;
     }
     return (0);
