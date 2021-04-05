@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/03 10:13:51 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/05 11:35:28 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int    looking_for_quotes(char **str, t_env **s_env)
     return (0);
 }
 
-int    clean_replace(t_cmd *s_cmd, t_env *s_env)
+int     clean_replace(t_cmd *s_cmd, t_env *s_env)
 {
     int     i;
     t_args  *tmp_args;

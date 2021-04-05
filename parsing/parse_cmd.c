@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/04 11:44:22 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/05 10:48:10 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,10 +303,7 @@ int    get_args(t_cmd *s_cmd)
         if(from == -1)
             from = i;
         if (s_cmd->full[i] == '\'' || s_cmd->full[i] == '"')
-        {
-            printf("enter %s\n", &s_cmd->full[i]);
             quote_detected(s_cmd->full, &i, just_char);
-        }
         else if ((s_cmd->full[i] == '>' || s_cmd->full[i] == '<') && quote == 0 && dquote == 0)
         {
             if (from != i)
@@ -376,7 +373,6 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
         free(tofree);
         if ((error = get_args(tmp)) != 0)
             return (error);
-        printf("%s\n", tmp->args->arg);
         if (clean_replace(tmp, s_env) != 0)
             return (-1);
         // get_the_cmd(tmp, s_env);

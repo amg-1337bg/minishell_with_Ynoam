@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/04 11:26:53 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/05 10:44:35 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int     quote_detected(char *line, int *j, int just_char)
     char c;
 
     c = line[*j];
-    if (*j != 0 && line[*j - 1] != '\\' || (line[*j - 1] == '\\' && just_char == *j - 1))
+    if (*j == 0 || (*j > 0 && line[*j - 1] != '\\') || (line[*j - 1] == '\\' && just_char == *j - 1))
     {
         if(c == '\'')
         {
@@ -55,7 +55,7 @@ int     quote_detected(char *line, int *j, int just_char)
                 {
                     if (line[*j - 1] == '\\' && just_char == *j - 1)
                         return (1);
-                    else if (line[*j] != '\\')
+                    else if (line[*j - 1] != '\\')
                         return (1);
                 }
             }
