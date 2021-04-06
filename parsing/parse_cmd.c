@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/06 09:49:25 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/06 15:24:02 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
             if (get_redirection(pipe_cmd, i, from, just_char) != 0)
                 from = -1;
         }
-        else if(s_cmd->full[*i] == ' ')
+        else if(s_cmd->full[*i] == ' ' && (s_cmd->full[(*i) - 1] != '\\' || just_char == (*i) - 1))
         {
             if (get_cmd_args(pipe_cmd, from, i) != 0)
             {
@@ -189,7 +189,7 @@ int    get_pipe_cmd(t_cmd *s_cmd, int *i)
         else if (pipe_cmd->full[*i] == '\\' && pipe_cmd->full[(*i) + 1] == '\\')
             just_char = (*i) + 1;
     }
-    get_the_rest(s_cmd, &i, from);
+    get_the_rest(pipe_cmd, i, from);
     if((tmp_cmd = ft_lstcmd(s_cmd->pipe)) == NULL)
         s_cmd->pipe = pipe_cmd;
     else
@@ -399,7 +399,7 @@ int     get_args(t_cmd *s_cmd)
             if (get_redirection(s_cmd, &i, from, just_char) != 0)
                 from = -1;
         }
-        else if(s_cmd->full[i] == ' ')
+        else if(s_cmd->full[i] == ' ' && (s_cmd->full[i - 1] != '\\' || just_char == i - 1))
         {
             if (get_cmd_args(s_cmd, from, &i) != 0)
             {

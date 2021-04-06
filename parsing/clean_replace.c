@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/06 12:03:01 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/06 16:05:18 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,11 @@ int     looking_for_quotes(char **str, t_env **s_env)
         {
             rm_char(&str[0], i);
             just_char = i;
+        }
+        else if (str[0][i] == ' ' && str[0][i - 1] == '\\' && just_char != i - 1)
+        {
+            rm_char(str, i - 1);
+            i -= 1;
         }
         else if (str[0][i] == '$')
             dollar_founded(str, s_env, &i, just_char);
