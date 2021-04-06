@@ -177,7 +177,7 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
         ret = ft_echo(create_args(cmd), fd);
     else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1)) // TODO:
-        ret = printf("i am a built in command\n");
+        ret = cd(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
         ret = pwd(fd);
     else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) // TODO: 
@@ -248,7 +248,7 @@ int     exec_normal(t_cmd *cmd, t_env *env)
             change_stdin_stdout(cmd->files, fd);
             dup2(fd[0], STDIN_FILENO);
             dup2(fd[1], STDOUT_FILENO);
-            execve(cmd->cmd, create_args(cmd), create_envp(env));
+            execve(cmd->cmd, create_args(cmd), create_envp(env, ft_strjoin(getcwd(NULL, 0), ft_strjoin("/", cmd->cmd))));
             put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }
@@ -268,7 +268,7 @@ int     exec_normal(t_cmd *cmd, t_env *env)
                 onepath = ft_strjoin(ft_strjoin(paths[i], "/"), cmd->cmd);
                 char **str;
                 str = create_args(cmd);
-                execve(onepath, create_args(cmd), create_envp(env));
+                execve(onepath, create_args(cmd), create_envp(env, onepath));
                 ft_free(&onepath);
                 i++;
             }
