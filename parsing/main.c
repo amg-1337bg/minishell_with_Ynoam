@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/05 12:01:02 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/06 18:52:12 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void    getenvp(t_env **s_env, char **envp)
 
 void    signal_detected(int sig)
 {
-    write(1,"\b\b  \b\b", 6);
+    write(1,"\033[D",3);
 }
 
 void    changenvp(t_env *env)

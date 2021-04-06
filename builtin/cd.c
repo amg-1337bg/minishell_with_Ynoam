@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:09:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/06 18:37:53 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/06 19:10:13 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int		cd(t_env *env, char **path)
 				return (0);
 			}
 	free(hna);
-	put_error(strerror(errno), "cd");
+	hna = ft_strjoin("cd: ", path[0]);
+	put_error(strerror(errno), hna);
+	free(hna);
 	return (1);
 }
