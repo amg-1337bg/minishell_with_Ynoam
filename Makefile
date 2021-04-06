@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
+#    By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/03/15 18:15:36 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/04/06 18:26:19 by ynoam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc $(FLAGS) $(SRC) -o $(NAME)
+	gcc -g -fsanitize=address $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
 	make clean -C ./libft

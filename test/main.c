@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <sys/errno.h>
 #include <string.h>
+#include <paths.h>
 int main(int ac, char *av[], char *env[])
 {
 	while (*env)
