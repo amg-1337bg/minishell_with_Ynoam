@@ -24,6 +24,11 @@ int     cmd_parser(t_cmd **s_cmd, t_env *s_env);
 void    get_the_cmd(t_cmd *s_cmd, t_env **s_env);
 void    convert_cmd_to_env(t_cmd *s_cmd, t_env **s_env);
 int     get_cmd_args(t_cmd *s_cmd, int from, int *i);
+char    *get_filename(t_cmd *s_cmd, int *i, int just_char);
+char    *get_redir_type(t_cmd *s_cmd, int *i);
+int     get_redirection(t_cmd *s_cmd, int *i, int from, int just_char);
+int     pipe_function(t_cmd *s_cmd, int *i, int from, int just_char);
+int     get_the_rest(t_cmd *s_cmd, int *i, int from);
 
 // free_strcut.c
 

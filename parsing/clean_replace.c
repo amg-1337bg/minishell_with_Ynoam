@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/05 11:35:28 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/06 12:03:01 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,30 @@ void    dollar_founded(char **str, t_env *s_env, int *i, int just_char)
     *i += ft_strlen(value) - 1;
 }
 
-int    looking_for_quotes(char **str, t_env **s_env)
+int     quotes_function(char **str, t_env *s_env, int *i, int just_char)
+{
+    if ((*i) != 0 && str[0][(*i) - 1] == '\\' && just_char != (*i) - 1)
+    {
+        rm_char(&str[0], (*i) - 1);
+        (*i) -= 1;
+    }
+    else
+    {
+        if(str[0][(*i)] == '"')
+        {
+            if (found_dquote(&str[0], s_env, i) == -1)
+                return (-1);
+        }
+        else if(str[0][(*i)] == '\'')
+        {
+            if (found_quote(&str[0], i) == -1)
+                return (-1);
+        }
+    }
+    return (0);
+}
+
+int     looking_for_quotes(char **str, t_env **s_env)
 {
     int i;
     int just_char;
@@ -155,34 +178,19 @@ int    looking_for_quotes(char **str, t_env **s_env)
     just_char = -1;
     while(str[0] != NULL && str[0][++i] != '\0')
     {
-        if(str[0][i] == '"')
+        if(str[0][i] == '"' || str[0][i] == '\'')
+            quotes_function(str, s_env, &i, just_char);
+        else if (str[0][i] == '|' && str[0][i - 1] == '\\' && just_char != i - 1)
         {
-            if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
-            {
-                rm_char(&str[0], i - 1);
-                i -= 1;
-            }
-            else
-            {
-                if (found_dquote(&str[0], s_env, &i) == -1)
-                    return (-1);
-            }
+            rm_char(str, i - 1);
+            i -= 1;
         }
-        else if(str[0][i] == '\'')
+        else if (str[0][i] == ';' && str[0][i - 1] == '\\' && just_char != i - 1)
         {
-            if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
-            {
-                rm_char(&str[0], i - 1);
-                i -= 1;
-            }
-            else
-            {
-                if (found_quote(&str[0], &i) == -1)
-                    return (-1);
-                just_char = i;
-            }
+            rm_char(str, i - 1);
+            i -= 1;
         }
-        else if (str[0][i] == '|' && str[0][i - 1] == '\\' && just_char == i - 1)
+        else if ((str[0][i] == '>' || str[0][i] == '<') && str[0][i - 1] == '\\' && just_char != i - 1)
         {
             rm_char(str, i - 1);
             i -= 1;
