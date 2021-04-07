@@ -176,7 +176,7 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
     change_stdin_stdout(cmd->files, fd);
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
         ret = ft_echo(create_args(cmd), fd);
-    else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1)) // TODO:
+    else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
         ret = cd(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
         ret = pwd(fd);
@@ -184,10 +184,14 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
         ret = printf("i am a built in command\n");
     else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1)) // TODO:
         ret = printf("i am a built in command\n");
-    else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1)) // TODO: 
-        ret = printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
+        ret = ft_env(env, fd);
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
         ret = ft_exit(create_args(cmd));
+	if (fd[0] != 0)
+		close(fd[0]);
+	if (fd[1] != 1)
+		close(fd[1]);
     free(fd);
     return (ret);
 }

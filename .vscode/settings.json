@@ -10,7 +10,8 @@
         "wait.h": "c",
         "stdlib.h": "c",
         "paths.h": "c",
-        "parsing.h": "c"
+        "parsing.h": "c",
+        "builtin.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "42header.username": "ynoam",

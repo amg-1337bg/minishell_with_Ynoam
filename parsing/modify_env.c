@@ -37,7 +37,7 @@ void    mdf_env(t_env *s_env, char *key, char *value)
     found = 0;
     while (tmp)
     {
-        if (ft_strncmp(tmp->key, key, ft_strlen(key)) == 0 && ft_strlen(key) == ft_strlen(tmp->key))
+        if (tmp->key && ft_strncmp(tmp->key, key, ft_strlen(key)) == 0 && ft_strlen(key) == ft_strlen(tmp->key))
         {
             free(tmp->value);
             tmp->value = value;
@@ -92,7 +92,7 @@ char    *search_env(t_env *s_env, char *key)
     tmp = s_env;
     while(tmp)
     {
-        if (!ft_strncmp(tmp->key, key, ft_strlen(tmp->key))
+        if (tmp->key && !ft_strncmp(tmp->key, key, ft_strlen(tmp->key))
             && ft_strlen(tmp->key) == ft_strlen(key))
             return (tmp->value);
         tmp = tmp->next;
