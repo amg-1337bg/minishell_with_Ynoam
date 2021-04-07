@@ -180,10 +180,10 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
         ret = cd(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
         ret = pwd(fd);
-    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) // TODO: 
-        ret = printf("i am a built in command\n");
-    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1)) // TODO:
-        ret = printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) 
+        ret = export(env, cmd->args, fd);
+    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
+        ret = unset(cmd->args, env);
     else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
         ret = ft_env(env, fd);
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))

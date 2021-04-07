@@ -6,14 +6,21 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:50:12 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/07 16:17:25 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 18:21:52 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int		unset(char *argv[], t_env head)
+int		unset(t_env *head, char *argv[])
 {
-	
+	if (argv)
+	{
+		while (*argv)
+		{
+			dlt_env(head, *argv);
+			argv++;
+		}
+	}
 	return 0;
 }
