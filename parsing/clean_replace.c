@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/06 19:17:35 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 09:10:26 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void    looking_for_dollar(char **str, t_env *s_env, int from, int *to)
         {
             diff = from;
             dollar_founded(str, s_env, &from, -2);
-            *to += from - diff;
+            *to = from - diff;
         }
         from++;
     }
@@ -157,12 +157,12 @@ int     quotes_function(char **str, t_env *s_env, int *i, int just_char)
     {
         if(str[0][(*i)] == '"')
         {
-            if (found_dquote(&str[0], s_env, i) == -1)
+            if (found_dquote(str, s_env, i) == -1)
                 return (-1);
         }
         else if(str[0][(*i)] == '\'')
         {
-            if (found_quote(&str[0], i) == -1)
+            if (found_quote(str, i) == -1)
                 return (-1);
         }
     }
@@ -197,7 +197,7 @@ int     looking_for_quotes(char **str, t_env **s_env)
         }
         else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
         {
-            rm_char(&str[0], i);
+            rm_char(str, i);
             just_char = i;
         }
         else if (str[0][i] == ' ' && str[0][i - 1] == '\\' && just_char != i - 1)

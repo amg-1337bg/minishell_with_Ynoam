@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/06 19:21:24 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 08:49:09 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_cmd	*ft_lstcmd(t_cmd *lst)
 	return (lst);
 }
 
-char **create_envp(t_env *s_env)
+char **create_envp(t_env *s_env, char *cmd)
 {
     char **ret;
     t_env *tmp;
@@ -43,11 +43,8 @@ char **create_envp(t_env *s_env)
 
     i = 0;
     tmp = s_env;
-    while (tmp != NULL)
-    {
+    while (tmp != NULL && ++i)
         tmp = tmp->next;
-        i++;
-    }
     j = 0;
     tmp = s_env;
     if ((ret = (char**)malloc((i + 1) * sizeof(char*))) == NULL)
@@ -55,7 +52,10 @@ char **create_envp(t_env *s_env)
     while (tmp != NULL)
     {
         ret[j] = ft_strjoin(tmp->key, "=");
-        ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
+        if (ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0 && ft_strlen(tmp->key) == ft_strlen("_"))
+            ret[j] = ft_strjoin(ret[j], cmd); //LEAKS HERE
+        else
+            ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
         j++;
         tmp = tmp->next;
     }
