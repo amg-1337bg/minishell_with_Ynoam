@@ -6,7 +6,11 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/04/07 16:20:33 by ynoam            ###   ########.fr       */
+=======
+/*   Updated: 2021/04/07 08:49:09 by ynoam            ###   ########.fr       */
+>>>>>>> 36c10a2587baed723a0e9de7fbd987c2f35ecaea
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +56,11 @@ char **create_envp(t_env *s_env, char *cmd)
     while (tmp != NULL)
     {
         ret[j] = ft_strjoin(tmp->key, "=");
+<<<<<<< HEAD
         if (tmp->key && ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0 && ft_strlen(tmp->key) == ft_strlen("_"))
+=======
+        if (ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0 && ft_strlen(tmp->key) == ft_strlen("_"))
+>>>>>>> 36c10a2587baed723a0e9de7fbd987c2f35ecaea
             ret[j] = ft_strjoin(ret[j], cmd); //LEAKS HERE
         else
             ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE

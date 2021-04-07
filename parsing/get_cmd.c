@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/06 15:08:43 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 11:18:59 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int     quote_detected(char *line, int *j, int just_char)
     char c;
 
     c = line[*j];
-    if (*j == 0 || (*j > 0 && line[*j - 1] != '\\') || (line[*j - 1] == '\\' && just_char == *j - 1))
+    if (*j == 0 || line[*j - 1] != '\\' || (line[*j - 1] == '\\' && just_char == *j - 1))
     {
         if(c == '\'')
         {
@@ -49,13 +49,13 @@ int     quote_detected(char *line, int *j, int just_char)
         {
             while (line[++(*j)] != '\0')
             {
-                if (line[*j] == '\\' && line[*j + 1] == '\\')
-                    just_char = *j + 1;
+                if (line[(*j)] == '\\' && line[(*j) + 1] == '\\')
+                    just_char = (*j) + 1;
                 else if (line[*j] == '"')
                 {
-                    if (line[*j - 1] == '\\' && just_char == *j - 1)
+                    if (line[(*j) - 1] == '\\' && just_char == (*j) - 1)
                         return (1);
-                    else if (line[*j - 1] != '\\')
+                    else if (line[(*j) - 1] != '\\')
                         return (1);
                 }
             }
@@ -121,13 +121,14 @@ int    get_cmd(t_cmd **s_cmd, t_env *s_env, char *line)
     {
         if((tmp = get_full_cmd(line, &i)) == NULL)
             return (Syntax_error);
-        if((last = ft_lstcmd(*s_cmd)) == NULL)
-            *s_cmd = tmp;
+        if((last = ft_lstcmd(s_cmd[0])) == NULL)
+            s_cmd[0] = tmp;
         else
             last->next = tmp;
         if (line[i] == ';')
             i++;
     }
+    printf("hello \n");
     if (cmd_parser(s_cmd, s_env) != 0)
         return(-1);
     return (0);

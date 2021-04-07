@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/06 15:24:02 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 14:58:25 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,8 +433,8 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
     t_cmd   *tmp;
     int     error;
     char    *tofree;
-    
-    tmp = *s_cmd;
+    char    *i;
+    tmp = s_cmd[0];
     while (tmp)
     {
         tofree = tmp->full;
