@@ -183,7 +183,7 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
     else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) 
         ret = export(env, cmd->args, fd);
     else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
-        ret = unset(cmd->args, env);
+        ret = unset(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
         ret = ft_env(env, fd);
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))

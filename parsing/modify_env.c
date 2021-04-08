@@ -114,3 +114,16 @@ t_env   *search_env_for_node(t_env *s_env, char *key)
 	}
 	return (NULL);
 }
+
+int		list_size(t_env *head)
+{
+	int i;
+
+	i = 0;
+	while (head)
+	{
+		i++;
+		head = head->next;
+	}
+	return (i);
+}
