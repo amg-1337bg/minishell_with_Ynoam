@@ -135,18 +135,6 @@ int		create_files(t_files *files)
 	return (return_value(ret));
 }
 
-int     pipe_count(t_cmd *command)
-{
-    int i;
-    i = 0;
-    while (command->pipe != NULL)
-    {
-        command = command->pipe;
-        i++;
-    }
-    return (i);
-}
-
 int     is_builtin(char *command)
 {
     if (!ft_strncmp(command, "echo", ft_strlen("echo") + 1))
@@ -180,10 +168,10 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
         ret = cd(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
         ret = pwd(fd);
-    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) // TODO: 
-        ret = printf("i am a built in command\n");
-    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1)) // TODO:
-        ret = printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) 
+        ret = export(env, cmd->args, fd);
+    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
+        ret = unset(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
         ret = ft_env(env, fd);
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
@@ -196,9 +184,21 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
     return (ret);
 }
 
+int     pipe_count(t_cmd *command)
+{
+    int i;
+    i = 0;
+    while (command->pipe != NULL)
+    {
+        command = command->pipe;
+        i++;
+    }
+    return (i);
+}
+
 int     exec_pipe(t_cmd *cmds, t_env *env)
 {
-    printf("there is a pipe\n");
+    
     return (0);
 }
 
@@ -212,22 +212,6 @@ int     is_path(char *cmd)
 		return (1);
 	return (0);
 }
-
-char	**search_env_for_path(char **env)
-{
-	int	i;
-
-	i = 0;
-	while(env[i])
-	{
-		if (!ft_strncmp(env[i], "PATH=", 5))
-			return(ft_split(&(env[i][5]), ':'));
-		i++;
-	}
-	return (NULL);
-}
-
-
 
 int     exec_normal(t_cmd *cmd, t_env *env)
 {
@@ -252,7 +236,7 @@ int     exec_normal(t_cmd *cmd, t_env *env)
             change_stdin_stdout(cmd->files, fd);
             dup2(fd[0], STDIN_FILENO);
             dup2(fd[1], STDOUT_FILENO);
-            execve(cmd->cmd, create_args(cmd), create_envp(env, ft_strjoin(getcwd(NULL, 0), ft_strjoin("/", cmd->cmd))));
+            execve(cmd->cmd, create_args(cmd), create_envp(env, cmd->cmd));
             put_error(strerror(errno), cmd->cmd);
 			exit(127);
         }

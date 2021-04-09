@@ -61,18 +61,18 @@ void    dlt_env(t_env *s_env, char *key)
         second = first->next;
         if(second != NULL)
         {
-            if (ft_strncmp(second->key, key, ft_strlen(key)) == 0 && ft_strlen(key) == ft_strlen(second->key))
+            if (second->key && ft_strncmp(second->key, key, ft_strlen(key)) == 0 && ft_strlen(key) == ft_strlen(second->key))
             {
                 first->next = second->next;
                 free(second->key);
-                free(second->key);
+                free(second->value);
                 free(second);
                 return ;
             }
         }
         else
         {
-            if (ft_strncmp(first->key, key, ft_strlen(key)) == 0 && ft_strlen(key) == ft_strlen(first->key))
+            if (first->key && ft_strncmp(first->key, key, ft_strlen(key)) == 0 && ft_strlen(key) == ft_strlen(first->key))
             {
                 free(first->key);
                 free(first->value);
@@ -113,4 +113,17 @@ t_env   *search_env_for_node(t_env *s_env, char *key)
 		tmp = tmp->next;
 	}
 	return (NULL);
+}
+
+int		list_size(t_env *head)
+{
+	int i;
+
+	i = 0;
+	while (head)
+	{
+		i++;
+		head = head->next;
+	}
+	return (i);
 }

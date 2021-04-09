@@ -12,6 +12,7 @@ int     get_cmd(t_cmd **s_cmd, t_env *s_env, char *line);
 char    *search_env(t_env *s_env, char *key);
 t_cmd	*ft_lstcmd(t_cmd *lst);
 char    **create_envp(t_env *s_env, char *cmd);
+int		list_size(t_env *head);
 
 // get_cmd
 
