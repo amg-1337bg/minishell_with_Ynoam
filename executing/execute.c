@@ -219,7 +219,7 @@ int     exec_normal(t_cmd *cmd, t_env *env)
     char    *onepath;
     int     ret;
     DIR     *dir;
-    int i = 0;
+    int     i = 0;
     int     *fd;
 
     fd = malloc(sizeof(int) * 2);
@@ -229,19 +229,24 @@ int     exec_normal(t_cmd *cmd, t_env *env)
         {
             put_error("is a directory", cmd->cmd);
             closedir(dir);
+            free(fd);
             return (126);
         }
-        else if (fork() == 0)
+        else
         {
-            change_stdin_stdout(cmd->files, fd);
-            dup2(fd[0], STDIN_FILENO);
-            dup2(fd[1], STDOUT_FILENO);
-            execve(cmd->cmd, create_args(cmd), create_envp(env, cmd->cmd));
-            put_error(strerror(errno), cmd->cmd);
-			exit(127);
+            if (fork() == 0)
+            {
+                change_stdin_stdout(cmd->files, fd);
+                dup2(fd[0], STDIN_FILENO);
+                dup2(fd[1], STDOUT_FILENO);
+                execve(cmd->cmd, create_args(cmd), create_envp(env, cmd->cmd));
+                put_error(strerror(errno), cmd->cmd);
+                exit(127);
+            }
+            wait(&ret);
+            free(fd);
+            return (ret);
         }
-        wait(&ret);
-        return (ret);
     }
     else // command in path variable
     {
