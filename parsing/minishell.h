@@ -8,6 +8,8 @@
 #include <signal.h>
 #include <sys/errno.h>
 #include <termios.h>
+#include <curses.h>
+#include <term.h>
 #include "../libft/libft.h"
 
 #define binPath "/bin/pwd"

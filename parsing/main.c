@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/07 08:49:09 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/08 11:02:12 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char **create_envp(t_env *s_env, char *cmd)
     while (tmp != NULL)
     {
         ret[j] = ft_strjoin(tmp->key, "=");
-        if (ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0 && ft_strlen(tmp->key) == ft_strlen("_"))
+        if (tmp->key && ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0 && ft_strlen(tmp->key) == ft_strlen("_"))
             ret[j] = ft_strjoin(ret[j], cmd); //LEAKS HERE
         else
             ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
@@ -63,6 +63,39 @@ char **create_envp(t_env *s_env, char *cmd)
     return (ret);
 }
 
+void    changenvp(t_env *env)
+{
+	char	*shlvl;
+	int		wow;
+
+	mdf_env(env, "OLDPWD", NULL);
+	mdf_env(env, "PWD", getcwd(NULL, 0));
+	shlvl = search_env(env, "SHLVL");
+	wow = 1;
+	if (shlvl[0] != 0) // if is exist
+	{
+		while (shlvl[wow])
+		{
+			if (!ft_isdigit(shlvl[wow]))
+				break;
+			wow++;
+		}
+		if (shlvl[wow] != 0)
+		{
+			crt_env(env, ft_strdup("SHLVL"), ft_strdup("1"));
+			return ;
+		}
+		if (ft_atoi(shlvl) > 998)
+			mdf_env(env, "SHLVL", ft_strdup(""));
+		else if (ft_atoi(shlvl) < 0)
+			mdf_env(env, "SHLVL", ft_itoa(0));
+		else
+			mdf_env(env, "SHLVL", ft_itoa(ft_atoi(search_env(env, "SHLVL")) + 1));
+	}
+	else
+		crt_env(env, ft_strdup("SHLVL"), ft_strdup("1"));
+}
+
 void    getenvp(t_env **s_env, char **envp)
 {
     int j;
@@ -71,6 +104,11 @@ void    getenvp(t_env **s_env, char **envp)
     t_env *fill;
 
     i = -1;
+    fill = malloc(sizeof(t_env));
+    fill->key = NULL;
+    fill->value = NULL;
+    fill->next = NULL;
+    *s_env = fill;
     while (envp[++i] != NULL)
     {
         j = -1;
@@ -84,8 +122,6 @@ void    getenvp(t_env **s_env, char **envp)
                 fill->next = NULL;
                 if ((tmp = ft_lstlst(*s_env)) != NULL)
                     tmp->next = fill;
-                else
-                    *s_env = fill;
                 break;
             }
     }
@@ -93,7 +129,16 @@ void    getenvp(t_env **s_env, char **envp)
 
 void    signal_detected(int sig)
 {
-    write(1,"\033[D",3);
+    char *del;
+    int tgeten;
+    
+    tgeten = tgetent(NULL, getenv("TERM"));
+	del = tgetstr("le", NULL);
+    if (del != NULL)
+	    write(1, del, ft_strlen(del));
+	del = tgetstr("dc", NULL);
+	if (del != NULL)
+        write(1, del, ft_strlen(del));
 }
 
 int main(int argc, char **argv, char **envp)
@@ -112,6 +157,8 @@ int main(int argc, char **argv, char **envp)
     s_cmd = NULL;
     cmd_return = 0;
     getenvp(&s_env, envp);
+    changenvp(s_env);
+    // signal(SIGINT, signal_detected);
     while(1)
     {
         write(1, Minishell, ft_strlen(Minishell));

@@ -6,7 +6,7 @@
 #    By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/04/06 18:49:13 by ynoam            ###   ########.fr        #
+#    Updated: 2021/04/08 10:54:56 by ynoam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc -g -fsanitize=address $(FLAGS) $(SRC) -o $(NAME)
+	gcc -g -fsanitize=address -ltermcap $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
 	make clean -C ./libft

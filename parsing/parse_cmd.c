@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/07 14:58:25 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 16:57:37 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,9 @@ char    *get_filename(t_cmd *s_cmd, int *i, int just_char)
             else if (s_cmd->full[*i - 1] != '\\')
                 break ;    
         }
-        else if (s_cmd->full[*i] == ' ')
+        else if (s_cmd->full[*i] == ' ' && (s_cmd->full[(*i) - 1] != '\\' || just_char == (*i) - 1))
+            break ;
+        else if (s_cmd->full[(*i)] == '|' && (s_cmd->full[(*i) - 1] != '\\' || just_char == (*i) - 1))
             break ;
         (*i)++;
     }
