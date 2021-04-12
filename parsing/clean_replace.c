@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/02 11:57:37 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 15:35:41 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ int    found_dquote(char **str, t_env *s_env, int *dquote_ind)
         }
         else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
         {
-            rm_char(&str[0], i);
+            rm_char(str, i);
             just_char = i;
         }
     }
-    return (-1);
+    return (0);
 }
 
 int    found_quote(char **str, int *quote_ind)
@@ -89,7 +89,7 @@ void    looking_for_dollar(char **str, t_env *s_env, int from, int *to)
 {
     int diff;
     
-    while (from < to && str[0][from] != '\0')
+    while (from < *to && str[0][from] != '\0')
     {
         if (str[0][from] == '$')
         {
@@ -101,7 +101,7 @@ void    looking_for_dollar(char **str, t_env *s_env, int from, int *to)
     }
 }
 
-char    *insert_var_value(char *after, char *value, char *before, int *i)
+char    *insert_var_value(char *after, char *value, char *before)
 {
     char    *ret;
     char    *tmp;
@@ -141,12 +141,51 @@ void    dollar_founded(char **str, t_env *s_env, int *i, int just_char)
     }
     value = ft_strdup(search_env(s_env, key));
     tmp = str[0];
-    str[0] = insert_var_value(ft_substr(str[0], 0, *i), value, ft_strdup(&str[0][begin]), i);
+    str[0] = insert_var_value(ft_substr(str[0], 0, *i), value, ft_strdup(&str[0][begin]));
     free(tmp);
-    *i += ft_strlen(value) - 1;
+    *i += ft_strlen(value) - ft_strlen(key) - 1;
+    free(key);
+    free(value);
 }
 
-int    looking_for_quotes(char **str, t_env **s_env)
+int     quotes_function(char **str, t_env *s_env, int *i, int just_char)
+{
+    if ((*i) != 0 && str[0][(*i) - 1] == '\\' && just_char != (*i) - 1)
+    {
+        rm_char(str, (*i) - 1);
+        (*i) -= 1;
+    }
+    else
+    {
+        if(str[0][(*i)] == '"')
+        {
+            if (found_dquote(str, s_env, i) == -1)
+                return (-1);
+        }
+        else
+        {
+            if (found_quote(str, i) == -1)
+                return (-1);
+        }
+    }
+    return (0);
+}
+
+void    char_remove(char **str, int *i, int *just_char)
+{
+    if (str[0][*i] == '\\')
+    {
+        rm_char(str, (*i));
+        (*just_char) = (*i);
+    }
+    else
+    {
+        rm_char(str, (*i) - 1);
+        (*i) -= 1;
+    }
+}
+
+int     looking_for_quotes(char **str, t_env **s_env)
 {
     int i;
     int just_char;
@@ -155,46 +194,25 @@ int    looking_for_quotes(char **str, t_env **s_env)
     just_char = -1;
     while(str[0] != NULL && str[0][++i] != '\0')
     {
-        if(str[0][i] == '"')
-        {
-            if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
-            {
-                rm_char(&str[0], i - 1);
-                i -= 1;
-            }
-            else
-            {
-                if (found_dquote(&str[0], s_env, &i) == -1)
-                    return (-1);
-            }
-        }
-        else if(str[0][i] == '\'')
-        {
-            if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
-            {
-                rm_char(&str[0], i - 1);
-                i -= 1;
-            }
-            else
-            {
-                if (found_quote(&str[0], &i) == -1)
-                    return (-1);
-                just_char = i;
-            }
-        }
+        if(str[0][i] == '"' || str[0][i] == '\'')
+            quotes_function(str, s_env, &i, just_char);
+        else if (str[0][i] == '|' && str[0][i - 1] == '\\' && just_char != i - 1)
+            char_remove(str, &i, &just_char);
+        else if (str[0][i] == ';' && str[0][i - 1] == '\\' && just_char != i - 1)
+            char_remove(str, &i, &just_char);
+        else if ((str[0][i] == '>' || str[0][i] == '<') && str[0][i - 1] == '\\' && just_char != i - 1)
+            char_remove(str, &i, &just_char);
         else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
-        {
-            rm_char(&str[0], i);
-            just_char = i;
-        }
+            char_remove(str, &i, &just_char);
+        else if (str[0][i] == ' ' && str[0][i - 1] == '\\' && just_char != i - 1)
+            char_remove(str, &i, &just_char);
         else if (str[0][i] == '$')
             dollar_founded(str, s_env, &i, just_char);
-            
     }
     return (0);
 }
 
-int    clean_replace(t_cmd *s_cmd, t_env *s_env)
+int     clean_replace(t_cmd *s_cmd, t_env *s_env)
 {
     int     i;
     t_args  *tmp_args;

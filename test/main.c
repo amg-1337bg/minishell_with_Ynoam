@@ -222,15 +222,13 @@ static void split(char* cmd)
 }
 =======
 #include <stdio.h>
-#include <dirent.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/errno.h>
-#include <string.h>
-int main(void)
+
+int main(int ac, char *av[], char *env[])
 {
-	exit(1777);
+	while (*env)
+	{
+		printf("%s\n", *env);
+		env++;
+	}
 }
 >>>>>>> 3bcf84087d2bc0269e1d5297f0b2371b8974bfa2

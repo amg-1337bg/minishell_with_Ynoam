@@ -23,7 +23,6 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <sys/errno.h>
-#include <termios.h>
 #include "../libft/libft.h"
 
 #define binPath "/bin/pwd"

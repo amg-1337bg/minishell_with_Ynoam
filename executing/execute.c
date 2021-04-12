@@ -135,18 +135,6 @@ int		create_files(t_files *files)
 	return (return_value(ret));
 }
 
-int     pipe_count(t_cmd *command)
-{
-    int i;
-    i = 0;
-    while (command->pipe != NULL)
-    {
-        command = command->pipe;
-        i++;
-    }
-    return (i);
-}
-
 int     is_builtin(char *command)
 {
     if (!ft_strncmp(command, "echo", ft_strlen("echo") + 1))
@@ -176,25 +164,41 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
     change_stdin_stdout(cmd->files, fd);
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
         ret = ft_echo(create_args(cmd), fd);
-    else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1)) // TODO:
-        ret = printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
+        ret = cd(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
         ret = pwd(fd);
-    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) // TODO: 
-        ret = printf("i am a built in command\n");
-    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1)) // TODO:
-        ret = printf("i am a built in command\n");
-    else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1)) // TODO: 
-        ret = printf("i am a built in command\n");
+    else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) 
+        ret = export(env, cmd->args, fd);
+    else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
+        ret = unset(env, cmd->args);
+    else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
+        ret = ft_env(env, fd);
     else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
         ret = ft_exit(create_args(cmd));
+	if (fd[0] != 0)
+		close(fd[0]);
+	if (fd[1] != 1)
+		close(fd[1]);
     free(fd);
     return (ret);
 }
 
+int     pipe_count(t_cmd *command)
+{
+    int i;
+    i = 0;
+    while (command->pipe != NULL)
+    {
+        command = command->pipe;
+        i++;
+    }
+    return (i);
+}
+
 int     exec_pipe(t_cmd *cmds, t_env *env)
 {
-    printf("there is a pipe\n");
+    
     return (0);
 }
 
@@ -209,29 +213,13 @@ int     is_path(char *cmd)
 	return (0);
 }
 
-char	**search_env_for_path(char **env)
-{
-	int	i;
-
-	i = 0;
-	while(env[i])
-	{
-		if (!ft_strncmp(env[i], "PATH=", 5))
-			return(ft_split(&(env[i][5]), ':'));
-		i++;
-	}
-	return (NULL);
-}
-
-
-
 int     exec_normal(t_cmd *cmd, t_env *env)
 {
     char    **paths;
     char    *onepath;
     int     ret;
     DIR     *dir;
-    int i = 0;
+    int     i = 0;
     int     *fd;
 
     fd = malloc(sizeof(int) * 2);
@@ -241,19 +229,24 @@ int     exec_normal(t_cmd *cmd, t_env *env)
         {
             put_error("is a directory", cmd->cmd);
             closedir(dir);
+            free(fd);
             return (126);
         }
-        else if (fork() == 0)
+        else
         {
-            change_stdin_stdout(cmd->files, fd);
-            dup2(fd[0], STDIN_FILENO);
-            dup2(fd[1], STDOUT_FILENO);
-            execve(cmd->cmd, create_args(cmd), create_envp(env));
-            put_error(strerror(errno), cmd->cmd);
-			exit(127);
+            if (fork() == 0)
+            {
+                change_stdin_stdout(cmd->files, fd);
+                dup2(fd[0], STDIN_FILENO);
+                dup2(fd[1], STDOUT_FILENO);
+                execve(cmd->cmd, create_args(cmd), create_envp(env, cmd->cmd));
+                put_error(strerror(errno), cmd->cmd);
+                exit(127);
+            }
+            wait(&ret);
+            free(fd);
+            return (ret);
         }
-        wait(&ret);
-        return (ret);
     }
     else // command in path variable
     {
@@ -268,7 +261,7 @@ int     exec_normal(t_cmd *cmd, t_env *env)
                 onepath = ft_strjoin(ft_strjoin(paths[i], "/"), cmd->cmd);
                 char **str;
                 str = create_args(cmd);
-                execve(onepath, create_args(cmd), create_envp(env));
+                execve(onepath, create_args(cmd), create_envp(env, onepath));
                 ft_free(&onepath);
                 i++;
             }

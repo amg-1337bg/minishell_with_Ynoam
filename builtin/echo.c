@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/02 12:15:42 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/07 15:44:10 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,18 @@ int		ft_echo(char *argv[], int *fd)
 	i = 1;
 	while (argv[1] && argv[i])
 	{
-		j = 2;
-		if (ft_strlen(argv[i]) > 2 && argv[i][0] == '-' && argv[i][1] == 'n')
+		j = 1;
+		if (ft_strlen(argv[i]) > 2 && argv[i][0] == '-')
+		{
 			while (argv[i][j] == 'n')
 				j++;
-		if (argv[i][j] == '\0')
-			flag = 1;
-		if (argv[i][j] != '\0')
-			break ;
+			if (argv[i][j] == '\0')
+				flag = 1;
+			if (argv[i][j] != '\0')
+				break;
+		}
+		else
+			break;
 		i++;
 	}
 	while(argv[1] && argv[i])
@@ -41,9 +45,5 @@ int		ft_echo(char *argv[], int *fd)
 	}
 	if (flag == 0)
 		ft_putstr_fd("\n", fd[1]);
- 	if (fd[0] != 0)
-		close(fd[0]);
-	if (fd[1] != 1)
-		close(fd[1]);
 	return (0);
 }

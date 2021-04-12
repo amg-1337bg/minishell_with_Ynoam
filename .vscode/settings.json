@@ -16,7 +16,10 @@
         "libft.h": "c",
         "signal.h": "c",
         "wait.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "paths.h": "c",
+        "parsing.h": "c",
+        "builtin.h": "c"
     },
 <<<<<<< HEAD
     "C_Cpp.errorSquiggles": "Disabled"
