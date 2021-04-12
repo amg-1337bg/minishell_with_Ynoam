@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:09:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/06 19:10:13 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/11 12:16:50 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,15 @@ int		cd(t_env *env, char **path)
 	t_env	*pwd;
 
 	hna = getcwd(NULL, 0);
-	if (path && !chdir(path[0]))
+	if (path[1])
 	{
-		cd2(env, hna);
-		return (0);
+		if (!chdir(path[1]))
+		{
+			cd2(env, hna);
+			return (0);
+		}
+		else
+			put_error(strerror(errno), "cd");
 	}
 	else if (!path) // cd only
 		if ((pwd = search_env_for_node(env, "HOME")) == NULL || pwd->value == NULL)

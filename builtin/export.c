@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:22:11 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/08 19:21:36 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/11 11:44:52 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@
 // 	}
 // 	return (copy);
 // }
+
+int		same(char *str1, char *str2)
+{
+	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0
+		&& ft_strlen(str1) == ft_strlen(str2))
+		return (1);
+	return (0);
+}
 
 void	print(t_env **head, int i, int *fd)
 {
@@ -121,16 +129,18 @@ int		export(t_env *head, char *argv[], int *fd)
 	char	*join;
 	char	*join2;
 	int		ret;
+	int		j;
 
 	ret = 0;
-	if (argv)
-		while (*argv)
+	j = 1;
+	if (argv && argv[j] != NULL)
+		while (argv[j])
 		{
 			i = 0;
-			if ((ft_isalpha(*argv[i]) || *argv[i] == '_') && ++i)
-				while (ft_isalnum((*argv)[i]) || (*argv)[i] == '_')
+			if ((ft_isalpha(argv[j][i]) || argv[j][i] == '_') && ++i)
+				while (ft_isalnum(argv[j][i]) || argv[j][i] == '_')
 					i++;
-			if ((*argv)[i] != '=' && (*argv)[i] != 0)
+			if (argv[j][i] != '=' && argv[j][i] != 0)
 			{
 				join =  ft_strjoin(*argv, "'");
 				join2 = ft_strjoin("export: `", join);
@@ -139,14 +149,21 @@ int		export(t_env *head, char *argv[], int *fd)
 				ft_free(&join2);
 				ret = 1;
 			}
-			else if ((*argv)[i] == '=' || (*argv)[i] == 0)
+			else if (argv[j][i] == '=' || argv[j][i] == 0)
 			{
-				if ((*argv)[i] == 0)
-					crt_env(head, ft_strdup(*argv), NULL);
-				else
-					crt_env(head, ft_substr(*argv, 0, i), ft_strdup(&((*argv)[i + 1])));
+				if (argv[j][i] == 0 && !search_env_for_node(head, argv[j]))
+						crt_env(head, ft_strdup(argv[j]), NULL);
+				else if (argv[j][i] == '=')
+				{
+					char *str = ft_substr(argv[j], 0, i);
+					if (!search_env_for_node(head, str))
+						crt_env(head, ft_strdup(str), ft_strdup(&(argv[j][i + 1])));
+					else
+						mdf_env(head, str, ft_strdup(&(argv[j][i + 1])));
+					free(str);
+				}
 			}
-			argv++;
+			j++;
 		}
 	else
 		dup_env(head, fd);

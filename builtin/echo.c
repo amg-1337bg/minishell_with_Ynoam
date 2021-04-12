@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/07 15:44:10 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/11 11:54:02 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ int		ft_echo(char *argv[], int *fd)
 	while (argv[1] && argv[i])
 	{
 		j = 1;
-		if (ft_strlen(argv[i]) > 2 && argv[i][0] == '-')
+		if (ft_strlen(argv[i]) >= 2 && argv[i][0] == '-')
 		{
 			while (argv[i][j] == 'n')
 				j++;
 			if (argv[i][j] == '\0')
+			{
 				flag = 1;
+				i++;
+				break;
+			}
 			if (argv[i][j] != '\0')
 				break;
 		}
