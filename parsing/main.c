@@ -127,20 +127,6 @@ void    getenvp(t_env **s_env, char **envp)
     }
 }
 
-void    signal_detected(int sig)
-{
-    char *del;
-    int tgeten;
-    
-    tgeten = tgetent(NULL, getenv("TERM"));
-	del = tgetstr("le", NULL);
-    if (del != NULL)
-	    write(1, del, ft_strlen(del));
-	del = tgetstr("dc", NULL);
-	if (del != NULL)
-        write(1, del, ft_strlen(del));
-}
-
 int main(int argc, char **argv, char **envp)
 {
     char *line;
@@ -164,6 +150,46 @@ int main(int argc, char **argv, char **envp)
         write(1, Minishell, ft_strlen(Minishell));
         get_next_line(0, &line);
         get_cmd(&s_cmd, s_env, line);
+        test = s_cmd;
+        // had lwhile kat afficher dakchi li kaine struct cmd
+        while (test)
+        {
+            printf("cmd = %s\n", test->cmd);
+            // had lwhile kat afficher l arguments
+            printf("/*****arguments*****/\n");
+            test_arg = test->args;
+            while (test_arg)
+            {
+                printf("%20s\n", test_arg->arg);
+                test_arg= test_arg->next;
+            }
+            //had lwhile kat afficher lredirection
+            printf("/******redirection*****/\n");
+            test_file = test->files;
+            while (test_file)
+            {
+                printf("%20%type %s file = %s\n", test_file->type, test_file->file);
+                test_file = test_file->next;
+            }
+            printf("/******PIPE*****/\n");
+            test_pipe = test->pipe;
+            while (test_pipe)
+            {
+                printf("pipe cmd = %s\n",test_pipe->cmd);
+                test_arg = test_pipe->args;
+                while (test_arg)
+                {
+                    printf("%20s\n", test_arg->arg);
+                    test_arg = test_arg->next;
+                }
+                test_pipe = test_pipe->next;
+            }
+            // printf("full = %s\n", test->full);
+            test = test->next;
+        }
+        // use create_envp to create char** enviroment
+        // cmd_return = execute(s_cmd, NULL)
+        printf("***************************Execution*************************\n");
         cmd_return = execute(s_cmd, s_env);
         free_cmd(&s_cmd);
     }

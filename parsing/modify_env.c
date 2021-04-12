@@ -94,7 +94,11 @@ char    *search_env(t_env *s_env, char *key)
     {
         if (tmp->key && !ft_strncmp(tmp->key, key, ft_strlen(tmp->key))
             && ft_strlen(tmp->key) == ft_strlen(key))
+        {
+            if (tmp->value == NULL)
+                return ("");
             return (tmp->value);
+        }
         tmp = tmp->next;
     }
     return ("");

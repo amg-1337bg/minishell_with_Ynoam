@@ -12,7 +12,7 @@
 
 NAME = minishell
 
-SRC =	executing/*.c  parsing/*.c   \
+SRC =	executing/*.c  parsing/*.c \
 		builtin/*.c libft/libft.a 
 FLAGS = -Wall -Wextra 
 
@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc -g -fsanitize=address -ltermcap $(FLAGS) $(SRC) -o $(NAME)
+	gcc  $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
 	make clean -C ./libft

@@ -444,6 +444,7 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
         free(tofree);
         if ((error = get_args(tmp)) != 0)
             return (error);
+        // printf("hello %s\n", tmp->args->arg);
         if (clean_replace(tmp, s_env) != 0)
             return (-1);
         tmp = tmp->next;

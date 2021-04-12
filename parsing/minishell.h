@@ -8,8 +8,21 @@
 #include <signal.h>
 #include <sys/errno.h>
 #include <termios.h>
-#include <curses.h>
-#include <term.h>
+#include "../libft/libft.h"
+
+#define binPath "/bin/pwd"
+#define Minishell "minishell > "
+
+#include "parsing.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <signal.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include <sys/errno.h>
 #include "../libft/libft.h"
 
 #define binPath "/bin/pwd"
@@ -20,5 +33,6 @@
 #define No_MultilineCmd -3
 
 #include "parsing.h"
+#include "../executing/executing.h"
 #include "../executing/executing.h"
 #include "../builtin/builtin.h"
