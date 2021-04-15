@@ -234,7 +234,7 @@ int     pipe_count(t_cmd *command)
     int i;
 
     i = 0;
-    while (command->pipe != NULL)
+    while (command)
     {
         command = command->pipe;
         i++;
