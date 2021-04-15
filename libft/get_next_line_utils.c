@@ -6,13 +6,13 @@
 /*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 10:12:26 by ynoam             #+#    #+#             */
-/*   Updated: 2020/02/25 15:52:01 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/13 17:46:49 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		ft_search(char *source)
+int	ft_search(char *source)
 {
 	if (!source)
 		return (1);
@@ -44,18 +44,23 @@ char	*ft_sub(char *string)
 	x = 0;
 	if (string == NULL)
 	{
-		if (!(baby = malloc(1)))
+		baby = malloc(1);
+		if (!baby)
 			return (NULL);
 		baby[0] = 0;
 		return (baby);
 	}
 	while (string[x] != '\0' && string[x] != '\n')
 		x++;
-	if (!(baby = malloc(x + 1)))
+	baby = malloc(x + 1);
+	if (!baby)
 		return (NULL);
 	baby[x] = '\0';
-	while (y < x && (baby[y] = string[y]))
+	while (y < x)
+	{
+		baby[y] = string[y];
 		y++;
+	}
 	return (baby);
 }
 

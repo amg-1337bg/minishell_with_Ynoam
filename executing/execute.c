@@ -218,6 +218,17 @@ int		exec_normal(t_cmd *cmd, t_env *env)
 	}
 }
 
+int     is_path(char *cmd)
+{
+    int i;
+
+	i = ft_strlen(cmd);
+	if ((i >= 2 && cmd[0] == '.' && cmd[1] == '/') || (i >= 3 && cmd[0] == '.' &&
+				cmd[1] == '.' && cmd[2] == '/') || (i >= 1 && cmd[0] == '/'))
+		return (1);
+	return (0);
+}
+
 int     pipe_count(t_cmd *command)
 {
     int i;
@@ -231,48 +242,81 @@ int     pipe_count(t_cmd *command)
     return (i);
 }
 
-
-int     is_path(char *cmd)
+int		exec_child(int var, int *fd, t_cmd *cmd, t_env *env)
 {
-    int i;
+	int	pid;
+    int one;
 
-	i = ft_strlen(cmd);
-	if ((i >= 2 && cmd[0] == '.' && cmd[1] == '/') || (i >= 3 && cmd[0] == '.' &&
-				cmd[1] == '.' && cmd[2] == '/') || (i >= 1 && cmd[0] == '/'))
-		return (1);
-	return (0);
+	pid = fork();
+	if (pid == 0)
+	{
+        if (var == 0)
+        {
+            dup2(fd[1], 1);
+            close(fd[1]);
+            close(fd[0]);
+        }
+        if (var != 0 && var != -1)
+        {
+            dup2(var, 0);
+            dup2(fd[1], 1);
+            close(fd[0]);
+            close(fd[1]);
+            close(var);
+        }
+        if (var == -1)
+        {
+            dup2(fd[0], 0);
+            close(fd[0]);
+        }
+		if (cmd->cmd && is_builtin(cmd->cmd))
+        {
+            one = create_files(cmd->files);
+            if (one != 0)
+                exit(one);
+            exit(exec_builtin(cmd, env));
+        }
+		else if (cmd->cmd && !is_builtin(cmd->cmd) && !create_files(cmd->files))
+        {
+            one = create_files(cmd->files);
+            if (one != 0)
+                exit(one);
+			exit(exec_normal(cmd, env));
+        }
+		else if (cmd->cmd == NULL)
+			exit(create_files(cmd->files));
+	}
+	return (pid);
 }
 
 int     exec_pipe(t_cmd *cmd, t_env *env)
 {
-	int		ret;
-    int		pid;
-	int		fd[2];
-    int     i;
+	int	ret;
+	int	fd[2];
+	int	i;
+	int	pcount;
+	int pid;
+    int inout;
 
-    i = 0;
-    while(cmd)
+	i = 0;
+    inout = 0;
+    pcount = pipe_count(cmd);
+    while(i < pcount)
     {
 		pipe(fd);
-		pid = fork();
-		if (pid == 0)
-		{
-			if (i == 0 && ++i)
-			{
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[1]);
-				close(fd[0]);
-			}
-			if (cmd->cmd && is_builtin(cmd->cmd) && !create_files(cmd->files))
-				exec_builtin(cmd, env);
-			else if (cmd->cmd && !is_builtin(cmd->cmd) && !create_files(cmd->files))
-				exec_normal(cmd, env);
-			else if (cmd->cmd == NULL)
-				exit(create_files(cmd->files));
-		}
+		exec_child(inout, fd, cmd, env);
+        close(fd[1]);
+        if (i != 0)
+            close(inout);
+        inout = fd[0];
 		cmd = cmd->pipe;
+		i++;
     }
+	pid = exec_child(-1, fd, cmd, env);
+    close(fd[0]);
 	waitpid(pid, &ret, 0);
+    while (--pcount >= 0)
+        wait(NULL);
 	return (return_value(ret));
 }
 
@@ -280,6 +324,7 @@ int		execute(t_cmd *cmds, t_env *env)
 {
     int ret;
     int status;
+    int pid;
 
     ret = 0;
     while(cmds !=  NULL)
@@ -293,10 +338,14 @@ int		execute(t_cmd *cmds, t_env *env)
 		}
         else if (cmds->cmd && !is_builtin(cmds->cmd))
 		{
-			if (create_files(cmds->files) == 0 && fork() == 0)
-				exit(exec_normal(cmds, env));
-			wait(&status);
-			ret = return_value(status);
+			if (create_files(cmds->files) == 0)
+            {
+                pid  = fork();
+                if (pid == 0)
+                    exit(exec_normal(cmds, env));
+                waitpid(pid, &status, 0);
+                ret = return_value(status);
+            }
 		}
 		else if (cmds->cmd == NULL)
 			ret = create_files(cmds->files);
