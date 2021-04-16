@@ -229,14 +229,17 @@ int     is_path(char *cmd)
 	return (0);
 }
 
-int     pipe_count(t_cmd *command)
+int     pipe_count(t_cmd *tmp)
 {
     int i;
+    t_cmd   *command;
 
+    command = tmp;
     i = 0;
+    command = command->pipe;
     while (command)
     {
-        command = command->pipe;
+        command = command->next;
         i++;
     }
     return (i);
@@ -295,29 +298,32 @@ int     exec_pipe(t_cmd *cmd, t_env *env)
 	int	fd[2];
 	int	i;
 	int	pcount;
-	int pid;
     int inout;
+    int pid;
 
-	i = 0;
+    i = 0;
     inout = 0;
     pcount = pipe_count(cmd);
     while(i < pcount)
     {
 		pipe(fd);
-		exec_child(inout, fd, cmd, env);
+		pid = exec_child(inout, fd, cmd, env);
         close(fd[1]);
         if (i != 0)
             close(inout);
         inout = fd[0];
-		cmd = cmd->pipe;
-		i++;
+        if (i == 0)
+            cmd = cmd->pipe;
+		else
+			cmd = cmd->next;
+        i++;
     }
 	pid = exec_child(-1, fd, cmd, env);
     close(fd[0]);
-	waitpid(pid, &ret, 0);
-    while (--pcount >= 0)
+    waitpid(pid, &ret, 0);
+    while(--pcount >= 0)
         wait(NULL);
-	return (return_value(ret));
+    return (return_value(ret));
 }
 
 int		execute(t_cmd *cmds, t_env *env)

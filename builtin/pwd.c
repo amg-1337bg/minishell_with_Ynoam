@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 21:02:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/11 17:38:09 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/16 17:33:15 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int		pwd(int	*fd)
+int	pwd(int	*fd)
 {
-	char *path;
+	char	*path;
 
-	if ((path = getcwd(NULL, 0)) == NULL)
+	path = getcwd(NULL, 0);
+	if (path == NULL)
 	{
 		put_error(strerror(errno), "pwd");
 		return (1);

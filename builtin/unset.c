@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:50:12 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/11 11:47:00 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/16 17:32:01 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int		unset(t_env *head, char *argv[])
+int	unset(t_env *head, char *argv[])
 {
 	argv++;
 	if (*argv)
@@ -23,5 +23,5 @@ int		unset(t_env *head, char *argv[])
 			argv++;
 		}
 	}
-	return 0;
+	return (0);
 }

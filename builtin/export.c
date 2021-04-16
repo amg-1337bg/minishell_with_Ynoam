@@ -3,36 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:22:11 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/11 11:44:52 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/16 17:36:52 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
-// export PWD OLDPWD 
-// env | grep PWD
-// PWD /
 
-// t_env	*create_env_copy(t_env *head)
-// {
-// 	t_env	*copy;
-
-// 	copy = malloc(sizeof(t_env));
-// 	copy->key = NULL;
-// 	copy->value = NULL;
-// 	copy->next = NULL;
-// 	head = head->next;
-// 	while (head)
-// 	{
-// 		crt_env(copy, head->key, head->value);
-// 		head = head->next;
-// 	}
-// 	return (copy);
-// }
-
-int		same(char *str1, char *str2)
+int	same(char *str1, char *str2)
 {
 	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0
 		&& ft_strlen(str1) == ft_strlen(str2))
@@ -82,7 +62,9 @@ void	sort_env(t_env **arr, int i, int *fd)
 	int		c;
 
 	j = -1;
-	while (++j < i - 1 && (k = j + 1))
+	while (++j < i - 1)
+	{
+		k = j + 1;
 		while (k < i)
 		{
 			c = 0;
@@ -99,6 +81,7 @@ void	sort_env(t_env **arr, int i, int *fd)
 			}
 			k++;
 		}
+	}
 	print(arr, i, fd);
 }
 
@@ -110,7 +93,7 @@ void	dup_env(t_env *head, int *fd)
 
 	i = list_size(head) - 1;
 	j = 0;
-	arr = malloc(sizeof(t_env*) * i);
+	arr = malloc(sizeof(t_env *) * i);
 	head = head->next;
 	while (j < i)
 	{
@@ -121,7 +104,6 @@ void	dup_env(t_env *head, int *fd)
 	sort_env(arr, i, fd);
 	free(arr);
 }
-
 
 int		export(t_env *head, char *argv[], int *fd)
 {
