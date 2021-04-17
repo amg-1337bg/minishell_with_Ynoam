@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/01 12:14:275:52 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/17 16:25:57 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
     if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
         ret = ft_echo(create_args(cmd), fd);
     else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
-        ret = cd(env, create_args(cmd));
+        ret = cd(env, cmd->args);
     else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
         ret = pwd(fd);
     else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1)) 
@@ -166,6 +166,7 @@ int     exec_builtin(t_cmd *cmd, t_env *env)
 	if (fd[1] != 1)
 		close(fd[1]);
     free(fd);
+	// free create_Args
     return (ret);
 }
 

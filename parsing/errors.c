@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 10:56:50 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/03/31 18:44:12 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/17 15:33:00 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ void    printed_errors(int error_code, char *str)
 }
 
 // Ynoam
-void	put_error(char *errorstr,char *filename)
+int	put_error(char *errorstr,char *filename)
 {
 	ft_putstr_fd("minishell: ",2);
 	ft_putstr_fd(filename,2);
 	ft_putstr_fd(": ",2);
 	ft_putstr_fd(errorstr,2);
 	ft_putstr_fd("\n",2);
+	return (1);
 }

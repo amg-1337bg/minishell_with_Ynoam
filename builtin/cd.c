@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:09:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/11 12:16:50 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/17 17:45:52 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-void	cd2(t_env *env, char *hna)
+int	cd2(t_env *env, char *hna)
 {
-	t_env *pwd;
-	t_env *oldpwd;
+	t_env	*pwd;
+	t_env	*oldpwd;
 
 	pwd = search_env_for_node(env, "PWD");
 	if (pwd)
@@ -27,40 +27,44 @@ void	cd2(t_env *env, char *hna)
 		mdf_env(env, "OLDPWD", hna);
 	else
 		free(hna);
+	return (1);
 }
 
-int		cd(t_env *env, char **path)
+int	cd(t_env *env, t_args *args)
 {
 	char	*hna;
 	t_env	*pwd;
 
 	hna = getcwd(NULL, 0);
-	if (path[1])
+	if (args)
 	{
-		if (!chdir(path[1]))
-		{
-			cd2(env, hna);
+		if (!chdir(args->arg) && cd2(env, hna))
 			return (0);
-		}
 		else
-			put_error(strerror(errno), "cd");
-	}
-	else if (!path) // cd only
-		if ((pwd = search_env_for_node(env, "HOME")) == NULL || pwd->value == NULL)
 		{
-			free(hna);
+			ft_free(&hna);
+			return (put_error(strerror(errno), args->arg));
+		}
+	}
+	else
+	{
+		pwd = search_env_for_node(env, "HOME");
+		if (pwd == NULL || pwd->value == NULL)
+		{
+			ft_free(&hna);
 			put_error("HOME not set", "cd");
 			return (1);
 		}
-		else
-			if (!chdir(pwd->value))
-			{
-				cd2(env, hna);
-				return (0);
-			}
-	free(hna);
-	hna = ft_strjoin("cd: ", path[0]);
+		else if (!chdir(pwd->value))
+		{
+			ft_free(&hna);
+			cd2(env, hna);
+			return (0);
+		}
+	}
+	ft_free(&hna);
+	hna = ft_strjoin("cd: ", args->arg);
 	put_error(strerror(errno), hna);
-	free(hna);
+	ft_free(&hna);
 	return (1);
 }

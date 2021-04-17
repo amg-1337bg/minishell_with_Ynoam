@@ -6,13 +6,13 @@
 /*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:22:34 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/07 16:16:01 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/17 15:41:46 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int		ft_env(t_env *head, int *fd)
+int	ft_env(t_env *head, int *fd)
 {
 	while (head)
 	{
