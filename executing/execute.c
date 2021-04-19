@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/18 17:40:40 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/19 17:59:04 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,8 @@ int	exec_normal2(t_cmd *cmd, t_env *env)
 	DIR	*dir;
 
 	fd = malloc(sizeof(int) * 2);
-	if ((dir = opendir(cmd->cmd)) != NULL)
+	dir = opendir(cmd->cmd);
+	if (dir)
 	{
 		put_error("is a directory", cmd->cmd);
 		closedir(dir);
@@ -263,6 +264,7 @@ void	search_for_path_and_exec(t_cmd *cmd, t_env *env)
 		ft_free(&onepath);
 		i++;
 	}
+	put_error("command not found", cmd->cmd);
 	ft_free_double(paths);
 	ft_free_double(str);
 	ft_free(&str2);
@@ -280,10 +282,8 @@ int	exec_normal(t_cmd *cmd, t_env *env)
 	dup2(fd[1], STDOUT_FILENO);
 	search_for_path_and_exec(cmd, env);
 	free(fd);
-	put_error("command not found", cmd->cmd);
 	return (127);
 }
-
 
 int	pipe_count(t_cmd *tmp)
 {
@@ -313,21 +313,17 @@ int	exec_child(int var, int *fd, t_cmd *cmd, t_env *env)
 		{
 			dup2(fd[1], 1);
 			close(fd[1]);
-			close(fd[0]);
 		}
 		if (var != 0 && var != -1)
 		{
 			dup2(var, 0);
 			dup2(fd[1], 1);
-			close(fd[0]);
 			close(fd[1]);
 			close(var);
 		}
 		if (var == -1)
-		{
 			dup2(fd[0], 0);
-			close(fd[0]);
-		}
+		close(fd[0]);
 		if (cmd->cmd && is_builtin(cmd->cmd))
 		{
 			one = create_files(cmd->files);
@@ -335,7 +331,7 @@ int	exec_child(int var, int *fd, t_cmd *cmd, t_env *env)
 				exit(one);
 			exit(exec_builtin(cmd, env));
 		}
-		else if (cmd->cmd && !is_builtin(cmd->cmd) && !create_files(cmd->files))
+		else if (cmd->cmd && !is_builtin(cmd->cmd))
 		{
 			one = create_files(cmd->files);
 			if (one != 0)
@@ -350,7 +346,6 @@ int	exec_child(int var, int *fd, t_cmd *cmd, t_env *env)
 
 int	exec_pipe(t_cmd *cmd, t_env *env)
 {
-	int	ret;
 	int	fd[2];
 	int	i;
 	int	pcount;
@@ -363,7 +358,7 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	while (i < pcount)
 	{
 		pipe(fd);
-		pid = exec_child(inout, fd, cmd, env);
+		exec_child(inout, fd, cmd, env);
 		close(fd[1]);
 		if (i != 0)
 			close(inout);
@@ -376,10 +371,10 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	}
 	pid = exec_child(-1, fd, cmd, env);
 	close(fd[0]);
-	waitpid(pid, &ret, 0);
+	waitpid(pid, &i, 0);
 	while (--pcount >= 0)
 		wait(NULL);
-	return (return_value(ret));
+	return (return_value(i));
 }
 
 int	execute(t_cmd *cmds, t_env *env)
@@ -388,32 +383,23 @@ int	execute(t_cmd *cmds, t_env *env)
 	int	status;
 	int	pid;
 
-	ret = 0;
 	while (cmds != NULL)
 	{
+		if (!(cmds->pipe))
+			ret = create_files(cmds->files);
+		if (!(cmds->pipe) && cmds->cmd && is_builtin(cmds->cmd) && !ret)
+			ret = exec_builtin(cmds, env);
+		else if (!(cmds->pipe) && cmds->cmd && !is_builtin(cmds->cmd) && !ret)
+		{
+			if (fork() == 0)
+				exit(exec_normal(cmds, env));
+			wait(&status);
+			ret = return_value(status);
+		}
 		if (cmds->pipe)
 			ret = exec_pipe(cmds, env);
-		else if (cmds->cmd && is_builtin(cmds->cmd))
-		{
-			if (create_files(cmds->files) == 0)
-				ret = exec_builtin(cmds, env);
-		}
-		else if (cmds->cmd && !is_builtin(cmds->cmd))
-		{
-			if (create_files(cmds->files) == 0)
-			{
-				pid = fork();
-				if (pid == 0)
-					exit(exec_normal(cmds, env));
-				waitpid(pid, &status, 0);
-				ret = return_value(status);
-			}
-		}
-		else if (cmds->cmd == NULL)
-			ret = create_files(cmds->files);
 		cmds = cmds->next;
 	}
-	ft_putstr_fd("\033[38;5;6m", 1);
 	ft_putstr_fd(ft_itoa(ret), 1);
 	return (ret);
 }
