@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/07 16:57:37 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/20 16:21:43 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,8 +445,8 @@ int    cmd_parser(t_cmd **s_cmd, t_env *s_env)
         if ((error = get_args(tmp)) != 0)
             return (error);
         // printf("hello %s\n", tmp->args->arg);
-        if (clean_replace(tmp, s_env) != 0)
-            return (-1);
+        // if (clean_replace(tmp, s_env) != 0)
+        //     return (-1);
         tmp = tmp->next;
     }
     return (0);

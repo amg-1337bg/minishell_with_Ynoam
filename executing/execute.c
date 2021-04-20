@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/20 15:36:57 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/20 16:22:30 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	execute(t_cmd *cmds, t_env *env)
 
 	while (cmds != NULL)
 	{
+		clean_replace(cmds, env);
 		if (!(cmds->pipe))
 			ret = create_files(cmds->files);
 		if (!(cmds->pipe) && cmds->cmd && is_builtin(cmds->cmd) && !ret)
