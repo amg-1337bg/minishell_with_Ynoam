@@ -24,7 +24,8 @@ char	*ft_strjoin(char const *string1, char const *string2)
 		return (ft_strdup(""));
 	i = ft_strlen(string1);
 	j = ft_strlen(string2);
-	if (!(thenew = (char *)malloc(i + j + 1)))
+	thenew = (char *)malloc(i + j + 1);
+	if (!thenew)
 		return (NULL);
 	thenew[i + j] = 0;
 	while (j--)

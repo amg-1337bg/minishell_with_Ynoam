@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 18:44:48 by ynoam             #+#    #+#             */
-/*   Updated: 2021/03/31 19:14:30 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/21 15:34:09 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_atoi(const char *str)
 {
-	int i;
-	int number;
-	int sign;
-	int test;
+	int	i;
+	int	number;
+	int	sign;
+	int	test;
 
 	i = 0;
 	number = 0;

@@ -24,7 +24,7 @@ static void	*vimmercopy(void *distination2, const void *source2, size_t len)
 	return ((char *)distination2);
 }
 
-void		*ft_memmove(void *distination, const void *source, size_t lenth)
+void	*ft_memmove(void *distination, const void *source, size_t lenth)
 {
 	char		*dst2;
 	const char	*src2;

@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-static int		fun(char const *s, char c)
+static int	fun(char const *s, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s[i] != c && s[i] != 0)
@@ -22,24 +22,25 @@ static int		fun(char const *s, char c)
 	return (i);
 }
 
-static void		thefreefunction(char **ptr, int j)
+static void	thefreefunction(char **ptr, int j)
 {
 	while (j)
 		free(&ptr[j--]);
 	free(ptr);
 }
 
-static int		thefillfun(int x, char c, char **ptrsplit, char const *s)
+static int	thefillfun(int x, char c, char **ptrsplit, char const *s)
 {
 	int	j;
-	int z;
+	int	z;
 
 	j = -1;
 	while (++j < x)
 	{
 		while (*s++ == c)
 			;
-		if (!(ptrsplit[j] = (char *)malloc(sizeof(char) * fun(--s, c) + 1)))
+		ptrsplit[j] = (char *)malloc(sizeof(char) * fun(--s, c) + 1);
+		if (!ptrsplit)
 		{
 			thefreefunction(ptrsplit, j);
 			return (0);
@@ -52,7 +53,7 @@ static int		thefillfun(int x, char c, char **ptrsplit, char const *s)
 	return (1);
 }
 
-char			**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**ptrsplit;
 	int		j;
@@ -65,7 +66,8 @@ char			**ft_split(char const *s, char c)
 	while (s[++j])
 		if (s[j] != c && (s[j + 1] == c || s[j + 1] == '\0'))
 			x++;
-	if (!(ptrsplit = (char **)malloc(sizeof(char *) * (x + 1))))
+	ptrsplit = (char **)malloc(sizeof(char *) * (x + 1));
+	if (!ptrsplit)
 		return (NULL);
 	ptrsplit[x] = NULL;
 	if (thefillfun(x, c, ptrsplit, s) == 0)

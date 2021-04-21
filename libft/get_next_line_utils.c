@@ -34,14 +34,12 @@ size_t	len(char *str)
 	return (size);
 }
 
-char	*ft_sub(char *string)
+char	*ft_sub(char *string, size_t x)
 {
 	char	*baby;
-	size_t	x;
 	size_t	y;
 
 	y = 0;
-	x = 0;
 	if (string == NULL)
 	{
 		baby = malloc(1);
@@ -80,10 +78,14 @@ char	*ft_from_newline(char *string)
 		x++;
 	if (string[x] == '\0' && y == 0)
 		x = 0;
-	else if ((y = ++x))
+	else
+	{
+		y = ++x;
 		while (string[x] != '\0')
 			x++;
-	if (!(baby = malloc(x - y + 1)))
+	}
+	baby = malloc(x - y + 1);
+	if (!baby)
 		return (NULL);
 	while (y < x)
 		baby[z++] = string[y++];
@@ -100,7 +102,8 @@ char	*ft_join(char *string1, char *string2)
 
 	i = len(string1);
 	j = len(string2);
-	if (!(thenew = malloc(i + j + 1)))
+	thenew = malloc(i + j + 1);
+	if (!thenew)
 		return (NULL);
 	thenew[i + j] = 0;
 	while (j--)

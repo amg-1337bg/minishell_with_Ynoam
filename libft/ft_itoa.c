@@ -14,7 +14,7 @@
 
 static int	thefunlen(unsigned int copy)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (copy > 9 && ++len)
@@ -22,7 +22,7 @@ static int	thefunlen(unsigned int copy)
 	return (++len);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char			*ptr;
 	unsigned int	copy;
@@ -35,7 +35,8 @@ char		*ft_itoa(int n)
 	else
 		copy = n;
 	i = thefunlen(copy);
-	if (!(ptr = malloc(i + sign + 1)))
+	ptr = malloc(i + sign + 1);
+	if (!ptr)
 		return (NULL);
 	ptr[i + sign] = '\0';
 	while (copy > 9)

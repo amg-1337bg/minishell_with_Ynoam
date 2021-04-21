@@ -12,7 +12,7 @@
 
 char	*ft_strrchr(const char *pointer_to_string, int c)
 {
-	int counter;
+	int	counter;
 
 	counter = 1;
 	while (*pointer_to_string != 0 && counter)

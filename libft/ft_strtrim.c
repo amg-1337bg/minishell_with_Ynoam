@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static int		forword(char const *forstr, char const *forset)
+static int	forword(char const *forstr, char const *forset)
 {
 	int	beging;
 	int	counter;
@@ -39,7 +39,7 @@ static int		forword(char const *forstr, char const *forset)
 	return (beging);
 }
 
-static int		backword(char const *backstr, char const *backset, int ending)
+static int	backword(char const *backstr, char const *backset, int ending)
 {
 	int	beging;
 	int	var;
@@ -66,7 +66,7 @@ static int		backword(char const *backstr, char const *backset, int ending)
 	return (ending);
 }
 
-char			*ft_strtrim(char const *string, char const *set)
+char	*ft_strtrim(char const *string, char const *set)
 {
 	char	*trime;
 	int		beging;
@@ -74,7 +74,7 @@ char			*ft_strtrim(char const *string, char const *set)
 	int		i;
 
 	if (string == NULL || set == NULL)
-		return ((char*)string);
+		return ((char *)string);
 	beging = forword(string, set);
 	ending = beging;
 	while (string[ending])
@@ -82,7 +82,8 @@ char			*ft_strtrim(char const *string, char const *set)
 	ending--;
 	ending = backword(string, set, ending);
 	trime = NULL;
-	if (!(trime = (char *)malloc(ending - beging + 2)))
+	trime = (char *)malloc(ending - beging + 2);
+	if (!trime)
 		return (NULL);
 	i = 0;
 	while (beging <= ending)

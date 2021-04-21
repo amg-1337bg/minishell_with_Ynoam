@@ -14,8 +14,8 @@
 
 void	*ft_memccpy(void *distination, const void *source, int c, size_t n)
 {
-	char *test;
-	char *test2;
+	char	*test;
+	char	*test2;
 
 	test = distination;
 	test2 = (char *)source;
