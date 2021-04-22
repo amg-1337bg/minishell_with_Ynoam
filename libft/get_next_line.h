@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 22:12:02 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/21 17:45:29 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/04/22 14:31:43 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 char	*ft_join(char *string1, char *string2);
 int		ft_free(char **stk);
 char	*ft_sub(char *string, size_t x);
-char	*ft_from_newline(char *string);
+char	*ft_from_newline(char *string, size_t x, size_t y, size_t z);
 int		ft_search(char *source);
 size_t	len(char *str);
 int		get_next_line(int fd, char **line);

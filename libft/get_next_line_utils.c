@@ -62,16 +62,10 @@ char	*ft_sub(char *string, size_t x)
 	return (baby);
 }
 
-char	*ft_from_newline(char *string)
+char	*ft_from_newline(char *string, size_t x, size_t y, size_t z)
 {
 	char	*baby;
-	size_t	x;
-	size_t	y;
-	size_t	z;
 
-	x = 0;
-	z = 0;
-	y = 0;
 	if (string == NULL)
 		return (NULL);
 	while (string[x] != '\n' && string[x] != '\0')

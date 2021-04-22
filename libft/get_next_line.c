@@ -24,7 +24,7 @@ int	g_next_line(char **stk, char *t, ssize_t r, char **line)
 	free(t);
 	if (!(*line) && ft_free(stk))
 		return (-1);
-	*stk = ft_from_newline(*stk);
+	*stk = ft_from_newline(*stk, 0, 0, 0);
 	if (!(*stk) && r != 0 && ft_free(stk))
 		return (-1);
 	if (r == 0 && ft_free(stk))
