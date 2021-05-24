@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/20 16:21:43 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/24 13:02:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,10 @@ int    get_cmd_args(t_cmd *s_cmd, int from, int *i)
     
     str = ft_substr(s_cmd->full, from, (*i) - from);
     if (s_cmd->cmd == NULL)
+    {
+        
         s_cmd->cmd = str;
+    }
     else
     {
         if((args = (t_args*)malloc(sizeof(t_args))) == NULL)

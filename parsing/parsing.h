@@ -42,9 +42,7 @@ void    printed_errors(int error_code, char *str);
 void    error();
 //  clean_replace.c
 
-int    clean_replace(t_cmd *s_cmd, t_env *s_env);
-
-int    clean_replace(t_cmd *s_cmd, t_env *s_env);
+int    clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return);
 void   looking_for_dollar(char **str, t_env *s_env, int from, int *to);
 void   dollar_founded(char **str, t_env *s_env, int *i, int just_char);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/21 17:20:01 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/24 13:10:49 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	return (wait_for_last_child(fd, pcount, cmd, env));
 }
 
-int	execute(t_cmd *cmds, t_env *env)
+int	execute(t_cmd *cmds, t_env *env, int cmd_return)
 {
 	int	ret;
 	int	status;
@@ -61,7 +61,7 @@ int	execute(t_cmd *cmds, t_env *env)
 
 	while (cmds != NULL)
 	{
-		clean_replace(cmds, env);
+		clean_replace(cmds, env, cmd_return);
 		if (!(cmds->pipe))
 			ret = create_files(cmds->files);
 		if (!(cmds->pipe) && cmds->cmd && is_builtin(cmds->cmd) && !ret)

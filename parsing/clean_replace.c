@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/07 15:35:41 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/21 10:02:59 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,13 @@ void    dollar_founded(char **str, t_env *s_env, int *i, int just_char)
     tmp = str[0];
     str[0] = insert_var_value(ft_substr(str[0], 0, *i), value, ft_strdup(&str[0][begin]));
     free(tmp);
-    *i += ft_strlen(value) - ft_strlen(key) - 1;
+    if (ft_strlen(value) != 0)
+    {    
+        (*i) += (ft_strlen(value));
+        if ((*i) < 0)
+            (*i) *= -1;
+    }
+    (*i) -= 1;
     free(key);
     free(value);
 }
@@ -185,10 +191,11 @@ void    char_remove(char **str, int *i, int *just_char)
     }
 }
 
-int     looking_for_quotes(char **str, t_env **s_env)
+int     special_chars(char **str, t_env **s_env, int cmd_return)
 {
     int i;
     int just_char;
+    char *tmp;
 
     i = -1;
     just_char = -1;
@@ -207,12 +214,21 @@ int     looking_for_quotes(char **str, t_env **s_env)
         else if (str[0][i] == ' ' && str[0][i - 1] == '\\' && just_char != i - 1)
             char_remove(str, &i, &just_char);
         else if (str[0][i] == '$')
-            dollar_founded(str, s_env, &i, just_char);
+        {
+            if (str[0][i + 1] == '?')
+            {
+                tmp = str[0];
+                str[0] = insert_var_value(ft_substr(str[0], 0, i), ft_itoa(cmd_return), ft_strdup(&str[0][i + 2]));
+                free(tmp);
+            }
+            else
+                dollar_founded(str, s_env, &i, just_char);
+        }
     }
     return (0);
 }
 
-int     clean_replace(t_cmd *s_cmd, t_env *s_env)
+int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
 {
     int     i;
     t_args  *tmp_args;
@@ -220,38 +236,38 @@ int     clean_replace(t_cmd *s_cmd, t_env *s_env)
     t_cmd   *tmp_pipe;
 
     i = -1;
-    if (looking_for_quotes(&s_cmd->cmd, s_env) != 0)
+    if (special_chars(&s_cmd->cmd, s_env, cmd_return) != 0)
         return (-1);
     tmp_args = s_cmd->args;
     while (tmp_args)
     {
-        if(looking_for_quotes(&tmp_args->arg, s_env) != 0)
+        if(special_chars(&tmp_args->arg, s_env, cmd_return) != 0)
             return (-1);
         tmp_args = tmp_args->next;
     }
     tmp_file = s_cmd->files;
     while (tmp_file)
     {
-        if (looking_for_quotes(&tmp_file->file, s_env) != -1)
+        if (special_chars(&tmp_file->file, s_env, cmd_return) != -1)
             return (-1);
         tmp_file = tmp_file->next;
     }
     tmp_pipe = s_cmd->pipe;
     if (tmp_pipe != NULL)
     {
-        if (looking_for_quotes(&tmp_pipe->cmd, s_env) != 0)
+        if (special_chars(&tmp_pipe->cmd, s_env, cmd_return) != 0)
             return (-1);
         tmp_args = tmp_pipe->args;
         while (tmp_args)
         {
-            if(looking_for_quotes(&tmp_args->arg, s_env) != 0)
+            if(special_chars(&tmp_args->arg, s_env, cmd_return) != 0)
                 return (-1);
             tmp_args = tmp_args->next;
         }
         tmp_file = tmp_pipe->files;
         while (tmp_file)
         {
-            if (looking_for_quotes(&tmp_file->file, s_env) != -1)
+            if (special_chars(&tmp_file->file, s_env, cmd_return) != -1)
                 return (-1);
             tmp_file = tmp_file->next;
         }    

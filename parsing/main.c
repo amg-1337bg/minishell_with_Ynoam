@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/16 15:39:00 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/21 09:50:41 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ int main(int argc, char **argv, char **envp)
         // // use create_envp to create char** enviroment
         // // cmd_return = execute(s_cmd, NULL)
         // printf("***************************Execution*************************\n");
-        cmd_return = execute(s_cmd, s_env);
+        cmd_return = execute(s_cmd, s_env, cmd_return);
         free_cmd(&s_cmd);
     }
 }

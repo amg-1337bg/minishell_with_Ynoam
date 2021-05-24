@@ -12,7 +12,7 @@ int		exec_child2(t_cmd *cmd, t_env *env);
 int		exec_normal(t_cmd *cmd, t_env *env);
 int		exec_normal2(t_cmd *cmd, t_env *env);
 int		exec_pipe(t_cmd *cmd, t_env *env);
-int		execute(t_cmd *cmds, t_env *env);
+int		execute(t_cmd *cmds, t_env *env, int cmd_return);
 int		ft_free_double(char **ptr);
 int		is_builtin(char *command);
 int		is_path(char *cmd);
