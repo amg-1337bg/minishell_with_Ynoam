@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/05/24 13:10:49 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/05/24 19:42:11 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,29 @@ int	wait_for_last_child(int *fd, int pcount, t_cmd *cmd, t_env *env)
 		wait(NULL);
 	return (return_value(status));
 }
+void	change_cmd_args(t_cmd *cmd)
+{
+	t_args	*tmp;
+	
+	if (cmd->cmd != NULL && cmd->cmd[0] == 0)
+	{
+		if (cmd->args) 
+		{
+			free(cmd->cmd);
+			tmp = cmd->args;
+			cmd->cmd = ft_strdup(tmp->arg);
+			cmd->args = cmd->args->next;
+			free(tmp->arg);
+			free(tmp->next);
+			free(tmp);
+		}
+		else
+		{
+			free(cmd->cmd);
+			cmd->cmd = NULL;
+		}
+	}
+}
 
 int	exec_pipe(t_cmd *cmd, t_env *env)
 {
@@ -39,6 +62,7 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	while (i < pcount)
 	{
 		pipe(fd);
+		change_cmd_args(cmd);
 		exec_child(inout, fd, cmd, env);
 		close(fd[1]);
 		if (i != 0)
@@ -62,6 +86,7 @@ int	execute(t_cmd *cmds, t_env *env, int cmd_return)
 	while (cmds != NULL)
 	{
 		clean_replace(cmds, env, cmd_return);
+		change_cmd_args(cmds);
 		if (!(cmds->pipe))
 			ret = create_files(cmds->files);
 		if (!(cmds->pipe) && cmds->cmd && is_builtin(cmds->cmd) && !ret)
