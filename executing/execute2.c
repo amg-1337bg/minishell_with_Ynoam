@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 15:33:39 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/20 15:34:05 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/26 12:25:13 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ int	create_files(t_files *files)
 {
 	while (files)
 	{
-		if (files->type[0] == '>')
+		if (files->file[0] == '$')
+			put_error("ambiguous redirect",files->file);
+		else if (files->type[0] == '>')
 		{
 			if (creat_file_or_openit(files->file, 0) == -1)
 			{

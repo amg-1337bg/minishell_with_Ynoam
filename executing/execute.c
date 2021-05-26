@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/05/24 19:42:11 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/05/24 19:42:11by ybamghoug        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,28 @@ int	wait_for_last_child(int *fd, int pcount, t_cmd *cmd, t_env *env)
 		wait(NULL);
 	return (return_value(status));
 }
+
 void	change_cmd_args(t_cmd *cmd)
 {
 	t_args	*tmp;
-	
+
 	if (cmd->cmd != NULL && cmd->cmd[0] == 0)
 	{
-		if (cmd->args) 
+		free(cmd->cmd);
+		cmd->cmd = NULL;
+		while (cmd->args && cmd->args->arg && cmd->args->arg[0] == 0)
 		{
-			free(cmd->cmd);
 			tmp = cmd->args;
-			cmd->cmd = ft_strdup(tmp->arg);
 			cmd->args = cmd->args->next;
 			free(tmp->arg);
-			free(tmp->next);
 			free(tmp);
 		}
-		else
+		if (cmd->args && cmd->args->arg)
 		{
-			free(cmd->cmd);
-			cmd->cmd = NULL;
+			tmp = cmd->args;
+			cmd->cmd = cmd->args->arg;
+			cmd->args = cmd->args->next;
+			free(tmp);
 		}
 	}
 }

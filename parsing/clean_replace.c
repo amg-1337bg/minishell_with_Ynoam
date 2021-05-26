@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/21 10:02:59 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/05/26 11:42:35 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,12 +230,13 @@ int     special_chars(char **str, t_env **s_env, int cmd_return)
 
 int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
 {
-    int     i;
+    char    *tmp;
     t_args  *tmp_args;
     t_files *tmp_file;
     t_cmd   *tmp_pipe;
+    int     i;
 
-    i = -1;
+    i = 0;
     if (special_chars(&s_cmd->cmd, s_env, cmd_return) != 0)
         return (-1);
     tmp_args = s_cmd->args;
@@ -248,8 +249,18 @@ int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
     tmp_file = s_cmd->files;
     while (tmp_file)
     {
-        if (special_chars(&tmp_file->file, s_env, cmd_return) != -1)
-            return (-1);
+        if (tmp_file->file[0] == '$')
+        {
+            tmp = ft_strdup(tmp_file->file); 
+            dollar_founded(&tmp_file->file, s_env, &i, 0);
+            if (strlen(tmp_file->file) == 0)
+                tmp_file->file = tmp;
+            else
+                free (tmp);
+        }
+        else
+            if (special_chars(&tmp_file->file, s_env, cmd_return) != -1)
+                return (-1);
         tmp_file = tmp_file->next;
     }
     tmp_pipe = s_cmd->pipe;
