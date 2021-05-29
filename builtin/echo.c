@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/17 16:07:50 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/29 17:12:54 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_echo2(char *argv[], int i, int fd, int flag)
 		ft_putstr_fd("\n", fd);
 }
 
-int	ft_echo(char *argv[], int *fd)
+int		ft_echo(char *argv[], int *fd)
 {
 	int	i;
 	int	j;
