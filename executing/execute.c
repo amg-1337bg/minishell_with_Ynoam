@@ -6,7 +6,11 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/05/26 09:43:54 by bamghoug         ###   ########.fr       */
+=======
+/*   Updated: 2021/05/24 19:42:11by ybamghoug        ###   ########.fr       */
+>>>>>>> f0f238fe2a61d17ac00bbf4f0e2b3993b2058f04
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +37,25 @@ void	change_cmd_args(t_cmd *cmd)
 
 	if (cmd->cmd != NULL && cmd->cmd[0] == 0)
 	{
+<<<<<<< HEAD
 		if (cmd->args)
+=======
+		free(cmd->cmd);
+		cmd->cmd = NULL;
+		while (cmd->args && cmd->args->arg && cmd->args->arg[0] == 0)
+>>>>>>> f0f238fe2a61d17ac00bbf4f0e2b3993b2058f04
 		{
-			free(cmd->cmd);
 			tmp = cmd->args;
-			cmd->cmd = ft_strdup(tmp->arg);
 			cmd->args = cmd->args->next;
 			free(tmp->arg);
 			free(tmp);
 		}
-		else
+		if (cmd->args && cmd->args->arg)
 		{
-			free(cmd->cmd);
-			cmd->cmd = NULL;
+			tmp = cmd->args;
+			cmd->cmd = cmd->args->arg;
+			cmd->args = cmd->args->next;
+			free(tmp);
 		}
 	}
 }

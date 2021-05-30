@@ -6,13 +6,13 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 21:02:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/16 17:33:15 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/29 17:12:41 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int	pwd(int	*fd)
+int	pwd(int *fd)
 {
 	char	*path;
 

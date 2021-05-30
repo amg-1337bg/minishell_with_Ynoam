@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 15:05:37 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/17 15:06:05 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/29 17:12:20 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int	same(char *str1, char *str2)
+int		same(char *str1, char *str2)
 {
 	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0
 		&& ft_strlen(str1) == ft_strlen(str2))

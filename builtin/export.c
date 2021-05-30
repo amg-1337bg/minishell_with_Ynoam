@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:22:11 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/17 15:08:46 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/29 17:12:04 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	dup_env(t_env *head, int *fd)
 	free(arr);
 }
 
-int	there_is_an_error(char *argv)
+int		there_is_an_error(char *argv)
 {
 	char	*join;
 	char	*join2;
@@ -49,16 +49,32 @@ void	variable_assign(t_env *head, char *argv[], int i, int j)
 {
 	char	*str;
 
-	str = ft_substr(argv[j], 0, i);
-	if (!search_env_for_node(head, str))
-		crt_env(head, ft_strdup(str), \
-				ft_strdup(&(argv[j][i + 1])));
+	if (argv[j][i] == '=')
+	{
+		str = ft_substr(argv[j], 0, i);
+		if (!search_env_for_node(head, str))
+			crt_env(head, ft_strdup(str), \
+					ft_strdup(&(argv[j][i + 1])));
+		else
+			mdf_env(head, str, ft_strdup(&(argv[j][i + 1])));
+		free(str);
+	}
 	else
-		mdf_env(head, str, ft_strdup(&(argv[j][i + 1])));
-	free(str);
+	{
+		str = ft_substr(argv[j], 0, i);
+		if (!search_env_for_node(head, str))
+			crt_env(head, ft_strdup(str), \
+					ft_strdup(&(argv[j][i + 2])));
+		else
+		{
+			mdf_env(head, str, ft_strjoin(search_env_for_node(head,\
+					str)->value, ft_strdup(&(argv[j][i + 2]))));
+		}
+		free(str);
+	}
 }
 
-int	thereis_some_args(t_env *head, char *argv[], int j)
+int		thereis_some_args(t_env *head, char *argv[], int j)
 {
 	int	i;
 	int	ret;
@@ -70,13 +86,15 @@ int	thereis_some_args(t_env *head, char *argv[], int j)
 		if ((ft_isalpha(argv[j][i]) || argv[j][i] == '_') && ++i)
 			while (ft_isalnum(argv[j][i]) || argv[j][i] == '_')
 				i++;
-		if (argv[j][i] != '=' && argv[j][i] != 0)
+		if (argv[j][i] != '=' && argv[j][i] != 0 && argv[j][i] != '+')
 			ret = there_is_an_error(argv[j]);
-		else if (argv[j][i] == '=' || argv[j][i] == 0)
+		else if (argv[j][i] == '=' || argv[j][i] == '+' || argv[j][i] == 0)
 		{
-			if (argv[j][i] == 0 && !search_env_for_node(head, argv[j]))
+			if (argv[j][i] == '+' && argv[j][i + 1] != '=')
+				ret = there_is_an_error(argv[j]);
+			else if (argv[j][i] == 0 && !search_env_for_node(head, argv[j]))
 				crt_env(head, ft_strdup(argv[j]), NULL);
-			else if (argv[j][i] == '=')
+			else if (argv[j][i] == '=' || argv[j][i] == '+')
 				variable_assign(head, argv, i, j);
 		}
 		j++;
@@ -84,7 +102,7 @@ int	thereis_some_args(t_env *head, char *argv[], int j)
 	return (ret);
 }
 
-int	export(t_env *head, char *argv[], int *fd)
+int		ft_export(t_env *head, char *argv[], int *fd)
 {
 	int		ret;
 	int		j;

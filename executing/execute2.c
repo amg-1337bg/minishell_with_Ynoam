@@ -6,7 +6,11 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 15:33:39 by ynoam             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/05/24 20:27:24 by bamghoug         ###   ########.fr       */
+=======
+/*   Updated: 2021/05/26 12:25:13 by ynoam            ###   ########.fr       */
+>>>>>>> f0f238fe2a61d17ac00bbf4f0e2b3993b2058f04
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +65,9 @@ int	create_files(t_files *files)
 {
 	while (files)
 	{
-		if (files->type[0] == '>')
+		if (files->file[0] == '$')
+			put_error("ambiguous redirect",files->file);
+		else if (files->type[0] == '>')
 		{
 			if (creat_file_or_openit(files->file, 0) == -1)
 			{

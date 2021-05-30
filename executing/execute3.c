@@ -6,7 +6,7 @@
 /*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 15:35:27 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/20 15:35:32 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/29 16:26:44 by ynoam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	exec_builtin(t_cmd *cmd, t_env *env)
 	else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
 		ret = pwd(fd);
 	else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1))
-		ret = export(env, create_args(cmd), fd);
+		ret = ft_export(env, create_args(cmd), fd);
 	else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
 		ret = unset(env, create_args(cmd));
 	else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
