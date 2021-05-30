@@ -37,14 +37,23 @@ void    free_cmd(t_cmd **s_cmd);
 void    free_files(t_files *s_files);
 void    free_args(t_args *s_args);
 
+//terminal.c
+
+void	modify_attr();
+
 // ERRORS
 void    printed_errors(int error_code, char *str);
 void    error();
-//  clean_replace.c
 
-int    clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return);
-void   looking_for_dollar(char **str, t_env *s_env, int from, int *to);
-void   dollar_founded(char **str, t_env *s_env, int *i, int just_char);
+//  clean_replace.c
+void    rm_char(char **str, int char_index);
+int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return);
+void    looking_for_dollar(char **str, t_env *s_env, int from, int *to);
+void    dollar_founded(char **str, t_env *s_env, int *i, int just_char);
+
+// Main
+char    *get_line(t_line **h_line);
+void ctrl_c(int c);
 
 
 #endif

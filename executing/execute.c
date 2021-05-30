@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 13:30:36 by ynoam             #+#    #+#             */
-/*   Updated: 2021/05/24 19:42:11 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/05/26 09:43:54 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	wait_for_last_child(int *fd, int pcount, t_cmd *cmd, t_env *env)
 	int	status;
 	int	pid;
 
+	clean_replace(cmd, env, 0);
+	change_cmd_args(cmd);
 	pid = exec_child(-1, fd, cmd, env);
 	close(fd[0]);
 	waitpid(pid, &status, 0);
@@ -24,20 +26,20 @@ int	wait_for_last_child(int *fd, int pcount, t_cmd *cmd, t_env *env)
 		wait(NULL);
 	return (return_value(status));
 }
+
 void	change_cmd_args(t_cmd *cmd)
 {
 	t_args	*tmp;
-	
+
 	if (cmd->cmd != NULL && cmd->cmd[0] == 0)
 	{
-		if (cmd->args) 
+		if (cmd->args)
 		{
 			free(cmd->cmd);
 			tmp = cmd->args;
 			cmd->cmd = ft_strdup(tmp->arg);
 			cmd->args = cmd->args->next;
 			free(tmp->arg);
-			free(tmp->next);
 			free(tmp);
 		}
 		else
@@ -62,6 +64,7 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	while (i < pcount)
 	{
 		pipe(fd);
+		clean_replace(cmd, env, 0);
 		change_cmd_args(cmd);
 		exec_child(inout, fd, cmd, env);
 		close(fd[1]);
@@ -102,6 +105,5 @@ int	execute(t_cmd *cmds, t_env *env, int cmd_return)
 			ret = exec_pipe(cmds, env);
 		cmds = cmds->next;
 	}
-	ft_putstr_fd(ft_itoa(ret), 1);
 	return (ret);
 }

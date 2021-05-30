@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/21 09:50:41 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/05/30 20:44:36 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,70 +127,52 @@ void    getenvp(t_env **s_env, char **envp)
     }
 }
 
+void ctrl_c(int c)
+{
+    char *cap;
+    
+        write(1, "\n", 1);
+        write(1, Minishell, ft_strlen(Minishell));
+        printf("%d\n", c);
+        // free(*line);
+        // *line = NULL;
+        cap = tgetstr("sc", 0);
+        write(1, cap, ft_strlen(cap));
+}
+
 int main(int argc, char **argv, char **envp)
 {
     char *line;
     t_env *s_env;
     t_cmd *s_cmd;
-    t_cmd *test;
-    t_args *test_arg;
-    t_files *test_file;
-    t_cmd   *test_pipe;
     int cmd_return;
-    int     sign = 0;
+    t_line  *h_line[3];
+    struct termios old;
+    struct termios tee;
+    
     
     s_env = NULL;
     s_cmd = NULL;
     cmd_return = 0;
     getenvp(&s_env, envp);
     changenvp(s_env);
-    // signal(SIGINT, signal_detected);
+    tcgetattr(STDIN_FILENO, &old);
+    tgetent(0, getenv("TERM"));
+    // modify_attr(tee);
+    h_line[0] = NULL;
+    h_line[1] = NULL;
+    h_line[2] = NULL;
     while(1)
     {
-        write(1, Minishell, ft_strlen(Minishell));
-        get_next_line(0, &line);
+        line = get_line(h_line);
+        tcsetattr(STDIN_FILENO, TCSANOW, &old);
+        // write(1, "\n", 1);
+        // printf("line = %s\n," ,line);
+        // printf("line = |%s|\n", line);
         get_cmd(&s_cmd, s_env, line);
-        // test = s_cmd;
-        // // had lwhile kat afficher dakchi li kaine struct cmd
-        // while (test)
-        // {
-        //     printf("cmd = %s\n", test->cmd);
-        //     // had lwhile kat afficher l arguments
-        //     printf("/*****arguments*****/\n");
-        //     test_arg = test->args;
-        //     while (test_arg)
-        //     {
-        //         printf("%20s\n", test_arg->arg);
-        //         test_arg= test_arg->next;
-        //     }
-        //     //had lwhile kat afficher lredirection
-        //     printf("/******redirection*****/\n");
-        //     test_file = test->files;
-        //     while (test_file)
-        //     {
-        //         printf("%20%type %s file = %s\n", test_file->type, test_file->file);
-        //         test_file = test_file->next;
-        //     }
-        //     printf("/******PIPE*****/\n");
-        //     test_pipe = test->pipe;
-        //     while (test_pipe)
-        //     {
-        //         printf("pipe cmd = %s\n",test_pipe->cmd);
-        //         test_arg = test_pipe->args;
-        //         while (test_arg)
-        //         {
-        //             printf("%20s\n", test_arg->arg);
-        //             test_arg = test_arg->next;
-        //         }
-        //         test_pipe = test_pipe->next;
-        //     }
-        //     // printf("full = %s\n", test->full);
-        //     test = test->next;
-        // }
-        // // use create_envp to create char** enviroment
-        // // cmd_return = execute(s_cmd, NULL)
-        // printf("***************************Execution*************************\n");
         cmd_return = execute(s_cmd, s_env, cmd_return);
         free_cmd(&s_cmd);
+        free(line);
     }
+    return (0);
 }

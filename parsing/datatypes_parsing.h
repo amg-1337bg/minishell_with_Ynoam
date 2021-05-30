@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   datatypes_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 14:38:21 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/08 10:59:32 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/26 11:08:16 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,14 @@ typedef struct s_environment
     char *value;
     struct s_environment *next;
 }               t_env;
+
+//  Line History
+
+typedef struct line
+{
+	char        *line;
+	struct line *next;
+	struct line *prev;
+}			    t_line;
 
 #endif

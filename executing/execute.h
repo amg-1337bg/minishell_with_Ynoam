@@ -26,5 +26,6 @@ void	change_stdin_stdout(t_files *files, int *fd);
 void	close_fds(int *fd);
 void	close_pipe(int fd[]);
 void	search_for_path_and_exec(t_cmd *cmd, t_env *env);
+void	change_cmd_args(t_cmd *cmd);
 
 #endif
