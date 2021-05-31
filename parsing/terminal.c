@@ -6,35 +6,22 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/30 20:44:22 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/05/31 20:22:15 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	modify_attr()
-{
-	struct termios tee;
-    
-	tcgetattr(STDIN_FILENO, &tee);
-    tee.c_lflag &= ~(ICANON);
-	tee.c_lflag &= ~(ECHO);
-	tee.c_cc[VMIN] = 0;
-    tee.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &tee);
-}
 
 unsigned char   gtc()
 {
     unsigned char c;
     unsigned char seq;
     struct termios tee;
-    
+
     c = 0;
     seq = 0;
     tcgetattr(STDIN_FILENO, &tee);
-    tee.c_lflag &= ~(ICANON);
-	tee.c_lflag &= ~(ECHO);
+    tee.c_lflag &= ~(ICANON | ECHO);
 	tee.c_cc[VMIN] = 0;
     tee.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tee);
@@ -49,6 +36,22 @@ unsigned char   gtc()
             c += seq;
 	}
     return c;
+}
+
+char *char_join(char *str, char c)
+{
+    char *ret;
+    int len;
+    int i;
+
+    len = ft_strlen(str);
+    ret = malloc((len + 2) * sizeof(char));
+    i= -1;
+    while (str[++i] != '\0')
+        ret[i] = str[i];
+    ret[i++] = c;
+    ret[i] = '\0';
+    return (ret);
 }
 
 void	del_write(char *line)
@@ -112,34 +115,31 @@ void	del_char(char **line)
     }
 }
 
-void    handle_up(t_line **h_line, char **line)
+void    handle_up(t_line **h_line, char **line, char **current)
 {
-    char    *tmp;
-    
-    tmp = h_line[1]->line;
+    if (h_line[2] == NULL)
+        *current = ft_strdup(*line);
+    del_write(h_line[1]->line);
     line[0] = ft_strdup(h_line[1]->line);
     h_line[2] = h_line[1];
     h_line[1] = h_line[1]->prev;
-    del_write(tmp);
 }
 
-void    handle_down(t_line **h_line, char **line)
+void    handle_down(t_line **h_line, char **line, char **current)
 {
-    if(h_line[2])
+    if(h_line[2]->next == NULL)
     {
-        if(h_line[2]->next == NULL)
-        {
-            del_write(line[0]);
-            h_line[1] = h_line[2];
-            h_line[2] = NULL;
-        }
-        else
-        {
-            h_line[1] = h_line[2];
-            h_line[2] = h_line[2]->next;
-            del_write(h_line[2]->line);
-            line[0] = ft_strdup(h_line[2]->line);
-        }
+        *line = *current;
+        del_write(line[0]);
+        h_line[1] = h_line[2];
+        h_line[2] = NULL;
+    }
+    else
+    {
+        h_line[1] = h_line[2];
+        h_line[2] = h_line[2]->next;
+        del_write(h_line[2]->line);
+        line[0] = ft_strdup(h_line[2]->line);
     }
 }
 
@@ -153,32 +153,12 @@ void    handle_nl(t_line **h_line, char **line)
     }
 }
 
-int    check_char(t_line **h_line, char **line, unsigned char c)
-{
+int    check_char(t_line **h_line, char **line, unsigned char c, char **current)
+{   
     if (c == (unsigned char)183 && h_line[1]) // up key
-    {
-        del_write(h_line[1]->line);
-        line[0] = ft_strdup(h_line[1]->line);
-        h_line[2] = h_line[1];
-        h_line[1] = h_line[1]->prev;
-    }
+        handle_up(h_line, line , current);
     else if (c == (unsigned char)184 && h_line[2]) // down key
-    {
-        if(h_line[2]->next == NULL)
-        {
-            del_write(line[0]);
-            h_line[1] = h_line[2];
-            h_line[2] = NULL;
-        }
-        else
-        {
-            h_line[1] = h_line[2];
-            h_line[2] = h_line[2]->next;
-            del_write(h_line[2]->line);
-            line[0] = ft_strdup(h_line[2]->line);
-        }
-    }
-        // handle_down(h_line, line);
+        handle_down(h_line, line, current);
     else if (c == (unsigned char)127) // backspace
         del_char(line);
     else if (c == (unsigned char)10)
@@ -189,32 +169,38 @@ int    check_char(t_line **h_line, char **line, unsigned char c)
     }
     else if (c >= (unsigned char)32 && c <= (unsigned char)126)
     {
-    	*line = ft_strjoin(*line, (char*)&c);
+        *line = char_join(*line, c);
     	write(1, &c, 1);
     }
     return (0);
 }
 
-char    *get_line(t_line **h_line)
+char    *get_line(t_line **h_line, struct termios old)
 {
     unsigned char    c;
-    int     flag;
     char    *line;
+    char    *current;
 
-    flag = 0;
     line = ft_strdup("");
-    signal(SIGINT, ctrl_c);
-    signal(SIGKILL, ctrl_c);
+    current = ft_strdup("");
+    write(1, Minishell, ft_strlen(Minishell));
+    write(1, tgetstr("sc", 0), ft_strlen(tgetstr("sc", 0)));
     while (1)
     {
-        if (flag == 0)
+        if (g_signal == 1)
         {
-            write(1, Minishell, ft_strlen(Minishell));
-            write(1, tgetstr("sc", 0), ft_strlen(tgetstr("sc", 0)));
-            flag = 1;
+            free(line);
+            line = ft_strdup("");
+            g_signal = 0;
         }
         c = gtc();
-        if (check_char(h_line, &line, c) == 1)
+        if (c == 4 && ft_strlen(line) == 0)
+        {
+            tcsetattr(STDIN_FILENO, TCSANOW, &old);
+            write(1, "exit\n", 5);
+            exit(0);
+        }
+        if (check_char(h_line, &line, c, &current) == 1)
             break ;
     }
     return (line);

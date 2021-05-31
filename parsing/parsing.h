@@ -3,6 +3,8 @@
 
 #include "datatypes_parsing.h"
 
+int     g_signal;
+
 t_env	*ft_lstlst(t_env *lst);
 void    getenvp(t_env **s_env, char **envp);
 void    dlt_env(t_env *s_env, char *key);
@@ -52,8 +54,8 @@ void    looking_for_dollar(char **str, t_env *s_env, int from, int *to);
 void    dollar_founded(char **str, t_env *s_env, int *i, int just_char);
 
 // Main
-char    *get_line(t_line **h_line);
-void ctrl_c(int c);
+char    *get_line(t_line **h_line, struct termios old);
+void    ctrl_c(int c);
 
 
 #endif

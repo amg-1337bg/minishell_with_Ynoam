@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 15:05:37 by ynoam             #+#    #+#             */
-/*   Updated: 2021/05/29 17:12:20 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/05/31 20:42:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,20 @@ int		same(char *str1, char *str2)
 		&& ft_strlen(str1) == ft_strlen(str2))
 		return (1);
 	return (0);
+}
+
+void	print_backslash(char *value, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (value[i])
+	{
+		if (value[i] == '\\')
+			write(fd, "\\",1);
+		write(fd, &(value[i]),1);
+		i++;
+	}
 }
 
 void	print(t_env **head, int i, int *fd)
@@ -35,7 +49,7 @@ void	print(t_env **head, int i, int *fd)
 			{
 				ft_putstr_fd("=", fd[1]);
 				ft_putstr_fd("\"", fd[1]);
-				ft_putstr_fd(head[j]->value, fd[1]);
+				print_backslash(head[j]->value, fd[1]);
 				ft_putstr_fd("\"", fd[1]);
 				ft_putstr_fd("\n", fd[1]);
 			}
