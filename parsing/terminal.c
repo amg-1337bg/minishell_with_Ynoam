@@ -29,10 +29,12 @@ unsigned char   gtc()
     unsigned char c;
     unsigned char seq;
     struct termios tee;
+    struct termios old;
     
     c = 0;
     seq = 0;
     tcgetattr(STDIN_FILENO, &tee);
+    old = tee;
     tee.c_lflag &= ~(ICANON);
 	tee.c_lflag &= ~(ECHO);
 	tee.c_cc[VMIN] = 0;
@@ -48,6 +50,7 @@ unsigned char   gtc()
         if (seq > 0)
             c += seq;
 	}
+	tcsetattr(STDIN_FILENO, TCSANOW, &old);
     return c;
 }
 
@@ -156,29 +159,30 @@ void    handle_nl(t_line **h_line, char **line)
 int    check_char(t_line **h_line, char **line, unsigned char c)
 {
     if (c == (unsigned char)183 && h_line[1]) // up key
-    {
-        del_write(h_line[1]->line);
-        line[0] = ft_strdup(h_line[1]->line);
-        h_line[2] = h_line[1];
-        h_line[1] = h_line[1]->prev;
-    }
+    // {
+    //     del_write(h_line[1]->line);
+    //     line[0] = ft_strdup(h_line[1]->line);
+    //     h_line[2] = h_line[1];
+    //     h_line[1] = h_line[1]->prev;
+    // }
+        handle_up(h_line, line);
     else if (c == (unsigned char)184 && h_line[2]) // down key
-    {
-        if(h_line[2]->next == NULL)
-        {
-            del_write(line[0]);
-            h_line[1] = h_line[2];
-            h_line[2] = NULL;
-        }
-        else
-        {
-            h_line[1] = h_line[2];
-            h_line[2] = h_line[2]->next;
-            del_write(h_line[2]->line);
-            line[0] = ft_strdup(h_line[2]->line);
-        }
-    }
-        // handle_down(h_line, line);
+    // {
+    //     if(h_line[2]->next == NULL)
+    //     {
+    //         del_write(line[0]);
+    //         h_line[1] = h_line[2];
+    //         h_line[2] = NULL;
+    //     }
+    //     else
+    //     {
+    //         h_line[1] = h_line[2];
+    //         h_line[2] = h_line[2]->next;
+    //         del_write(h_line[2]->line);
+    //         line[0] = ft_strdup(h_line[2]->line);
+    //     }
+    // }
+        handle_down(h_line, line);
     else if (c == (unsigned char)127) // backspace
         del_char(line);
     else if (c == (unsigned char)10)
@@ -204,7 +208,7 @@ char    *get_line(t_line **h_line)
     flag = 0;
     line = ft_strdup("");
     signal(SIGINT, ctrl_c);
-    signal(SIGKILL, ctrl_c);
+    signal(SIGQUIT, ctrl_c);
     while (1)
     {
         if (flag == 0)

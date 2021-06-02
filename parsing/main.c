@@ -131,13 +131,12 @@ void ctrl_c(int c)
 {
     char *cap;
     
-        write(1, "\n", 1);
-        write(1, Minishell, ft_strlen(Minishell));
-        printf("%d\n", c);
-        // free(*line);
-        // *line = NULL;
-        cap = tgetstr("sc", 0);
-        write(1, cap, ft_strlen(cap));
+    write(1, "\n", 1);
+    write(1, Minishell, ft_strlen(Minishell));
+    // free(*line);
+    // *line = NULL;
+    cap = tgetstr("sc", 0);
+    write(1, cap, ft_strlen(cap));
 }
 
 int main(int argc, char **argv, char **envp)
@@ -156,7 +155,7 @@ int main(int argc, char **argv, char **envp)
     cmd_return = 0;
     getenvp(&s_env, envp);
     changenvp(s_env);
-    tcgetattr(STDIN_FILENO, &old);
+    // tcgetattr(STDIN_FILENO, &old);
     tgetent(0, getenv("TERM"));
     // modify_attr(tee);
     h_line[0] = NULL;
@@ -165,7 +164,7 @@ int main(int argc, char **argv, char **envp)
     while(1)
     {
         line = get_line(h_line);
-        tcsetattr(STDIN_FILENO, TCSANOW, &old);
+        // tcsetattr(STDIN_FILENO, TCSANOW, &old);
         // write(1, "\n", 1);
         // printf("line = %s\n," ,line);
         // printf("line = |%s|\n", line);
