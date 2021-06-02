@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/31 20:19:48 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/02 15:55:15 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ void    ctrl_c(int c)
     g_signal = 1;
 }
 
+
 int main(int argc, char **argv, char **envp)
 {
     char *line;
@@ -154,16 +155,15 @@ int main(int argc, char **argv, char **envp)
     changenvp(s_env);
     tcgetattr(STDIN_FILENO, &old);
     tgetent(0, getenv("TERM"));
-    signal(SIGINT, ctrl_c);
     h_line[0] = NULL;
     h_line[1] = NULL;
     h_line[2] = NULL;
     while(1)
     {
-        line = get_line(h_line, old);
+        line = get_line(h_line, old, &cmd_return);
         tcsetattr(STDIN_FILENO, TCSANOW, &old);
-        get_cmd(&s_cmd, s_env, line);
-        cmd_return = execute(s_cmd, s_env, cmd_return);
+        if (get_cmd(&s_cmd, s_env, line, &cmd_return) == 0)
+            cmd_return = execute(s_cmd, s_env, cmd_return);
         free_cmd(&s_cmd);
         free(line);
     }

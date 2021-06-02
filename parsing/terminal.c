@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/31 20:22:15 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/01 19:32:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,8 +174,11 @@ int    check_char(t_line **h_line, char **line, unsigned char c, char **current)
     }
     return (0);
 }
-
-char    *get_line(t_line **h_line, struct termios old)
+void    ctrl_b(int c)
+{
+    return;
+}
+char    *get_line(t_line **h_line, struct termios old, int *cmd_return)
 {
     unsigned char    c;
     char    *line;
@@ -183,14 +186,22 @@ char    *get_line(t_line **h_line, struct termios old)
 
     line = ft_strdup("");
     current = ft_strdup("");
-    write(1, Minishell, ft_strlen(Minishell));
-    write(1, tgetstr("sc", 0), ft_strlen(tgetstr("sc", 0)));
+    if (*cmd_return == 3)
+        write(1, "Quit: 3\n", ft_strlen("Quit: 3\n"));
+    if (*cmd_return != 2)
+    {
+        write(1, Minishell, ft_strlen(Minishell));
+        write(1, tgetstr("sc", 0), ft_strlen(tgetstr("sc", 0)));
+    }
+    signal(SIGINT, ctrl_c);
+    signal(SIGQUIT, ctrl_b);
     while (1)
     {
         if (g_signal == 1)
         {
             free(line);
             line = ft_strdup("");
+            *cmd_return = 1;
             g_signal = 0;
         }
         c = gtc();

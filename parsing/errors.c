@@ -3,27 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 10:56:50 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/04/17 15:33:00 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/06/02 12:32:12 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // BRAHIM
-void    error()
+void    error(void)
 {
-	write (2, strerror(errno), ft_strlen(strerror(errno)));
-	write (2, "\n", 1);
+	write (1, "ERROR\n", ft_strlen("ERROR\n"));
 }
 
-void    printed_errors(int error_code, char *str)
+void    printed_errors(int error_code)
 {
-    write(1, Minishell, ft_strlen(Minishell));
-	if(error_code == -2)
-		printf("syntax error near unexpected token '%s'\n", str);
+	if(error_code == -258)
+		printf("syntax error near unexpected token\n");
 	else if (error_code == -3)
 		printf("ERROR: No Multiline Commands\n");
 }

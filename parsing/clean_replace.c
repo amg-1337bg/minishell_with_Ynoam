@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/30 20:46:14 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/02 18:24:25 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int    found_dquote(char **str, t_env *s_env, int *dquote_ind)
             {
                 rm_char(str, i);
                 rm_char(str, *dquote_ind);
-                looking_for_dollar(str, s_env, *dquote_ind, &i);
+                looking_for_dollar(str, s_env, dquote_ind, &i);
                 *dquote_ind = i - 2;
                 return (0);
             }
@@ -85,19 +85,19 @@ int    found_quote(char **str, int *quote_ind)
     return (-1);
 }
 
-void    looking_for_dollar(char **str, t_env *s_env, int from, int *to)
+void    looking_for_dollar(char **str, t_env *s_env, int *from, int *to)
 {
     int diff;
     
-    while (from < *to && str[0][from] != '\0')
+    while (*from < *to && str[0][*from] != '\0')
     {
-        if (str[0][from] == '$')
+        if (str[0][*from] == '$')
         {
-            diff = from;
-            dollar_founded(str, s_env, &from, -2);
-            *to += from - diff;
+            diff = *from;
+            dollar_founded(str, s_env, from, -2);
+            // *to += from - diff;
         }
-        from++;
+        *from++;
     }
 }
 
@@ -140,6 +140,9 @@ void    dollar_founded(char **str, t_env *s_env, int *i, int just_char)
         return ;
     }
     value = ft_strdup(search_env(s_env, key));
+    tmp = value;
+    value = ft_strtrim(value, " ");
+    free(tmp);
     tmp = str[0];
     str[0] = insert_var_value(ft_substr(str[0], 0, *i), value, ft_strdup(&str[0][begin]));
     free(tmp);
@@ -199,19 +202,19 @@ int     special_chars(char **str, t_env **s_env, int cmd_return)
 
     i = -1;
     just_char = -1;
-    while(str[0] != NULL && str[0][++i] != '\0')
+    while(*str != NULL && str[0][++i] != '\0')
     {
         if(str[0][i] == '"' || str[0][i] == '\'')
             quotes_function(str, s_env, &i, just_char);
-        else if (str[0][i] == '|' && str[0][i - 1] == '\\' && just_char != i - 1)
+        else if (str[0][i] == '|' && i > 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             char_remove(str, &i, &just_char);
-        else if (str[0][i] == ';' && str[0][i - 1] == '\\' && just_char != i - 1)
+        else if (str[0][i] == ';' && i > 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             char_remove(str, &i, &just_char);
-        else if ((str[0][i] == '>' || str[0][i] == '<') && str[0][i - 1] == '\\' && just_char != i - 1)
+        else if ((str[0][i] == '>' || str[0][i] == '<') && i > 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             char_remove(str, &i, &just_char);
         else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
             char_remove(str, &i, &just_char);
-        else if (str[0][i] == ' ' && str[0][i - 1] == '\\' && just_char != i - 1)
+        else if (str[0][i] == ' ' && i > 0 && str[0][i - 1] == '\\' && just_char != i - 1)
             char_remove(str, &i, &just_char);
         else if (str[0][i] == '$')
         {
@@ -228,6 +231,80 @@ int     special_chars(char **str, t_env **s_env, int cmd_return)
     return (0);
 }
 
+t_args    *arg_to_head(t_args *arg, char *cmd, int from, int *i)
+{
+    t_args  *args;
+    t_args  *tmp;
+    char    *str;
+    
+    str = ft_substr(cmd, from, (*i) - from);
+    if((args = (t_args*)malloc(sizeof(t_args))) == NULL)
+        error();
+    args->arg = str;
+    args->next = NULL;
+    tmp = ft_lastarg(arg);
+    if (tmp == NULL)
+    {
+        *i += space_count(&cmd[*i]) - 1;        
+        return (args);
+    }
+    else
+        tmp->next = args;
+    (*i) += space_count(&cmd[*i]) - 1;
+    return (arg);
+}
+
+void    look_for_args(t_cmd *cmd, char *tmp, int i)
+{
+    int from;
+    t_args *arg;
+    t_args *tmp_arg;
+
+    from = -1;
+    arg = NULL;
+    i += space_count(&tmp[i]) - 1;
+    while (tmp[++i] != '\0')
+    {
+        if (from == -1)
+            from = i;
+        if (tmp[i] == ' ')
+        {
+            arg = arg_to_head(arg, tmp, from, &i);
+            from = -1;
+        }
+    }
+    if (from != -1)
+        arg = arg_to_head(arg, tmp, from, &i);
+    tmp_arg = ft_lastarg(arg);
+    if (tmp != NULL)
+    {
+        tmp_arg->next = cmd->args;
+        cmd->args = arg;
+    }
+}
+
+void    check_again(t_cmd *cmd)
+{
+    int i;
+    int from;
+    char *tmp;
+
+    i = -1;
+    from = -1;
+    tmp = NULL;
+    while (cmd->cmd[++i] != '\0')
+    {
+        if (cmd->cmd[i] == ' ')
+        {
+            tmp = cmd->cmd;
+            cmd->cmd = ft_substr(cmd->cmd, 0, i);
+            look_for_args(cmd, tmp, i);
+            free(tmp);
+            return;
+        }
+    }
+}
+
 int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
 {
     char    *tmp;
@@ -242,10 +319,13 @@ int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
     tmp_args = s_cmd->args;
     while (tmp_args)
     {
+        printf("arg = %s\n", tmp_args->arg);
         if(special_chars(&tmp_args->arg, s_env, cmd_return) != 0)
             return (-1);
+        printf("arg = %s\n", tmp_args->arg);
         tmp_args = tmp_args->next;
     }
+    check_again(s_cmd);
     tmp_file = s_cmd->files;
     while (tmp_file)
     {
