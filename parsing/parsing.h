@@ -18,7 +18,6 @@ int		list_size(t_env *head);
 
 // get_cmd
 
-void    check_quotes(char c, int *quote, int *dquote);
 int     quote_detected(char *line, int *j, int just_char);
 
 // redirection.c
@@ -61,8 +60,65 @@ void    looking_for_dollar(char **str, t_env *s_env, int from, int *to);
 void    dollar_founded(char **str, t_env *s_env, int *i, int just_char);
 
 // Main
-char    *get_line(t_line **h_line, struct termios old, int *cmd_return);
+char    *get_line(t_line **h_line, int *cmd_return);
 void    ctrl_c(int c);
 
+// pipe.c
+int     pipe_function(t_cmd *s_cmd, int *i, int *from, int just_char);
+int     get_pipe_cmd(t_cmd *s_cmd, int *i);
+int     pipe_checker(t_cmd *pipe_cmd, int *i, int *from, int *just_char);
+void    initializ_pipecmd(t_cmd **pipe_cmd, t_cmd *s_cmd);
+
+// linked_list.c
+t_args	*ft_lastarg(t_args *lst);
+t_files	*ft_lastfile(t_files *lst);
+t_env	*ft_lstlst(t_env *lst);
+t_cmd	*ft_lstcmd(t_cmd *lst);
+t_line	*last_line(t_line *head);
+
+//env.c
+
+void    getenvp(t_env **s_env, char **envp);
+void    changenvp(t_env *env);
+char **create_envp(t_env *s_env, char *cmd);
+
+//quotes.c
+int     quote_detected(char *line, int *j, int just_char);
+int     dquote_traitement(char *line, int *j, char c, int just_char);
+int     quote_traitement(char *line, int *j, char c);
+int     quotes_function(char **str, t_env *s_env, int *i, int just_char);
+
+//quotes1.c
+int    found_dquote(char **str, t_env *s_env, int *dquote_ind);
+int    found_quote(char **str, int *quote_ind);
+void    rm_char(char **str, int char_index);
+void    char_remove(char **str, int *i, int *just_char);
+//dollar.c
+char    *insert_var_value(char *after, char *value, char *before);
+int     join_dollar_val(char **str, t_env *s_env, int *i, int begin);
+void    dollar_founded(char **str, t_env *s_env, int *i, int just_char);
+int     check_before(char **str, int *i, int begin, int just_char);
+
+//clean_rep_utils.c
+void special_checker(char **str, int *i, int cmd_return, int *just_char);
+char *dollar_status(char *str, int *i, int cmd_return);
+int special_chars(char **str, t_env **s_env, int cmd_return);
+t_args *arg_to_head(t_args *arg, char *cmd, int from, int *i);
+void look_for_args(t_cmd *cmd, char *tmp, int i);
+
+unsigned char   gtc(void);
+char *char_join(char *str, char c);
+void	del_write(char *line);
+void	add_to_history(t_line **h_line ,char *line);
+void	del_char(char **line);
+
+void    ctrl_c(int c);
+void    check_signal(char **line, int *cmd_return);
+void    ctrl_b(int c);
+void    check_cmd_ret(int *cmd_return);
+
+void    handle_up(t_line **h_line, char **line, char **current);
+void    handle_down(t_line **h_line, char **line, char **current);
+void    handle_nl(t_line **h_line, char **line);
 
 #endif
