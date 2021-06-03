@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/02 18:24:25 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/03 11:32:19 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int    found_dquote(char **str, t_env *s_env, int *dquote_ind)
             {
                 rm_char(str, i);
                 rm_char(str, *dquote_ind);
-                looking_for_dollar(str, s_env, dquote_ind, &i);
                 *dquote_ind = i - 2;
                 return (0);
             }
@@ -63,6 +62,8 @@ int    found_dquote(char **str, t_env *s_env, int *dquote_ind)
             rm_char(str, i);
             just_char = i;
         }
+        else if (str[0][i] == '$')
+            dollar_founded(str, s_env, &i, just_char);
     }
     return (0);
 }
@@ -85,19 +86,20 @@ int    found_quote(char **str, int *quote_ind)
     return (-1);
 }
 
-void    looking_for_dollar(char **str, t_env *s_env, int *from, int *to)
+void    looking_for_dollar(char **str, t_env *s_env, int from, int *to)
 {
     int diff;
+    int just_char;
     
-    while (*from < *to && str[0][*from] != '\0')
+    while (from < *to && str[0][from] != '\0')
     {
-        if (str[0][*from] == '$')
+        if (str[0][from] == '$')
         {
-            diff = *from;
+            diff = from;
             dollar_founded(str, s_env, from, -2);
-            // *to += from - diff;
+            *to += from - diff - 1;
         }
-        *from++;
+        from++;
     }
 }
 
@@ -122,7 +124,7 @@ void    dollar_founded(char **str, t_env *s_env, int *i, int just_char)
     char    *tmp;
 
     begin = *i;
-    if(begin != 0 && str[0][begin - 1] == '\\' && (just_char != -2 && just_char != begin - 1))
+    if(begin != 0 && str[0][begin - 1] == '\\' && just_char != -2 && just_char != begin - 1)
     {
         rm_char(str, begin - 1);
         *i -= 1;
@@ -319,10 +321,8 @@ int     clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
     tmp_args = s_cmd->args;
     while (tmp_args)
     {
-        printf("arg = %s\n", tmp_args->arg);
         if(special_chars(&tmp_args->arg, s_env, cmd_return) != 0)
             return (-1);
-        printf("arg = %s\n", tmp_args->arg);
         tmp_args = tmp_args->next;
     }
     check_again(s_cmd);

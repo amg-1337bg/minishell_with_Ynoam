@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/02 14:48:03 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/03 11:31:02 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ int     quote_detected(char *line, int *j, int just_char)
     char c;
 
     c = line[*j];
-    if (*j == 0 || line[*j - 1] != '\\' || (line[*j - 1] == '\\' && just_char == *j - 1))
+    if (*j != 0 && line[*j - 1] == '\\' && just_char != *j - 1)
+        return (1);
+    else
     {
         if(c == '\'')
         {
