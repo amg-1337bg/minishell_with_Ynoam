@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/05/30 20:44:36 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/02 15:55:15 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,17 +127,17 @@ void    getenvp(t_env **s_env, char **envp)
     }
 }
 
-void ctrl_c(int c)
+void    ctrl_c(int c)
 {
     char *cap;
     
     write(1, "\n", 1);
     write(1, Minishell, ft_strlen(Minishell));
-    // free(*line);
-    // *line = NULL;
     cap = tgetstr("sc", 0);
     write(1, cap, ft_strlen(cap));
+    g_signal = 1;
 }
+
 
 int main(int argc, char **argv, char **envp)
 {
@@ -147,29 +147,23 @@ int main(int argc, char **argv, char **envp)
     int cmd_return;
     t_line  *h_line[3];
     struct termios old;
-    struct termios tee;
-    
     
     s_env = NULL;
     s_cmd = NULL;
     cmd_return = 0;
     getenvp(&s_env, envp);
     changenvp(s_env);
-    // tcgetattr(STDIN_FILENO, &old);
+    tcgetattr(STDIN_FILENO, &old);
     tgetent(0, getenv("TERM"));
-    // modify_attr(tee);
     h_line[0] = NULL;
     h_line[1] = NULL;
     h_line[2] = NULL;
     while(1)
     {
-        line = get_line(h_line);
-        // tcsetattr(STDIN_FILENO, TCSANOW, &old);
-        // write(1, "\n", 1);
-        // printf("line = %s\n," ,line);
-        // printf("line = |%s|\n", line);
-        get_cmd(&s_cmd, s_env, line);
-        cmd_return = execute(s_cmd, s_env, cmd_return);
+        line = get_line(h_line, old, &cmd_return);
+        tcsetattr(STDIN_FILENO, TCSANOW, &old);
+        if (get_cmd(&s_cmd, s_env, line, &cmd_return) == 0)
+            cmd_return = execute(s_cmd, s_env, cmd_return);
         free_cmd(&s_cmd);
         free(line);
     }
