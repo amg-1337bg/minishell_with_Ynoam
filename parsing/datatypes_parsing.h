@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 14:38:21 by ynoam             #+#    #+#             */
-/*   Updated: 2021/05/26 11:08:16 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/03 19:20:20 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 typedef struct s_operator{
     char *type; // ">" or ">>" or "<"
     char *file;
+    int     dollar;
     struct s_operator *next;
 }              t_files;
 
