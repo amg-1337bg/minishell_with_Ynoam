@@ -6,7 +6,7 @@
 #    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/05/26 09:20:06 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/06/04 11:10:28 by bamghoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc -g -fsanitize=address -ltermcap  $(FLAGS) $(SRC) -o $(NAME)
+	gcc -g -ltermcap  $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
 	make clean -C ./libft

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 14:13:07 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:44:40 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/04 10:52:45 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,17 @@ void	getenvp(t_env **s_env, char **envp)
 				break ;
 			}
 	}
+}
+
+int	list_size(t_env *head)
+{
+	int	i;
+
+	i = 0;
+	while (head)
+	{
+		i++;
+		head = head->next;
+	}
+	return (i);
 }

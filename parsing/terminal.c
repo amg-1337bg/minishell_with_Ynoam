@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:34:27 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/04 11:12:54 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 {
+	char	*tmp;
 	if (c == (unsigned char)183 && h_line[1])
 		handle_up(h_line, line, current);
 	else if (c == (unsigned char)184 && h_line[2])
@@ -28,6 +29,7 @@ int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 	}
 	else if (c >= (unsigned char)32 && c <= (unsigned char)126)
 	{
+		tmp = *line;
 		*line = char_join(*line, c);
 		write(1, &c, 1);
 	}
