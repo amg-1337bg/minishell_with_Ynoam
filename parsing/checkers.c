@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 10:30:01 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/04 10:56:37 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/04 11:43:05 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	pipe_checker(t_cmd *pipe_cmd, int *i, int *from, int *just_char)
 		(*from) = -1;
 	else if (pipe_cmd->full[*i] == ' ' && (pipe_cmd->full[(*i) - 1] != '\\'
 			|| *just_char == (*i) - 1))
-		call_get_cmd(pipe_cmd, from, i);
+		call_get_cmd(pipe_cmd, i, from);
 	else if (pipe_cmd->full[(*i)] == '|' && (pipe_cmd->full[(*i) - 1] != '\\'
 			|| *just_char == (*i) - 1))
 	{
