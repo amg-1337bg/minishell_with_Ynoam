@@ -23,7 +23,7 @@ int	ft_exit(char **args)
 		j = 0;
 		while (args[1][j])
 		{
-			if ((!ft_isdigit(args[1][j]) || j >= 19)
+			if (((!ft_isdigit(args[1][j]) && args[1][0] != '-') || j >= 19)
 					&& put_error("numeric argument required", \
 						ft_strjoin("exit: ", args[1])))
 				exit(255);
@@ -31,11 +31,7 @@ int	ft_exit(char **args)
 		}
 		if (args[2] && put_error("too many arguments", "exit"))
 			return (1);
-		j = 0;
-		i = 0;
-		while (args[1][i] >= 48 && args[1][i] <= 57)
-			j = (j * 10) + args[1][i++] - 48;
-		exit(j);
+		exit(ft_atoi(args[1]));
 	}
 	exit(0);
 	return (0);
