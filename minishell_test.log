@@ -47,18 +47,7 @@ $
 ================================================================================
 
 |> WITH echo $PWD; echo $OLDPWD; cd /; echo $PWD; echo $OLDPWD; unset PWD; cd /dev; echo $OLDPWD
-|  STATUS: expected 0 actual -6
-|---------------------------------------EXPECTED--------------------------------
-/Users/bamghoug/.cache/minishell_test/sandbox$
-$
-/$
-/Users/bamghoug/.cache/minishell_test/sandbox$
-$
-|---------------------------------------ACTUAL----------------------------------
-/Users/bamghoug/.cache/minishell_test/sandbox$
-$
-/$
-/Users/bamghoug/.cache/minishell_test/sandbox$
+TIMEOUT
 ================================================================================
 
 |> WITH echo $PWD; echo $OLDPWD; cd /; echo $PWD; echo $OLDPWD; export PWD=bonjour; cd /dev; echo $OLDPWD
@@ -1014,11 +1003,7 @@ TERM=xterm-256color
 ================================================================================
 
 |> WITH unset PWD; pwd; echo $PWD
-|  STATUS: expected 0 actual -6
-|---------------------------------------EXPECTED--------------------------------
-/Users/bamghoug/.cache/minishell_test/sandbox$
-$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH Pwd
@@ -1897,6 +1882,22 @@ minishell: syntax error near unexpected token `;'$
 syntax error near unexpected token$
 ================================================================================
 
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls;
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls;
+TIMEOUT
+================================================================================
+
 |> WITH echo|
 |  STATUS: expected 2 actual 0
 ================================================================================
@@ -1947,6 +1948,22 @@ minishell: syntax error near unexpected token `|'$
 minishell: syntax error near unexpected token `|'$
 |---------------------------------------ACTUAL----------------------------------
 b$
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls
+TIMEOUT
+================================================================================
+
+|> WITH echo bonjour  | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e
+TIMEOUT
+================================================================================
+
+|> WITH echo bonjour  | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e
+TIMEOUT
 ================================================================================
 
 |> WITH echo a | ls asdfasdf
@@ -3059,24 +3076,15 @@ minishell: wHoami: command not found$
 ================================================================================
 
 |> WITH echo charles\ 
-|---------------------------------------EXPECTED--------------------------------
-charles $
-|---------------------------------------ACTUAL----------------------------------
-charles$
+TIMEOUT
 ================================================================================
 
 |> WITH echo \ \ \ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-        $
-|---------------------------------------ACTUAL----------------------------------
-       $
+TIMEOUT
 ================================================================================
 
 |> WITH echo \ \ \ \ \ \ \ \               \ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-               $
-|---------------------------------------ACTUAL----------------------------------
-              $
+TIMEOUT
 ================================================================================
 
 |> WITH echo\ bonjour
@@ -3112,17 +3120,15 @@ bonjour$
 ================================================================================
 
 |> WITH  \                 echo bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell:  : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH                  \                    echo bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell:  : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
+================================================================================
+
+|> WITH echo \
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='foo ' B=' bar  ' C='baz '] echo $A"$B"$C"A"$B"$C"
@@ -3203,24 +3209,15 @@ foo$BbazAbar$C$
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour'] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-       bonjour      $
-|---------------------------------------ACTUAL----------------------------------
-       bonjour     $
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour je suis'] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-       bonjour je suis      $
-|---------------------------------------ACTUAL----------------------------------
-       bonjour je suis     $
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='  bonjour je suis  '] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-        bonjour je suis       $
-|---------------------------------------ACTUAL----------------------------------
-       bonjour je suis     $
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour     je     suis    splited'] echo $A
@@ -3273,24 +3270,15 @@ bonjour     je     suis    splited$
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour je suis splited'] echo $A\ 
-|---------------------------------------EXPECTED--------------------------------
-bonjour je suis splited $
-|---------------------------------------ACTUAL----------------------------------
-bonjour je suis splited$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour     je     suis    splited'] echo $A\ 
-|---------------------------------------EXPECTED--------------------------------
-bonjour je suis splited $
-|---------------------------------------ACTUAL----------------------------------
-bonjour     je     suis    splited$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='   bonjour     je     suis    splited   '] echo $A\ 
-|---------------------------------------EXPECTED--------------------------------
-bonjour je suis splited  $
-|---------------------------------------ACTUAL----------------------------------
-bonjour     je     suis    splited$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='   bonjour     je     suis    splited   '] echo $A$A$A
@@ -3435,10 +3423,7 @@ bonjour$
 ================================================================================
 
 |> WITH 'echo     ' bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell: echo     : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH "     echo" bonjour
@@ -3450,10 +3435,7 @@ bonjour$
 ================================================================================
 
 |> WITH "echo     " bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell: echo     : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH echo '
