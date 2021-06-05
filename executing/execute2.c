@@ -31,30 +31,30 @@ void	close_pipe(int fd[])
 
 char	**create_args(t_cmd *cmd)
 {
-	t_args	*tmp_args;
-	char	**argv;
+	t_args	*tmp;
+	char	**arg;
 	int		i;
 	int		j;
 
-	tmp_args = cmd->args;
+	tmp = cmd->args;
 	i = 1;
-	while (tmp_args)
+	while (tmp)
 	{
-		tmp_args = tmp_args->next;
+		tmp = tmp->next;
 		i++;
 	}
-	tmp_args = cmd->args;
-	argv = malloc((i + 1) * sizeof(char *));
-	argv[0] = cmd->cmd;
+	tmp = cmd->args;
+	arg = malloc((i + 1) * sizeof(char *));
+	arg[0] = cmd->cmd;
 	j = 1;
 	while (j < i)
 	{
-		argv[j] = tmp_args->arg;
-		tmp_args = tmp_args->next;
+		arg[j] = tmp->arg;
+		tmp = tmp->next;
 		j++;
 	}
-	argv[j] = NULL;
-	return (argv);
+	arg[j] = NULL;
+	return (arg);
 }
 
 int	create_files(t_files *files)
@@ -62,7 +62,7 @@ int	create_files(t_files *files)
 	while (files)
 	{
 		if (files->file[0] == '$' && files->dollar == 1)
-			put_error("ambiguous redirect",files->file);
+			put_error("ambiguous redirect", files->file);
 		else if (files->type[0] == '>')
 		{
 			if (creat_file_or_openit(files->file, 0) == -1)
