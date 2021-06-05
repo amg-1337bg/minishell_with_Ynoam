@@ -27,7 +27,7 @@ void	print_backslash(char *value, int fd)
 	i = 0;
 	while (value[i])
 	{
-		if (value[i] == '\\')
+		if (value[i] == '\\' || value[i] == '$' || value[i] == '\"')
 			write(fd, "\\",1);
 		write(fd, &(value[i]),1);
 		i++;
