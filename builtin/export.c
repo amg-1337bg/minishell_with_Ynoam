@@ -32,7 +32,7 @@ void	dup_env(t_env *head, int *fd)
 	free(arr);
 }
 
-int		there_is_an_error(char *argv)
+int	there_is_an_error(char *argv)
 {
 	char	*join;
 	char	*join2;
@@ -67,14 +67,14 @@ void	variable_assign(t_env *head, char *argv[], int i, int j)
 					ft_strdup(&(argv[j][i + 2])));
 		else
 		{
-			mdf_env(head, str, ft_strjoin(search_env_for_node(head,\
-					str)->value, ft_strdup(&(argv[j][i + 2]))));
+			mdf_env(head, str, ft_strjoin(search_env_for_node(head,
+						str)->value, ft_strdup(&(argv[j][i + 2]))));
 		}
 		free(str);
 	}
 }
 
-int		thereis_some_args(t_env *head, char *argv[], int j)
+int	thereis_some_args(t_env *head, char *argv[], int j)
 {
 	int	i;
 	int	ret;
@@ -102,7 +102,7 @@ int		thereis_some_args(t_env *head, char *argv[], int j)
 	return (ret);
 }
 
-int		ft_export(t_env *head, char *argv[], int *fd)
+int	ft_export(t_env *head, char *argv[], int *fd)
 {
 	int		ret;
 	int		j;

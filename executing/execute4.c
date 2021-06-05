@@ -12,29 +12,31 @@
 
 #include "../parsing/minishell.h"
 
-void	search_for_path_and_exec(t_cmd *cmd, t_env *env)
+void	search_for_path_and_exec(t_cmd *cmd, t_env *env, char **fuckyou)
 {
 	char	**paths;
-	char	**str;
+	char	**argv;
 	char	*onepath;
 	char	*str2;
 	int		i;
 
 	i = 0;
 	paths = ft_split(search_env(env, "PATH"), ':');
-	str = create_args(cmd);
+	argv = create_args(cmd);
 	str2 = ft_strjoin("/", cmd->cmd);
+	fuckyou = create_envp(env, onepath);
 	while (paths[i])
 	{
 		onepath = ft_strjoin(paths[i], str2);
-		execve(onepath, str, create_envp(env, onepath));
+		execve(onepath, argv, fuckyou);
 		ft_free(&onepath);
 		i++;
 	}
 	put_error("command not found", cmd->cmd);
 	ft_free_double(paths);
-	ft_free_double(str);
+	ft_free_double(argv);
 	ft_free(&str2);
+	ft_free_double(&fuckyou);
 }
 
 int	exec_normal(t_cmd *cmd, t_env *env)
@@ -47,7 +49,7 @@ int	exec_normal(t_cmd *cmd, t_env *env)
 	change_stdin_stdout(cmd->files, fd);
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
-	search_for_path_and_exec(cmd, env);
+	search_for_path_and_exec(cmd, env, NULL);
 	free(fd);
 	return (127);
 }
