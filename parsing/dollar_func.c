@@ -6,11 +6,31 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:57:01 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 19:34:57 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 17:05:03 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	dollar_inside(char **str, t_env *s_env, int *i, int just_char)
+{
+	int		begin;
+	char	*value;
+	char	*key;
+	char	*tmp;
+
+	begin = *i;
+	if (check_before(str, i, begin, just_char) == 1)
+		return ;
+	while (str[0][++begin] != '\0')
+	{
+		if (ft_isalnum(str[0][begin]) != 1 && str[0][begin] != '_')
+			break ;
+	}
+	if (join_dollar_in(str, s_env, i, begin) == 1)
+		return ;
+	(*i) -= 1;
+}
 
 void	dollar_founded(char **str, t_env *s_env, int *i, int just_char)
 {
@@ -30,6 +50,34 @@ void	dollar_founded(char **str, t_env *s_env, int *i, int just_char)
 	if (join_dollar_val(str, s_env, i, begin) == 1)
 		return ;
 	(*i) -= 1;
+}
+
+int	join_dollar_in(char **str, t_env *s_env, int *i, int begin)
+{
+	char	*value;
+	char	*key;
+	char	*tmp;
+
+	key = ft_substr(str[0], (*i) + 1, begin - ((*i) + 1));
+	if (ft_strlen(key) == 0)
+		return (ft_free(&key));
+	value = ft_strdup(search_env(s_env, key));
+	// tmp = value;
+	// value = ft_strtrim(value, " ");
+	// free(tmp);
+	tmp = str[0];
+	str[0] = insert_var_value(ft_substr(str[0], 0, *i), value,
+			ft_strdup(&str[0][begin]));
+	free(tmp);
+	if (ft_strlen(value) != 0)
+	{
+		(*i) += ft_strlen(value);
+		if ((*i) < 0)
+			(*i) *= -1;
+	}
+	free(key);
+	free(value);
+	return (0);
 }
 
 int	join_dollar_val(char **str, t_env *s_env, int *i, int begin)
