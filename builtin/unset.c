@@ -31,7 +31,7 @@ int	unset(t_env *head, char *argv[])
 				there_is_an_error(argv[j], 1);
 			i++;
 		}
-		dlt_env(head, *argv);
+		dlt_env(head, argv[j]);
 		j++;
 	}
 	return (0);

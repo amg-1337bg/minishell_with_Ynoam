@@ -27,8 +27,12 @@ int	cd2(t_env *env, char *hna)
 	if (pwd)
 		mdf_env(env, "PWD", getcwd(NULL, 0));
 	oldpwd = search_env_for_node(env, "OLDPWD");
-	if (oldpwd)
+	if (pwd)
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s\n", pwd->value);
+	if (oldpwd && pwd)
 		mdf_env(env, "OLDPWD", ft_strdup(hna));
+	if (oldpwd && !pwd)
+		mdf_env(env, "OLDPWD", ft_strdup(""));
 	ft_free(&hna);
 	return (1);
 }
