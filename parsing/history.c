@@ -17,6 +17,7 @@ void	handle_up(t_line **h_line, char **line, char **current)
 	if (h_line[2] == NULL)
 		*current = ft_strdup(*line);
 	del_write(h_line[1]->line);
+	free(*line);
 	line[0] = ft_strdup(h_line[1]->line);
 	h_line[2] = h_line[1];
 	h_line[1] = h_line[1]->prev;

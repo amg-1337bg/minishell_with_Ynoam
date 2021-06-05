@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 14:13:07 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/04 10:52:45 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 14:02:10 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ char	**create_envp(t_env *s_env, char *cmd)
 		char_tmp = ret[j];
 		if (tmp->key && ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0
 			&& ft_strlen(tmp->key) == ft_strlen("_"))
-			ret[j] = ft_strjoin(ret[j], cmd); //LEAKS HERE
+			ret[j] = ft_strjoin(ret[j], cmd);
 		else
-			ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
+			ret[j] = ft_strjoin(ret[j], tmp->value);
 		free (char_tmp);
 		tmp = tmp->next;
 	}
@@ -49,7 +49,7 @@ void	changenvp(t_env *env)
 	mdf_env(env, "PWD", getcwd(NULL, 0));
 	shlvl = search_env(env, "SHLVL");
 	wow = 1;
-	if (shlvl[0] != 0) // if is exist
+	if (shlvl[0] != 0)
 	{
 		while (shlvl[wow])
 		{
@@ -74,6 +74,17 @@ void	changenvp(t_env *env)
 		crt_env(env, ft_strdup("SHLVL"), ft_strdup("1"));
 }
 
+t_env	*init_env(void)
+{
+	t_env	*fill;
+
+	fill = malloc(sizeof(t_env));
+	fill->key = NULL;
+	fill->value = NULL;
+	fill->next = NULL;
+	return (fill);
+}
+
 void	getenvp(t_env **s_env, char **envp)
 {
 	int		j;
@@ -82,16 +93,13 @@ void	getenvp(t_env **s_env, char **envp)
 	t_env	*fill;
 
 	i = -1;
-	fill = malloc(sizeof(t_env));
-	fill->key = NULL;
-	fill->value = NULL;
-	fill->next = NULL;
-	*s_env = fill;
+	*s_env = init_env();
 	while (envp[++i] != NULL)
 	{
 		j = -1;
 		fill = (t_env *)malloc(sizeof(t_env));
 		while (envp[i][++j] != '\0')
+		{	
 			if (envp[i][j] == '=')
 			{
 				fill->key = ft_substr(envp[i], 0, j);
@@ -102,6 +110,7 @@ void	getenvp(t_env **s_env, char **envp)
 					tmp->next = fill;
 				break ;
 			}
+		}
 	}
 }
 

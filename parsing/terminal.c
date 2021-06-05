@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/04 20:02:12 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 13:39:58 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 {
-	char *tmp;
-	
+	char	*tmp;
+
 	if (c == (unsigned char)183 && h_line[1])
 		handle_up(h_line, line, current);
 	else if (c == (unsigned char)184 && h_line[2])
@@ -38,6 +38,25 @@ int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 	return (0);
 }
 
+void	init_lines(char **line, char **current)
+{
+	*line = ft_strdup("");
+	*current = NULL;
+}
+
+void	init_signals(void)
+{
+	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, ctrl_b);
+}
+
+void	ctrl_d(struct termios *old)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, old);
+	write(1, "exit\n", 5);
+	exit(0);
+}
+
 char	*get_line(t_line **h_line, int *cmd_return)
 {
 	unsigned char	c;
@@ -45,24 +64,21 @@ char	*get_line(t_line **h_line, int *cmd_return)
 	char			*current;
 	struct termios	old;
 
-	line = ft_strdup("");
+	init_lines(&line, &current);
 	check_cmd_ret(cmd_return);
 	tcgetattr(STDIN_FILENO, &old);
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, ctrl_b);
+	init_signals();
 	while (1)
 	{
 		check_signal(&line, cmd_return);
 		c = gtc();
 		if (c == 4 && ft_strlen(line) == 0)
-		{
-			tcsetattr(STDIN_FILENO, TCSANOW, &old);
-			write(1, "exit\n", 5);
-			exit(0);
-		}
+			ctrl_d(&old);
 		if (check_char(h_line, &line, c, &current) == 1)
 			break ;
 	}
+	if (current != NULL)
+		free(current);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old);
 	return (line);
 }

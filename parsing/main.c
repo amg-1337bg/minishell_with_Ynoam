@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/04 16:03:19 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 14:59:58 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,14 @@ int	main(int argc, char **argv, char **envp)
 	h_line[2] = NULL;
 	while (1)
 	{
-		line = get_line(h_line, &cmd_return);
+		// if (argv[2])
+		// 	line = strdup(argv[2]);
+		// else
+			line = get_line(h_line, &cmd_return);
 		if (get_cmd(&s_cmd, s_env, line, &cmd_return) == 0)
 			cmd_return = execute(s_cmd, s_env, cmd_return);
+		// if (argv[2])
+		// 	exit(0);
 		free_cmd(&s_cmd);
 		free(line);
 	}
