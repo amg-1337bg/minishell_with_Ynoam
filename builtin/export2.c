@@ -12,7 +12,7 @@
 
 #include "../parsing/minishell.h"
 
-int		same(char *str1, char *str2)
+int	same(char *str1, char *str2)
 {
 	if (ft_strncmp(str1, str2, ft_strlen(str1)) == 0
 		&& ft_strlen(str1) == ft_strlen(str2))
@@ -28,8 +28,8 @@ void	print_backslash(char *value, int fd)
 	while (value[i])
 	{
 		if (value[i] == '\\' || value[i] == '$' || value[i] == '\"')
-			write(fd, "\\",1);
-		write(fd, &(value[i]),1);
+			write(fd, "\\", 1);
+		write(fd, &(value[i]), 1);
 		i++;
 	}
 }
