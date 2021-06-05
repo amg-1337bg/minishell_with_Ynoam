@@ -46,7 +46,6 @@ char	*get_line(t_line **h_line, int *cmd_return)
 	struct termios	old;
 
 	line = ft_strdup("");
-	current = ft_strdup("");
 	check_cmd_ret(cmd_return);
 	tcgetattr(STDIN_FILENO, &old);
 	signal(SIGINT, ctrl_c);

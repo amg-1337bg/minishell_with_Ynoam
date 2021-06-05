@@ -15,26 +15,25 @@
 char	**create_envp(t_env *s_env, char *cmd)
 {
 	char	**ret;
+	char	*char_tmp;
 	t_env	*tmp;
 	int		i;
 	int		j;
 
-	i = 0;
 	tmp = s_env->next;
-	while (tmp != NULL && ++i)
-		tmp = tmp->next;
-	j = 0;
-	tmp = s_env->next;
+	i = list_size(tmp);
+	j = -1;
 	ret = malloc((i + 1) * sizeof(char *));
 	while (tmp != NULL)
 	{
-		ret[j] = ft_strjoin(tmp->key, "=");
+		ret[++j] = ft_strjoin(tmp->key, "=");
+		char_tmp = ret[j];
 		if (tmp->key && ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0
 			&& ft_strlen(tmp->key) == ft_strlen("_"))
 			ret[j] = ft_strjoin(ret[j], cmd); //LEAKS HERE
 		else
 			ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
-		j++;
+		free (char_tmp);
 		tmp = tmp->next;
 	}
 	ret[j] = NULL;

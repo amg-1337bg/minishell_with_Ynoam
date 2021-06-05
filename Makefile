@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME):
 	make -C ./libft
-	gcc -g -ltermcap  $(FLAGS) $(SRC) -o $(NAME)
+	gcc -g -fsanitize=address -ltermcap  $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
 	make clean -C ./libft

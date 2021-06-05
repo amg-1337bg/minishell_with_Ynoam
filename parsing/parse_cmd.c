@@ -34,8 +34,6 @@ void	get_cmd_args(t_cmd *s_cmd, int from, int *i)
 	else
 	{
 		args = (t_args *)malloc(sizeof(t_args));
-		if (args == NULL)
-			error();
 		args->arg = str;
 		args->next = NULL;
 		tmp_arg = ft_lastarg(s_cmd->args);

@@ -27,9 +27,11 @@ int	pipe_function(t_cmd *s_cmd, int *i, int *from, int just_char)
 		tmp = ft_strdup(&s_cmd->full[(*i) + 1]);
 		if (ft_strlen(tmp) == 0)
 		{
+			free (tmp);
 			printed_errors(No_MultilineCmd);
 			return (-1);
 		}
+		free(tmp);
 		(*i)++;
 		if (get_pipe_cmd(s_cmd, i) != 0)
 			return (0);
