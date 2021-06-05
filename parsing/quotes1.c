@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 17:00:24 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 19:36:21 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 17:03:39 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	found_dquote(char **str, t_env *s_env, int *dquote_ind)
 			just_char = i;
 		}
 		else if (str[0][i] == '$')
-			dollar_founded(str, s_env, &i, just_char);
+			dollar_inside(str, s_env, &i, just_char);
 	}
 	return (0);
 }

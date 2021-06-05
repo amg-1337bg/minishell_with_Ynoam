@@ -14,14 +14,25 @@
 
 int	unset(t_env *head, char *argv[])
 {
-	argv++;
-	if (*argv)
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 1;
+	while (argv[j])
 	{
-		while (*argv)
+		i = 0;
+		if ((!ft_isalpha(argv[j][i]) && argv[j][i] != '_'))
+			there_is_an_error(argv[j], 1);
+		i++;
+		while (argv[j][i])
 		{
-			dlt_env(head, *argv);
-			argv++;
+			if ((!ft_isalnum(argv[j][i]) && argv[j][i] != '_'))
+				there_is_an_error(argv[j], 1);
+			i++;
 		}
+		dlt_env(head, *argv);
+		j++;
 	}
 	return (0);
 }
