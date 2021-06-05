@@ -23,27 +23,30 @@ void	close_fds(int *fd)
 
 int	exec_builtin(t_cmd *cmd, t_env *env)
 {
-	int	*fd;
-	int	ret;
+	int		*fd;
+	int		ret;
+	char	**arg;
 
 	fd = malloc(sizeof(int) * 2);
 	ret = 0;
 	change_stdin_stdout(cmd->files, fd);
+	arg = create_args(cmd);
 	if (!ft_strncmp(cmd->cmd, "echo", ft_strlen("echo") + 1))
-		ret = ft_echo(create_args(cmd), fd);
+		ret = ft_echo(arg, fd);
 	else if (!ft_strncmp(cmd->cmd, "cd", ft_strlen("cd") + 1))
 		ret = cd(env, cmd->args);
 	else if (!ft_strncmp(cmd->cmd, "pwd", ft_strlen("pwd") + 1))
 		ret = pwd(fd);
 	else if (!ft_strncmp(cmd->cmd, "export", ft_strlen("export") + 1))
-		ret = ft_export(env, create_args(cmd), fd);
+		ret = ft_export(env, arg, fd);
 	else if (!ft_strncmp(cmd->cmd, "unset", ft_strlen("unset") + 1))
-		ret = unset(env, create_args(cmd));
+		ret = unset(env, arg);
 	else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
 		ret = ft_env(env, fd);
 	else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
-		ret = ft_exit(create_args(cmd));
+		ret = ft_exit(arg);
 	close_fds(fd);
+	free(arg);
 	return (ret);
 }
 

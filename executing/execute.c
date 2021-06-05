@@ -57,27 +57,26 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	int	fd[2];
 	int	i;
 	int	pcount;
-	int	inout;
+	int	in;
 	int	pid;
 
 	i = 0;
-	inout = 0;
+	in = 0;
 	pcount = pipe_count(cmd);
 	while (i < pcount)
 	{
 		pipe(fd);
 		clean_replace(cmd, env, 0);
 		change_cmd_args(cmd);
-		exec_child(inout, fd, cmd, env);
+		exec_child(in, fd, cmd, env);
 		close(fd[1]);
 		if (i != 0)
-			close(inout);
-		inout = fd[0];
-		if (i == 0)
+			close(in);
+		in = fd[0];
+		if (i++ == 0)
 			cmd = cmd->pipe;
 		else
 			cmd = cmd->next;
-		i++;
 	}
 	return (wait_for_last_child(fd, pcount, cmd, env));
 }
