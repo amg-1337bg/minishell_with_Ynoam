@@ -36,7 +36,7 @@ void	search_for_path_and_exec(t_cmd *cmd, t_env *env, char **fuckyou)
 	ft_free_double(paths);
 	ft_free_double(argv);
 	ft_free(&str2);
-	ft_free_double(&fuckyou);
+	ft_free_double(fuckyou);
 }
 
 int	exec_normal(t_cmd *cmd, t_env *env)
