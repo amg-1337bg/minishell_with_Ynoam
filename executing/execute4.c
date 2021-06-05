@@ -24,19 +24,19 @@ void	search_for_path_and_exec(t_cmd *cmd, t_env *env, char **fuckyou)
 	paths = ft_split(search_env(env, "PATH"), ':');
 	argv = create_args(cmd);
 	str2 = ft_strjoin("/", cmd->cmd);
-	fuckyou = create_envp(env, onepath);
 	while (paths[i])
 	{
 		onepath = ft_strjoin(paths[i], str2);
+		fuckyou = create_envp(env, onepath);
 		execve(onepath, argv, fuckyou);
-		ft_free(&onepath);
+		free(onepath);
+		ft_free_double(fuckyou);
 		i++;
 	}
 	put_error("command not found", cmd->cmd);
 	ft_free_double(paths);
 	ft_free_double(argv);
 	ft_free(&str2);
-	ft_free_double(fuckyou);
 }
 
 int	exec_normal(t_cmd *cmd, t_env *env)

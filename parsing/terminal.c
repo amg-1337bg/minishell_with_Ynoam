@@ -46,7 +46,7 @@ char	*get_line(t_line **h_line, int *cmd_return)
 	struct termios	old;
 
 	line = ft_strdup("");
-	current = ft_strdup("");
+	current = NULL;
 	check_cmd_ret(cmd_return);
 	tcgetattr(STDIN_FILENO, &old);
 	signal(SIGINT, ctrl_c);
@@ -64,6 +64,8 @@ char	*get_line(t_line **h_line, int *cmd_return)
 		if (check_char(h_line, &line, c, &current) == 1)
 			break ;
 	}
+	if (current != NULL)
+		free(current);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old);
 	return (line);
 }
