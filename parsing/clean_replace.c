@@ -36,7 +36,7 @@ void	check_again(t_cmd *cmd)
 
 int	clean_rep_args(t_args *args, t_env *s_env, int cmd_return)
 {
-	while (args)
+	while (args != NULL)
 	{
 		if (special_chars(&args->arg, s_env, cmd_return) != 0)
 			return (-1);

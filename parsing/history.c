@@ -27,7 +27,8 @@ void	handle_down(t_line **h_line, char **line, char **current)
 {
 	if (h_line[2]->next == NULL)
 	{
-		*line = *current;
+		free (*line);
+		*line = ft_strdup(*current);
 		del_write(line[0]);
 		h_line[1] = h_line[2];
 		h_line[2] = NULL;
