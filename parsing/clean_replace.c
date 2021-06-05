@@ -23,6 +23,7 @@ void	check_again(t_cmd *cmd)
 	tmp = NULL;
 	while (cmd->cmd != NULL && cmd->cmd[++i] != '\0')
 	{
+		printf("echo hello\n");
 		if (cmd->cmd[i] == ' ')
 		{
 			tmp = cmd->cmd;
