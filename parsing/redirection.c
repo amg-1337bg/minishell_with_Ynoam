@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:41:34 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/04 10:17:10 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 13:43:14 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,8 @@ char	*get_filename(t_cmd *s_cmd, int *i, int just_char)
 			just_char = *i + 1;
 		else if (s_cmd->full[*i] == '>' || s_cmd->full[*i] == '<')
 		{
-			if (s_cmd->full[*i - 1] == '\\' && just_char == *i - 1)
-				break ;
-			else if (s_cmd->full[*i - 1] != '\\')
+			if ((s_cmd->full[*i - 1] == '\\' && just_char == *i - 1)
+				|| s_cmd->full[*i - 1] != '\\')
 				break ;
 		}
 		else if (s_cmd->full[*i] == ' ' && (s_cmd->full[(*i) - 1] != '\\' || just_char == (*i) - 1))

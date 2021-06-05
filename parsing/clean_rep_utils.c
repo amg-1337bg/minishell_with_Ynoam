@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 19:38:17 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:56:40 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 14:58:38 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	special_checker(char **str, int *i, int cmd_return, int *just_char)
 	else if ((str[0][(*i)] == '>' || str[0][(*i)] == '<') && i > 0
 		&& str[0][(*i) - 1] == '\\' && *just_char != (*i) - 1)
 		char_remove(str, i, just_char);
-	else if (str[0][(*i)] == '\\' && str[0][(*i) + 1] == '\\')
+	else if (str[0][(*i)] == '\\')
 		char_remove(str, i, just_char);
 	else if (str[0][(*i)] == ' ' && i > 0 && str[0][(*i) - 1] == '\\'
 		&& *just_char != (*i) - 1)
