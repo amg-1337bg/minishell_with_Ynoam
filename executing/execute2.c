@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 15:33:39 by ynoam             #+#    #+#             */
-/*   Updated: 2021/06/03 19:22:18 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 16:44:41 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	return_value(int ret)
 	if (WIFEXITED(ret))
 		return (WEXITSTATUS(ret));
 	else if (WIFSIGNALED(ret))
-		return (WTERMSIG(ret));
+		return (128 + WTERMSIG(ret));
 	else if (WIFSTOPPED(ret))
 		return (WSTOPSIG(ret));
 	return (0);

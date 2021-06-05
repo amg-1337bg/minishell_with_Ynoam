@@ -98,6 +98,8 @@ char    *insert_var_value(char *after, char *value, char *before);
 int     join_dollar_val(char **str, t_env *s_env, int *i, int begin);
 void    dollar_founded(char **str, t_env *s_env, int *i, int just_char);
 int     check_before(char **str, int *i, int begin, int just_char);
+void	dollar_inside(char **str, t_env *s_env, int *i, int just_char);
+int     join_dollar_in(char **str, t_env *s_env, int *i, int begin);
 
 //clean_rep_utils.c
 void special_checker(char **str, int *i, int cmd_return, int *just_char);

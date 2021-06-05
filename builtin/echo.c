@@ -25,7 +25,7 @@ void	ft_echo2(char *argv[], int i, int fd, int flag)
 		ft_putstr_fd("\n", fd);
 }
 
-int		ft_echo(char *argv[], int *fd)
+int	ft_echo(char *argv[], int *fd)
 {
 	int	i;
 	int	j;

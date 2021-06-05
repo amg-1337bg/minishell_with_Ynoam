@@ -47,7 +47,6 @@ $
 ================================================================================
 
 |> WITH echo $PWD; echo $OLDPWD; cd /; echo $PWD; echo $OLDPWD; unset PWD; cd /dev; echo $OLDPWD
-|  STATUS: expected 0 actual -6
 |---------------------------------------EXPECTED--------------------------------
 /Users/bamghoug/.cache/minishell_test/sandbox$
 $
@@ -59,6 +58,7 @@ $
 $
 /$
 /Users/bamghoug/.cache/minishell_test/sandbox$
+/$
 ================================================================================
 
 |> WITH echo $PWD; echo $OLDPWD; cd /; echo $PWD; echo $OLDPWD; export PWD=bonjour; cd /dev; echo $OLDPWD
@@ -1014,11 +1014,12 @@ TERM=xterm-256color
 ================================================================================
 
 |> WITH unset PWD; pwd; echo $PWD
-|  STATUS: expected 0 actual -6
 |---------------------------------------EXPECTED--------------------------------
 /Users/bamghoug/.cache/minishell_test/sandbox$
 $
 |---------------------------------------ACTUAL----------------------------------
+/Users/bamghoug/.cache/minishell_test/sandbox$
+/Users/bamghoug/.cache/minishell_test/sandbox$
 ================================================================================
 
 |> WITH Pwd
@@ -1029,89 +1030,56 @@ $
 |  STATUS: expected 127 actual 0
 ================================================================================
 
-|> WITH [EXPORTS A='a'] unset 'A '; echo $A
+|> WITH [EXPORTS A='a'] unset A; echo $A
 |---------------------------------------EXPECTED--------------------------------
-minishell: unset: `A ': not a valid identifier$
-a$
+$
 |---------------------------------------ACTUAL----------------------------------
 a$
 ================================================================================
 
-|> WITH [EXPORTS A='a'] unset 'A='; echo $A
+|> WITH [EXPORTS A='a' B='b' C='c'] unset A B C; echo $A$B$C
 |---------------------------------------EXPECTED--------------------------------
-minishell: unset: `A=': not a valid identifier$
-a$
+$
 |---------------------------------------ACTUAL----------------------------------
-a$
+abc$
 ================================================================================
 
 |> WITH [EXPORTS A='a' B='b' C='c'] unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C
-|---------------------------------------EXPECTED--------------------------------
-minishell: unset: `asdf ': not a valid identifier$
-minishell: unset: ` asdf asdf asd f': not a valid identifier$
-minishell: unset: ` asdf ': not a valid identifier$
-minishell: unset: `': not a valid identifier$
-minishell: unset: `asdf ': not a valid identifier$
-$
-|---------------------------------------ACTUAL----------------------------------
-$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='a' B='b' C='c'] unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C
-|---------------------------------------EXPECTED--------------------------------
-minishell: unset: `asdf ': not a valid identifier$
-minishell: unset: ` asdf asdf asd f': not a valid identifier$
-minishell: unset: ` asdf ': not a valid identifier$
-minishell: unset: `': not a valid identifier$
-minishell: unset: `asdf ': not a valid identifier$
-a$
-|---------------------------------------ACTUAL----------------------------------
-a$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='a' B='b' C='c'] unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C
+TIMEOUT
+================================================================================
+
+|> WITH [EXPORTS A='a' B='b' C='c'] unset A; echo $A$B$C
 |---------------------------------------EXPECTED--------------------------------
-minishell: unset: `asdf ': not a valid identifier$
-minishell: unset: ` asdf asdf asd f': not a valid identifier$
-minishell: unset: ` asdf ': not a valid identifier$
-minishell: unset: `': not a valid identifier$
-minishell: unset: `asdf ': not a valid identifier$
-c$
+bc$
 |---------------------------------------ACTUAL----------------------------------
-c$
+abc$
+================================================================================
+
+|> WITH [EXPORTS A='a' B='b' C='c'] unset C; echo $A$B$C
+|---------------------------------------EXPECTED--------------------------------
+ab$
+|---------------------------------------ACTUAL----------------------------------
+abc$
 ================================================================================
 
 |> WITH [EXPORTS A='a' B='b' C='c'] unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C
-|  STATUS: expected 1 actual 0
-|---------------------------------------EXPECTED--------------------------------
-minishell: unset: `asdf ': not a valid identifier$
-minishell: unset: ` asdf asdf asd f': not a valid identifier$
-minishell: unset: ` asdf ': not a valid identifier$
-minishell: unset: `': not a valid identifier$
-minishell: unset: `asdf ': not a valid identifier$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='a' B='b' C='c'] unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C
-|  STATUS: expected 1 actual 0
-|---------------------------------------EXPECTED--------------------------------
-minishell: unset: `asdf ': not a valid identifier$
-minishell: unset: ` asdf asdf asd f': not a valid identifier$
-minishell: unset: ` asdf ': not a valid identifier$
-minishell: unset: `': not a valid identifier$
-minishell: unset: `asdf ': not a valid identifier$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='a' B='b' C='c'] unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '
-|  STATUS: expected 1 actual 0
-|---------------------------------------EXPECTED--------------------------------
-minishell: unset: `asdf ': not a valid identifier$
-minishell: unset: ` asdf asdf asd f': not a valid identifier$
-minishell: unset: ` asdf ': not a valid identifier$
-minishell: unset: `': not a valid identifier$
-minishell: unset: `asdf ': not a valid identifier$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH unset 'AH@'=nop
@@ -1119,6 +1087,8 @@ minishell: unset: `asdf ': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH@=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH@=nop': not a valid identifier$
+minishell: unset: `AH@=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset "AH'"=nop
@@ -1126,6 +1096,8 @@ minishell: unset: `AH@=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH'=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH'=nop': not a valid identifier$
+minishell: unset: `AH'=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH"'=nop
@@ -1133,6 +1105,8 @@ minishell: unset: `AH'=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH"=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH"=nop': not a valid identifier$
+minishell: unset: `AH"=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH$'=nop
@@ -1140,6 +1114,8 @@ minishell: unset: `AH"=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH$=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH$=nop': not a valid identifier$
+minishell: unset: `AH$=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH!'=nop
@@ -1147,6 +1123,8 @@ minishell: unset: `AH$=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH!=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH!=nop': not a valid identifier$
+minishell: unset: `AH!=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH|'=nop
@@ -1154,6 +1132,8 @@ minishell: unset: `AH!=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH|=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH|=nop': not a valid identifier$
+minishell: unset: `AH|=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH;'=nop
@@ -1161,6 +1141,8 @@ minishell: unset: `AH|=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH;=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH;=nop': not a valid identifier$
+minishell: unset: `AH;=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH&'=nop
@@ -1168,6 +1150,8 @@ minishell: unset: `AH;=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH&=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH&=nop': not a valid identifier$
+minishell: unset: `AH&=nop': not a valid identifier$
 ================================================================================
 
 |> WITH unset 'AH\'=nop
@@ -1175,6 +1159,8 @@ minishell: unset: `AH&=nop': not a valid identifier$
 |---------------------------------------EXPECTED--------------------------------
 minishell: unset: `AH\=nop': not a valid identifier$
 |---------------------------------------ACTUAL----------------------------------
+minishell: unset: `AH\=nop': not a valid identifier$
+minishell: unset: `AH\=nop': not a valid identifier$
 ================================================================================
 
 |> WITH Unset TERM
@@ -1897,6 +1883,22 @@ minishell: syntax error near unexpected token `;'$
 syntax error near unexpected token$
 ================================================================================
 
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls;
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls ; ls;
+TIMEOUT
+================================================================================
+
 |> WITH echo|
 |  STATUS: expected 2 actual 0
 ================================================================================
@@ -1947,6 +1949,22 @@ minishell: syntax error near unexpected token `|'$
 minishell: syntax error near unexpected token `|'$
 |---------------------------------------ACTUAL----------------------------------
 b$
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls
+TIMEOUT
+================================================================================
+
+|> WITH [SETUP touch a b c] ls  | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls
+TIMEOUT
+================================================================================
+
+|> WITH echo bonjour  | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e
+TIMEOUT
+================================================================================
+
+|> WITH echo bonjour  | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e
+TIMEOUT
 ================================================================================
 
 |> WITH echo a | ls asdfasdf
@@ -3059,24 +3077,15 @@ minishell: wHoami: command not found$
 ================================================================================
 
 |> WITH echo charles\ 
-|---------------------------------------EXPECTED--------------------------------
-charles $
-|---------------------------------------ACTUAL----------------------------------
-charles$
+TIMEOUT
 ================================================================================
 
 |> WITH echo \ \ \ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-        $
-|---------------------------------------ACTUAL----------------------------------
-       $
+TIMEOUT
 ================================================================================
 
 |> WITH echo \ \ \ \ \ \ \ \               \ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-               $
-|---------------------------------------ACTUAL----------------------------------
-              $
+TIMEOUT
 ================================================================================
 
 |> WITH echo\ bonjour
@@ -3112,17 +3121,15 @@ bonjour$
 ================================================================================
 
 |> WITH  \                 echo bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell:  : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH                  \                    echo bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell:  : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
+================================================================================
+
+|> WITH echo \
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='foo ' B=' bar  ' C='baz '] echo $A"$B"$C"A"$B"$C"
@@ -3203,24 +3210,15 @@ foo$BbazAbar$C$
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour'] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-       bonjour      $
-|---------------------------------------ACTUAL----------------------------------
-       bonjour     $
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour je suis'] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-       bonjour je suis      $
-|---------------------------------------ACTUAL----------------------------------
-       bonjour je suis     $
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='  bonjour je suis  '] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ 
-|---------------------------------------EXPECTED--------------------------------
-        bonjour je suis       $
-|---------------------------------------ACTUAL----------------------------------
-       bonjour je suis     $
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour     je     suis    splited'] echo $A
@@ -3273,24 +3271,15 @@ bonjour     je     suis    splited$
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour je suis splited'] echo $A\ 
-|---------------------------------------EXPECTED--------------------------------
-bonjour je suis splited $
-|---------------------------------------ACTUAL----------------------------------
-bonjour je suis splited$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='bonjour     je     suis    splited'] echo $A\ 
-|---------------------------------------EXPECTED--------------------------------
-bonjour je suis splited $
-|---------------------------------------ACTUAL----------------------------------
-bonjour     je     suis    splited$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='   bonjour     je     suis    splited   '] echo $A\ 
-|---------------------------------------EXPECTED--------------------------------
-bonjour je suis splited  $
-|---------------------------------------ACTUAL----------------------------------
-bonjour     je     suis    splited$
+TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='   bonjour     je     suis    splited   '] echo $A$A$A
@@ -3435,10 +3424,7 @@ bonjour$
 ================================================================================
 
 |> WITH 'echo     ' bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell: echo     : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH "     echo" bonjour
@@ -3450,10 +3436,7 @@ bonjour$
 ================================================================================
 
 |> WITH "echo     " bonjour
-|  STATUS: expected 127 actual -11
-|---------------------------------------EXPECTED--------------------------------
-minishell: echo     : command not found$
-|---------------------------------------ACTUAL----------------------------------
+TIMEOUT
 ================================================================================
 
 |> WITH echo '

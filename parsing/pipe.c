@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 11:40:32 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/04 11:43:07 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 16:20:20 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	get_pipe_cmd(t_cmd *s_cmd, int *i)
 		s_cmd->pipe = pipe_cmd;
 	else
 		tmp_cmd->next = pipe_cmd;
+	if (pipe_cmd->full[(*i)] == '\0')
+		(*i) -= 1;
 	return (0);
 }
 
