@@ -32,13 +32,16 @@ void	dup_env(t_env *head, int *fd)
 	free(arr);
 }
 
-int	there_is_an_error(char *argv)
+int	there_is_an_error(char *argv, int i)
 {
 	char	*join;
 	char	*join2;
 
 	join = ft_strjoin(argv, "'");
-	join2 = ft_strjoin("export: `", join);
+	if (i == 0)
+		join2 = ft_strjoin("export: `", join);
+	if (i == 1)
+		join2 = ft_strjoin("unset: `", join);
 	put_error("not a valid identifier", join2);
 	ft_free(&join);
 	ft_free(&join2);
@@ -87,11 +90,11 @@ int	thereis_some_args(t_env *head, char *argv[], int j)
 			while (ft_isalnum(argv[j][i]) || argv[j][i] == '_')
 				i++;
 		if (argv[j][i] != '=' && argv[j][i] != 0 && argv[j][i] != '+')
-			ret = there_is_an_error(argv[j]);
+			ret = there_is_an_error(argv[j], 0);
 		else if (argv[j][i] == '=' || argv[j][i] == '+' || argv[j][i] == 0)
 		{
 			if (argv[j][i] == '+' && argv[j][i + 1] != '=')
-				ret = there_is_an_error(argv[j]);
+				ret = there_is_an_error(argv[j], 0);
 			else if (argv[j][i] == 0 && !search_env_for_node(head, argv[j]))
 				crt_env(head, ft_strdup(argv[j]), NULL);
 			else if (argv[j][i] == '=' || argv[j][i] == '+')

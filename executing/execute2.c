@@ -15,9 +15,15 @@
 int	return_value(int ret)
 {
 	if (WIFEXITED(ret))
+		printf("1 = %d\n", WEXITSTATUS(ret));
+	else if (WIFSIGNALED(ret))
+		printf("2 = %d\n", 128 + WTERMSIG(ret));
+	else if (WIFSTOPPED(ret))
+		printf("3 = %d\n", WSTOPSIG(ret));
+	if (WIFEXITED(ret))
 		return (WEXITSTATUS(ret));
 	else if (WIFSIGNALED(ret))
-		return (WTERMSIG(ret));
+		return (128 + WTERMSIG(ret));
 	else if (WIFSTOPPED(ret))
 		return (WSTOPSIG(ret));
 	return (0);

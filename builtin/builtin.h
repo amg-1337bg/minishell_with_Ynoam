@@ -25,5 +25,6 @@ void	print(t_env **head, int i, int *fd);
 void	swap_env(t_env **arr, int k, int j);
 void	sort_env(t_env **arr, int i, int *fd);
 int		cd(t_env *env, t_args *args);
+int		there_is_an_error(char *argv, int i);
 
 #endif
