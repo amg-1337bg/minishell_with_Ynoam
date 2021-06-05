@@ -121,4 +121,8 @@ void    handle_up(t_line **h_line, char **line, char **current);
 void    handle_down(t_line **h_line, char **line, char **current);
 void    handle_nl(t_line **h_line, char **line);
 
+int     checker(t_cmd *s_cmd, int *i, int *from, int *just_char);
+int     pipe_checker(t_cmd *pipe_cmd, int *i, int *from, int *just_char);
+void	call_get_cmd(t_cmd *pipe_cmd, int *i, int *from);
+
 #endif

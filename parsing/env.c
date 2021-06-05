@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 14:13:07 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:44:40 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/04 10:52:45 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,25 @@
 char	**create_envp(t_env *s_env, char *cmd)
 {
 	char	**ret;
+	char	*char_tmp;
 	t_env	*tmp;
 	int		i;
 	int		j;
 
-	i = 0;
 	tmp = s_env->next;
-	while (tmp != NULL && ++i)
-		tmp = tmp->next;
-	j = 0;
-	tmp = s_env->next;
+	i = list_size(tmp);
+	j = -1;
 	ret = malloc((i + 1) * sizeof(char *));
 	while (tmp != NULL)
 	{
-		ret[j] = ft_strjoin(tmp->key, "=");
+		ret[++j] = ft_strjoin(tmp->key, "=");
+		char_tmp = ret[j];
 		if (tmp->key && ft_strncmp(tmp->key, "_", ft_strlen("_")) == 0
 			&& ft_strlen(tmp->key) == ft_strlen("_"))
 			ret[j] = ft_strjoin(ret[j], cmd); //LEAKS HERE
 		else
 			ret[j] = ft_strjoin(ret[j], tmp->value); //LEAKS HERE
-		j++;
+		free (char_tmp);
 		tmp = tmp->next;
 	}
 	ret[j] = NULL;
@@ -104,4 +103,17 @@ void	getenvp(t_env **s_env, char **envp)
 				break ;
 			}
 	}
+}
+
+int	list_size(t_env *head)
+{
+	int	i;
+
+	i = 0;
+	while (head)
+	{
+		i++;
+		head = head->next;
+	}
+	return (i);
 }

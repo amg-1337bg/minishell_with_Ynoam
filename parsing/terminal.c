@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:34:27 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/04 20:02:12 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 {
+	char *tmp;
+	
 	if (c == (unsigned char)183 && h_line[1])
 		handle_up(h_line, line, current);
 	else if (c == (unsigned char)184 && h_line[2])
@@ -28,7 +30,9 @@ int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 	}
 	else if (c >= (unsigned char)32 && c <= (unsigned char)126)
 	{
+		tmp = *line;
 		*line = char_join(*line, c);
+		free(tmp);
 		write(1, &c, 1);
 	}
 	return (0);
@@ -42,7 +46,6 @@ char	*get_line(t_line **h_line, int *cmd_return)
 	struct termios	old;
 
 	line = ft_strdup("");
-	current = ft_strdup("");
 	check_cmd_ret(cmd_return);
 	tcgetattr(STDIN_FILENO, &old);
 	signal(SIGINT, ctrl_c);

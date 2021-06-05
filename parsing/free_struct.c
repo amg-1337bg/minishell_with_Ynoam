@@ -43,6 +43,25 @@ void	free_files(t_files *s_files)
 	}
 }
 
+void	free_pipe(t_cmd **s_cmd)
+{
+	t_cmd	*cmd_next;
+	t_cmd	*tmp;
+
+	tmp = *s_cmd;
+	while (tmp)
+	{
+		cmd_next = tmp->next;
+		free(tmp->cmd);
+		free_args(tmp->args);
+		free_files(tmp->files);
+		free(tmp->full);
+		free(tmp);
+		tmp = cmd_next;
+	}
+	*s_cmd = NULL;
+}
+
 void	free_cmd(t_cmd **s_cmd)
 {
 	t_cmd	*cmd_next;
@@ -55,6 +74,7 @@ void	free_cmd(t_cmd **s_cmd)
 		free(tmp->cmd);
 		free_args(tmp->args);
 		free_files(tmp->files);
+		free_pipe(&tmp->pipe);
 		free(tmp->full);
 		free(tmp);
 		tmp = cmd_next;
