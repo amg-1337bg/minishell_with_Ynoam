@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 21:29:32 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:39:11 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/05 18:54:40 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handle_up(t_line **h_line, char **line, char **current)
 	if (h_line[2] == NULL)
 		*current = ft_strdup(*line);
 	del_write(h_line[1]->line);
-	free(*line);
+	ft_free(line);
 	line[0] = ft_strdup(h_line[1]->line);
 	h_line[2] = h_line[1];
 	h_line[1] = h_line[1]->prev;

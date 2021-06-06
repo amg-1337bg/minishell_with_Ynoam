@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 12:09:53 by ynoam             #+#    #+#             */
-/*   Updated: 2021/04/18 15:11:09 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/06/05 18:31:53 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	cd2(t_env *env, char *hna)
 	if (pwd)
 		mdf_env(env, "PWD", getcwd(NULL, 0));
 	oldpwd = search_env_for_node(env, "OLDPWD");
-	if (pwd)
-		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s\n", pwd->value);
 	if (oldpwd && pwd)
 		mdf_env(env, "OLDPWD", ft_strdup(hna));
 	if (oldpwd && !pwd)
