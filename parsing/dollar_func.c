@@ -80,19 +80,41 @@ int	join_dollar_in(char **str, t_env *s_env, int *i, int begin)
 	return (0);
 }
 
+char	*join_splited_val(char **str)
+{
+	char	*ret;
+	char	*tmp;
+	int		i;
+
+	i = -1;
+	while (str[++i] != NULL)
+	{
+		ret = ft_strjoin(str[i], " ");
+		tmp = ret;
+		if (str[i + 1] != NULL)
+		{
+			ret = ft_strjoin(ret, str[i + 1]);
+			free (tmp);
+		}
+	}
+	
+}
+
 int	join_dollar_val(char **str, t_env *s_env, int *i, int begin)
 {
 	char	*value;
 	char	*key;
 	char	*tmp;
+	char	**str;
 
 	key = ft_substr(str[0], (*i) + 1, begin - ((*i) + 1));
 	if (ft_strlen(key) == 0)
 		return (ft_free(&key));
 	value = ft_strdup(search_env(s_env, key));
-	tmp = value;
-	value = ft_strtrim(value, " ");
-	free(tmp);
+	str = ft_split(value, ' ');
+	// tmp = value;
+	// value = ft_strtrim(value, " ");
+	// free(tmp);
 	tmp = str[0];
 	str[0] = insert_var_value(ft_substr(str[0], 0, *i), value,
 			ft_strdup(&str[0][begin]));
