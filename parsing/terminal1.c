@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 21:27:34 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 21:38:03 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/06 13:05:50 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	del_write(char *line)
 	write(1, cap, ft_strlen(cap));
 	cap = tgetstr("cd", 0);
 	write(1, cap, ft_strlen(cap));
+	write(1, tgetstr("sc", 0), ft_strlen(tgetstr("sc", 0)));
 	write(1, line, ft_strlen(line));
 }
 

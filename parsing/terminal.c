@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 18:54:18 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/06 10:27:00 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_char(t_line **h_line, char **line, unsigned char c, char **current)
 	{
 		tmp = *line;
 		*line = char_join(*line, c);
-		ft_free(tmp);
+		ft_free(&tmp);
 		write(1, &c, 1);
 	}
 	return (0);

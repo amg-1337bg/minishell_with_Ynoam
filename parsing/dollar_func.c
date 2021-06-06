@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:57:01 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 17:05:03 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/06 12:45:10 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,27 @@ char	*join_splited_val(char **str)
 	int		i;
 
 	i = -1;
+	tmp = NULL;
+	ret = ft_strdup("");
 	while (str[++i] != NULL)
 	{
-		ret = ft_strjoin(str[i], " ");
 		tmp = ret;
+		ret = ft_strjoin(ret, str[i]);
+		free(tmp);
 		if (str[i + 1] != NULL)
 		{
-			ret = ft_strjoin(ret, str[i + 1]);
-			free (tmp);
+			tmp = ret;
+			ret = ft_strjoin(ret, " ");
+			free(tmp);
 		}
 	}
-	
+	if (ft_strlen(ret) == 0)
+	{
+		tmp = ret;
+		ret = ft_strdup(" ");
+		free(tmp);
+	}
+	return (ret);
 }
 
 int	join_dollar_val(char **str, t_env *s_env, int *i, int begin)
@@ -105,16 +115,16 @@ int	join_dollar_val(char **str, t_env *s_env, int *i, int begin)
 	char	*value;
 	char	*key;
 	char	*tmp;
-	char	**str;
+	char	**str1;
 
 	key = ft_substr(str[0], (*i) + 1, begin - ((*i) + 1));
 	if (ft_strlen(key) == 0)
 		return (ft_free(&key));
 	value = ft_strdup(search_env(s_env, key));
-	str = ft_split(value, ' ');
-	// tmp = value;
-	// value = ft_strtrim(value, " ");
-	// free(tmp);
+	str1 = ft_split(value, ' ');
+	free(value);
+	value = join_splited_val(str1);
+	ft_free_double(str1);
 	tmp = str[0];
 	str[0] = insert_var_value(ft_substr(str[0], 0, *i), value,
 			ft_strdup(&str[0][begin]));

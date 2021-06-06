@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 18:21:49 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/06 12:24:01 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	clean_rep_pipe(t_cmd *pipe, t_env *s_env, int cmd_return)
 	t_args	*tmp_args;
 	t_files	*tmp_file;
 
-	if (pipe != NULL)
+	while (pipe != NULL)
 	{
 		if (special_chars(&pipe->cmd, s_env, cmd_return) != 0)
 			return (-1);
@@ -95,6 +95,7 @@ int	clean_rep_pipe(t_cmd *pipe, t_env *s_env, int cmd_return)
 				return (-1);
 			tmp_file = tmp_file->next;
 		}
+		pipe = pipe->next;
 	}
 	return (0);
 }

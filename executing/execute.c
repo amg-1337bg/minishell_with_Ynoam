@@ -66,7 +66,7 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	while (i < pcount)
 	{
 		pipe(fd);
-		clean_replace(cmd->pipe, env, 0);
+		// clean_replace(cmd->pipe, env, 0);
 		change_cmd_args(cmd);
 		exec_child(in, fd, cmd, env);
 		close(fd[1]);
