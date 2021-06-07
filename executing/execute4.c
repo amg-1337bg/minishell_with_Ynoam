@@ -16,20 +16,21 @@ void	search_for_path_and_exec(t_cmd *cmd, t_env *env, char **fuckyou)
 {
 	char	**paths;
 	char	**argv;
-	char	*onepath;
 	char	*str2;
 	int		i;
+	char	*two[2];
 
+	two[1] = find_underscor(cmd);
 	i = 0;
 	paths = ft_split(search_env(env, "PATH"), ':');
 	argv = create_args(cmd);
 	str2 = ft_strjoin("/", cmd->cmd);
 	while (paths[i])
 	{
-		onepath = ft_strjoin(paths[i], str2);
-		fuckyou = create_envp(env, onepath);
-		execve(onepath, argv, fuckyou);
-		free(onepath);
+		two[0] = ft_strjoin(paths[i], str2);
+		fuckyou = create_envp(env, two[1]);
+		execve(two[0], argv, fuckyou);
+		free(two[0]);
 		ft_free_double(fuckyou);
 		i++;
 	}
@@ -90,6 +91,7 @@ int	exec_child2(t_cmd *cmd, t_env *env)
 	}
 	else if (cmd->cmd == NULL)
 		exit(create_files(cmd->files));
+	return (0);
 }
 
 int	exec_child(int var, int *fd, t_cmd *cmd, t_env *env)

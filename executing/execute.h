@@ -28,5 +28,6 @@ void	close_pipe(int fd[]);
 void	search_for_path_and_exec(t_cmd *cmd, t_env *env, char **no);
 void	change_cmd_args(t_cmd *cmd);
 int		open_file_for_read(char *file, int i);
+char	*find_underscor(t_cmd *cmd);
 
 #endif
