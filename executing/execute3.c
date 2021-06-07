@@ -63,9 +63,11 @@ int	is_path(char *cmd)
 
 int	exec_normal2(t_cmd *cmd, t_env *env)
 {
-	int	*fd;
-	DIR	*dir;
+	int		*fd;
+	DIR		*dir;
+	char	*underscor;
 
+	underscor = find_underscor(cmd);
 	fd = malloc(sizeof(int) * 2);
 	dir = opendir(cmd->cmd);
 	if (dir)
@@ -80,7 +82,7 @@ int	exec_normal2(t_cmd *cmd, t_env *env)
 		change_stdin_stdout(cmd->files, fd);
 		dup2(fd[0], STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
-		execve(cmd->cmd, create_args(cmd), create_envp(env, cmd->cmd));
+		execve(cmd->cmd, create_args(cmd), create_envp(env, underscor));
 		put_error(strerror(errno), cmd->cmd);
 		free(fd);
 		return (127);

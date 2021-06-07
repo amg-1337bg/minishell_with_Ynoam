@@ -30,12 +30,9 @@ int	unset(t_env *head, char *argv[])
 		i++;
 		while (argv[j][0] != 0 && argv[j][i])
 		{
-			// printf(">>>>>>>>>>>>>>>>>>    %s[%d]\n", argv[j], i);
-			if ((!ft_isalnum(argv[j][i]) && argv[j][i] != '_'))
-			{
-				there_is_an_error(argv[j], 1);
+			if ((!ft_isalnum(argv[j][i]) && argv[j][i] != '_')
+				&& there_is_an_error(argv[j], 1))
 				break ;
-			}
 			i++;
 		}
 		dlt_env(head, argv[j]);
