@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 08:55:12 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/06 12:51:50 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 10:04:13 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	main(int argc, char **argv, char **envp)
 		if (get_cmd(&s_cmd, s_env, line, &cmd_return) == 0)
 			cmd_return = execute(s_cmd, s_env, cmd_return);
 		// if (argv[2])
-		// 	exit(0);
+		// 	exit(cmd_return);
 		free_cmd(&s_cmd);
 		free(line);
 	}
-	return (0);
+	return (cmd_return);
 }

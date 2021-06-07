@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 15:51:13 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 11:08:38 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	get_the_rest(t_cmd *s_cmd, int *i, int from)
 
 int	get_args(t_cmd *s_cmd)
 {
-	int	i;
-	int	from;
-	int	just_char;
+	int		i;
+	int		from;
+	int		just_char;
 
 	i = -1;
 	from = -1;
