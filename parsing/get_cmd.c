@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/07 16:15:11 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 16:33:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_cmd	*fill_cmd_struct(char *line, int *begin, int end)
 
 	str = ft_substr(line, *begin, end - (*begin));
 	tmp = str;
-	str = ft_strtrim(str, " "); 
+	str = ft_strtrim(str, " ");
 	free(tmp);
 	if (ft_strlen(str) == 0)
 	{
