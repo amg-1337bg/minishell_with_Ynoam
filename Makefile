@@ -54,7 +54,7 @@ all: $(NAME)
 
 $(NAME):
 	@make -C ./libft
-	@gcc -g -fsanitize=address $(FLAGS) $(SRC) libft/libft.a -ltermcap
+	@gcc -fsanitize=address $(FLAGS) $(SRC) libft/libft.a -ltermcap
 	@ mv a.out $(NAME)
 
 clean:
