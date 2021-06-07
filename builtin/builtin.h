@@ -13,6 +13,7 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 # include "../parsing/minishell.h"
+#include <limits.h>
 
 int		pwd(int *fd);
 int		ft_exit(char **args);
