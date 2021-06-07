@@ -41,7 +41,7 @@ int	ft_echo(char *argv[], int *fd)
 			while (argv[i][j] == 'n')
 				j++;
 			if (argv[i][j] == '\0' && ++i && ++flag)
-				break ;
+				continue ;
 			if (argv[i][j] != '\0')
 				break ;
 		}
