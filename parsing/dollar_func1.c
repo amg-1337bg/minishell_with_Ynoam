@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 14:35:52 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/07 14:40:16 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:46:30 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 void	dollar_inside(char **str, t_env *s_env, int *i, int just_char)
 {
 	int		begin;
-	char	*value;
-	char	*key;
-	char	*tmp;
 
 	begin = *i;
 	if (check_before(str, i, begin, just_char) == 1)

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 17:00:24 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 17:03:39 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:21:40 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,14 @@ int	found_dquote(char **str, t_env *s_env, int *dquote_ind)
 	just_char = -1;
 	while (str[0][++i] != '\0')
 	{
-		if (str[0][i] == '"')
+		if (*str[i] == 34 && i != 0 && *str[i - 1] == 92 && just_char != i - 1)
+			rm_char(str, --i);
+		else if (str[0][i] == '"')
 		{
-			if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
-			{
-				rm_char(str, i - 1);
-				i -= 1;
-			}
-			else
-			{
-				rm_char(str, i);
-				rm_char(str, *dquote_ind);
-				*dquote_ind = i - 2;
-				return (0);
-			}
+			rm_char(str, i);
+			rm_char(str, *dquote_ind);
+			*dquote_ind = i - 2;
+			return (0);
 		}
 		else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
 		{

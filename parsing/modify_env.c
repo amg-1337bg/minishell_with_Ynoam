@@ -54,20 +54,19 @@ void	mdf_env(t_env *s_env, char *key, char *value)
 void	dlt_env(t_env *s_env, char *key)
 {
 	t_env	*first;
-	t_env	*second;
+	t_env	*s;
 
 	first = s_env;
 	while (first)
 	{
-		second = first->next;
-		if (second != NULL && second->key && ft_strncmp(second->key, key, ft_strlen(key)) == 0
-			&& ft_strlen(key) == ft_strlen(second->key))
+		s = first->next;
+		if (s != NULL && s->key && ft_strncmp(s->key, key, ft_strlen(key)) == 0
+			&& ft_strlen(key) == ft_strlen(s->key))
 		{
-			first->next = second->next;
-			free(second->key);
-			free(second->value);
-			free(second);
-			return ;
+			first->next = s->next;
+			free(s->key);
+			free(s->value);
+			return (free(s));
 		}
 		else if (first->key && ft_strncmp(first->key, key, ft_strlen(key)) == 0
 			&& ft_strlen(key) == ft_strlen(first->key))
@@ -75,8 +74,7 @@ void	dlt_env(t_env *s_env, char *key)
 			free(first->key);
 			free(first->value);
 			s_env = first->next;
-			free(first);
-			return ;
+			return (free(first));
 		}
 		first = first->next;
 	}
