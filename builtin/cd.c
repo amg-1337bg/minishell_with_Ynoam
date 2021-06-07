@@ -22,15 +22,18 @@ int	cd2(t_env *env, char *hna)
 {
 	t_env	*pwd;
 	t_env	*oldpwd;
+	char	*pwdold;
 
 	pwd = search_env_for_node(env, "PWD");
 	if (pwd)
+		pwdold = ft_strdup(pwd->value);
+	else
+		pwdold = ft_strdup("");
+	if (pwd)
 		mdf_env(env, "PWD", getcwd(NULL, 0));
 	oldpwd = search_env_for_node(env, "OLDPWD");
-	if (oldpwd && pwd)
-		mdf_env(env, "OLDPWD", ft_strdup(hna));
-	if (oldpwd && !pwd)
-		mdf_env(env, "OLDPWD", ft_strdup(""));
+	if (oldpwd)
+		mdf_env(env, "OLDPWD", pwdold);
 	ft_free(&hna);
 	return (1);
 }
