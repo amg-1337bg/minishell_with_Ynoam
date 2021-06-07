@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 19:38:17 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/07 10:45:59 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 14:39:54 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*dollar_status(char *str, int *i, int cmd_return)
 {
 	char	*ret;
 
-	ret = insert_var_value(ft_substr(str, 0, (*i)),
+	ret = insvalue(ft_substr(str, 0, (*i)),
 			ft_itoa(cmd_return), ft_strdup(&str[(*i) + 2]));
 	free(str);
 	return (ret);
