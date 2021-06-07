@@ -6,13 +6,13 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 19:38:17 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/07 10:45:59 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:46:10 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	special_checker(char **str, int *i, int cmd_return, int *just_char)
+void	special_checker(char **str, int *i, int *just_char)
 {
 	if (str[0][(*i)] == '|' && (*i) > 0 && str[0][(*i) - 1] == '\\'
 		&& *just_char != (*i) - 1)
@@ -35,17 +35,16 @@ char	*dollar_status(char *str, int *i, int cmd_return)
 {
 	char	*ret;
 
-	ret = insert_var_value(ft_substr(str, 0, (*i)),
+	ret = insvalue(ft_substr(str, 0, (*i)),
 			ft_itoa(cmd_return), ft_strdup(&str[(*i) + 2]));
 	free(str);
 	return (ret);
 }
 
-int	special_chars(char **str, t_env **s_env, int cmd_return)
+int	special_chars(char **str, t_env *s_env, int cmd_return)
 {
 	int		i;
 	int		just_char;
-	char	*tmp;
 
 	i = -1;
 	just_char = -1;
@@ -61,7 +60,7 @@ int	special_chars(char **str, t_env **s_env, int cmd_return)
 			g_signal = 1;
 		}
 		else
-			special_checker(str, &i, cmd_return, &just_char);
+			special_checker(str, &i, &just_char);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 15:09:18 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/03 19:31:46 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:50:27 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	quote_detected(char *line, int *j, int just_char)
 		}
 		else
 		{
-			if (dquote_traitement(line, j, c, just_char) == 1)
+			if (dquote_traitement(line, j, just_char) == 1)
 				return (1);
 		}
 	}
@@ -36,7 +36,7 @@ int	quote_detected(char *line, int *j, int just_char)
 	return (0);
 }
 
-int	dquote_traitement(char *line, int *j, char c, int just_char)
+int	dquote_traitement(char *line, int *j, int just_char)
 {
 	while (line[++(*j)] != '\0')
 	{

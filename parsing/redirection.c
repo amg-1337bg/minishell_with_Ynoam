@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:41:34 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 15:53:05 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:50:43 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	get_redirection(t_cmd *s_cmd, int *i, int from, int just_char)
 char	*get_redir_type(t_cmd *s_cmd, int *i)
 {
 	char	c;
-	char	*res;
 
 	c = s_cmd->full[(*i)];
 	if (c == '<')
@@ -67,32 +66,32 @@ char	*get_redir_type(t_cmd *s_cmd, int *i)
 	}
 }
 
-char	*get_filename(t_cmd *s_cmd, int *i, int just_char)
+char	*get_filename(t_cmd *s, int *i, int j)
 {
 	char	*ret;
 	int		from;
 
-	(*i) += space_count(&s_cmd->full[(*i)]);
+	(*i) += space_count(&s->full[(*i)]);
 	from = *i;
-	while (s_cmd->full[*i] != '\0')
+	while (s->full[*i] != '\0')
 	{
-		if (s_cmd->full[*i] == 39 || s_cmd->full[*i] == 34)
-			quote_detected(s_cmd->full, i, just_char);
-		else if (s_cmd->full[*i] == '\\' && s_cmd->full[*i + 1] == '\\')
-			just_char = *i + 1;
-		else if (s_cmd->full[*i] == '>' || s_cmd->full[*i] == '<')
+		if (s->full[*i] == 39 || s->full[*i] == 34)
+			quote_detected(s->full, i, j);
+		else if (s->full[*i] == '\\' && s->full[*i + 1] == '\\')
+			j = *i + 1;
+		else if (s->full[*i] == '>' || s->full[*i] == '<')
 		{
-			if ((s_cmd->full[*i - 1] == '\\' && just_char == *i - 1)
-				|| s_cmd->full[*i - 1] != '\\')
+			if ((s->full[*i - 1] == '\\' && j == *i - 1)
+				|| s->full[*i - 1] != '\\')
 				break ;
 		}
-		else if (s_cmd->full[*i] == ' ' && (s_cmd->full[(*i) - 1] != '\\' || just_char == (*i) - 1))
+		else if (s->full[*i] == 32 && (s->full[*i - 1] != 92 || j == *i - 1))
 			break ;
-		else if (s_cmd->full[(*i)] == '|' && (s_cmd->full[(*i) - 1] != '\\' || just_char == (*i) - 1))
+		else if (s->full[*i] == '|' && (s->full[*i - 1] != 92 || j == *i - 1))
 			break ;
 		(*i)++;
 	}
-	ret = ft_substr(s_cmd->full, from, *i - from);
+	ret = ft_substr(s->full, from, *i - from);
 	return (ret);
 }
 
