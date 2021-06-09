@@ -6,43 +6,37 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 17:00:24 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 17:03:39 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 16:36:28 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	found_dquote(char **str, t_env *s_env, int *dquote_ind)
+int	found_dquote(char **s, t_env *s_env, int *dquote_ind)
 {
 	int	i;
 	int	just_char;
 
 	i = *dquote_ind;
 	just_char = -1;
-	while (str[0][++i] != '\0')
+	while (s[0][++i] != '\0')
 	{
-		if (str[0][i] == '"')
+		if ((*s)[i] == 34 && i != 0 && (*s)[i - 1] == 92 && just_char != i - 1)
+			rm_char(s, --i);
+		else if (s[0][i] == '"')
 		{
-			if (i != 0 && str[0][i - 1] == '\\' && just_char != i - 1)
-			{
-				rm_char(str, i - 1);
-				i -= 1;
-			}
-			else
-			{
-				rm_char(str, i);
-				rm_char(str, *dquote_ind);
-				*dquote_ind = i - 2;
-				return (0);
-			}
+			rm_char(s, i);
+			rm_char(s, *dquote_ind);
+			*dquote_ind = i - 2;
+			return (0);
 		}
-		else if (str[0][i] == '\\' && str[0][i + 1] == '\\')
+		else if (s[0][i] == '\\' && s[0][i + 1] == '\\')
 		{
-			rm_char(str, i);
+			rm_char(s, i);
 			just_char = i;
 		}
-		else if (str[0][i] == '$')
-			dollar_inside(str, s_env, &i, just_char);
+		else if (s[0][i] == '$')
+			dollar_inside(s, s_env, &i, just_char);
 	}
 	return (0);
 }

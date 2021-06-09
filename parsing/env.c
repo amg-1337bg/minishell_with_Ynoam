@@ -52,16 +52,10 @@ void	changenvp(t_env *env)
 	if (shlvl[0] != 0)
 	{
 		while (shlvl[wow])
-		{
-			if (!ft_isdigit(shlvl[wow]))
+			if (!ft_isdigit(shlvl[wow++]))
 				break ;
-			wow++;
-		}
 		if (shlvl[wow] != 0)
-		{
-			crt_env(env, ft_strdup("SHLVL"), ft_strdup("1"));
-			return ;
-		}
+			return (crt_env(env, ft_strdup("SHLVL"), ft_strdup("1")));
 		if (ft_atoi(shlvl) > 998)
 			mdf_env(env, "SHLVL", ft_strdup(""));
 		else if (ft_atoi(shlvl) < 0)

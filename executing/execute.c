@@ -58,7 +58,6 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	int	i;
 	int	pcount;
 	int	in;
-	int	pid;
 
 	i = 0;
 	in = 0;
@@ -66,7 +65,6 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	while (i < pcount)
 	{
 		pipe(fd);
-		// clean_replace(cmd->pipe, env, 0);
 		change_cmd_args(cmd);
 		exec_child(in, fd, cmd, env);
 		close(fd[1]);
@@ -81,15 +79,13 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 	return (wait_for_last_child(fd, pcount, cmd, env));
 }
 
-int	execute(t_cmd *cmds, t_env *env, int cmd_return)
+int	execute(t_cmd *cmds, t_env *env, int ret)
 {
-	int	ret;
 	int	status;
-	int	pid;
 
 	while (cmds != NULL)
 	{
-		clean_replace(cmds, env, cmd_return);
+		clean_replace(cmds, env, ret);
 		change_cmd_args(cmds);
 		if (!(cmds->pipe))
 			ret = create_files(cmds->files);

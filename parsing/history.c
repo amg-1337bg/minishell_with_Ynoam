@@ -29,6 +29,7 @@ void	handle_down(t_line **h_line, char **line, char **current)
 	{
 		free (*line);
 		*line = ft_strdup(*current);
+		ft_free(current);
 		del_write(line[0]);
 		h_line[1] = h_line[2];
 		h_line[2] = NULL;
@@ -38,6 +39,8 @@ void	handle_down(t_line **h_line, char **line, char **current)
 		h_line[1] = h_line[2];
 		h_line[2] = h_line[2]->next;
 		del_write(h_line[2]->line);
+		if (line[0] != NULL)
+			ft_free(line);
 		line[0] = ft_strdup(h_line[2]->line);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 11:40:32 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 16:20:20 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:41:16 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	pipe_function(t_cmd *s_cmd, int *i, int *from, int just_char)
 		if (ft_strlen(tmp) == 0)
 		{
 			free (tmp);
-			printed_errors(No_MultilineCmd);
+			printed_errors(NO_MULTI);
 			return (-1);
 		}
 		free(tmp);

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 08:53:29 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/06 12:24:01 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 10:46:32 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,17 @@ int	clean_replace(t_cmd *s_cmd, t_env *s_env, int cmd_return)
 
 	if (special_chars(&s_cmd->cmd, s_env, cmd_return) != 0)
 		return (-1);
+	if (g_signal == 1)
+		check_again(s_cmd);
 	tmp_args = s_cmd->args;
 	if (clean_rep_args(tmp_args, s_env, cmd_return) == -1)
 		return (-1);
-	check_again(s_cmd);
 	tmp_file = s_cmd->files;
 	if (clean_rep_files(tmp_file, s_env, cmd_return) == -1)
 		return (-1);
 	tmp_pipe = s_cmd->pipe;
 	if (clean_rep_pipe(tmp_pipe, s_env, cmd_return) == -1)
 		return (-1);
+	g_signal = 0;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 09:31:59 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 15:51:13 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:48:09 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	get_the_rest(t_cmd *s_cmd, int *i, int from)
 
 int	get_args(t_cmd *s_cmd)
 {
-	int	i;
-	int	from;
-	int	just_char;
+	int		i;
+	int		from;
+	int		just_char;
 
 	i = -1;
 	from = -1;
@@ -70,12 +70,11 @@ int	get_args(t_cmd *s_cmd)
 	return (0);
 }
 
-int	cmd_parser(t_cmd **s_cmd, t_env *s_env)
+int	cmd_parser(t_cmd **s_cmd, char **line)
 {
 	t_cmd	*tmp;
 	int		error;
 	char	*tofree;
-	char	*i;
 
 	tmp = s_cmd[0];
 	while (tmp)
@@ -88,5 +87,6 @@ int	cmd_parser(t_cmd **s_cmd, t_env *s_env)
 			return (error);
 		tmp = tmp->next;
 	}
+	ft_free(line);
 	return (0);
 }

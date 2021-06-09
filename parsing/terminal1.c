@@ -6,16 +6,16 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 21:27:34 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/06 13:05:50 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:40:18 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-unsigned char	gtc(void)
+char	gtc(void)
 {
-	unsigned char	c;
-	unsigned char	seq;
+	char			c;
+	char			seq;
 	struct termios	tee;
 
 	c = 0;

@@ -12,6 +12,21 @@
 
 #include "../parsing/minishell.h"
 
+char	*find_underscor(t_cmd *cmd)
+{
+	t_args	*arg;
+	char	*underscor;
+
+	underscor = cmd->cmd;
+	arg = cmd->args;
+	while (arg)
+	{
+		underscor = arg->arg;
+		arg = arg->next;
+	}
+	return (underscor);
+}
+
 int	creat_file_or_openit(char *filename, int trunc)
 {
 	return (open(filename, O_WRONLY | O_CREAT | trunc, 00644));
@@ -21,8 +36,6 @@ int	open_file_for_read(char *filename, int i)
 {
 	int	j;
 
-	if (i == 0)
-		return (open(filename, O_RDONLY));
 	if (i == 1)
 	{
 		j = open(filename, O_RDONLY);
@@ -30,6 +43,7 @@ int	open_file_for_read(char *filename, int i)
 			return (-1);
 		close(j);
 	}
+	return (open(filename, O_RDONLY));
 }
 
 void	assign_stdin_stdout(char *stdoutf, char *stdinf, int trunc, int *fd)

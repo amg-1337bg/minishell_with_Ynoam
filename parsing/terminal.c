@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 08:39:35 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/06 10:27:00 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:39:40 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ctrl_d(struct termios *old)
 
 char	*get_line(t_line **h_line, int *cmd_return)
 {
-	unsigned char	c;
+	char			c;
 	char			*line;
 	char			*current;
 	struct termios	old;

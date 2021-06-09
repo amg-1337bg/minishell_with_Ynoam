@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 10:30:01 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/05 15:53:20 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:04:40 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	checker(t_cmd *s_cmd, int *i, int *from, int *just_char)
 		if (get_redirection(s_cmd, i, *from, *just_char) != 0)
 			*from = -1;
 	}
-	else if (s_cmd->full[(*i)] == ' ' && (s_cmd->full[(*i) - 1] != '\\'
-			|| *just_char == (*i) - 1))
+	else if (s_cmd->full[(*i)] == ' ' && (*i) > 0
+		&& (s_cmd->full[(*i) - 1] != '\\' || *just_char == (*i) - 1))
 	{
 		get_cmd_args(s_cmd, *from, i);
 		*from = -1;
