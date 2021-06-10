@@ -36,7 +36,7 @@ char	**create_envp(t_env *s_env, char *cmd)
 		free (char_tmp);
 		tmp = tmp->next;
 	}
-	ret[j] = NULL;
+	ret[++j] = NULL;
 	return (ret);
 }
 

@@ -48,13 +48,13 @@ SRC = executing/execute.c \
 	  builtin/pwd.c \
 	  builtin/unset.c \
 	  
-FLAGS = -Wall -Wextra Werror
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME):
 	@make -C ./libft
-	@gcc -g -fsanitize=address $(FLAGS) $(SRC) libft/libft.a -ltermcap
+	@gcc $(FLAGS) $(SRC) libft/libft.a -ltermcap
 	@ mv a.out $(NAME)
 
 clean:
