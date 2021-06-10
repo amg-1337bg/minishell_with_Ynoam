@@ -64,15 +64,15 @@ void	dlt_env(t_env *s_env, char *key)
 			&& ft_strlen(key) == ft_strlen(s->key))
 		{
 			first->next = s->next;
-			free(s->key);
-			free(s->value);
+			ft_free(&(s->value));
+			ft_free(&(s->key));
 			return (free(s));
 		}
 		else if (first->key && ft_strncmp(first->key, key, ft_strlen(key)) == 0
 			&& ft_strlen(key) == ft_strlen(first->key))
 		{
-			free(first->key);
-			free(first->value);
+			ft_free(&(first->key));
+			ft_free(&(first->value));
 			s_env = first->next;
 			return (free(first));
 		}

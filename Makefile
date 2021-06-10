@@ -6,7 +6,7 @@
 #    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/06/07 16:30:43 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/06/09 15:24:14 by bamghoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ SRC = executing/execute.c \
 	  builtin/pwd.c \
 	  builtin/unset.c \
 	  
-FLAGS = -Wall -Wextra Werror
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
