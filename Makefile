@@ -6,7 +6,7 @@
 #    By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/23 09:13:00 by bamghoug          #+#    #+#              #
-#    Updated: 2021/06/09 15:24:14 by bamghoug         ###   ########.fr        #
+#    Updated: 2021/06/10 18:33:05 by bamghoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,6 @@ SRC = executing/execute.c \
 	  parsing/main.c \
 	  parsing/modify_env.c \
 	  parsing/parse_cmd.c \
-	  parsing/parsing.h \
 	  parsing/pipe.c \
 	  parsing/quotes.c \
 	  parsing/quotes1.c \
@@ -52,9 +51,9 @@ FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME):
+$(NAME): $(SRC)
 	@make -C ./libft
-	@gcc -g -fsanitize=address $(FLAGS) $(SRC) libft/libft.a -ltermcap
+	@gcc $(FLAGS) $(SRC) libft/libft.a -ltermcap
 	@ mv a.out $(NAME)
 
 clean:

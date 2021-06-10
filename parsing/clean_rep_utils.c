@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 19:38:17 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/07 15:46:10 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/10 16:41:18 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ void	special_checker(char **str, int *i, int *just_char)
 char	*dollar_status(char *str, int *i, int cmd_return)
 {
 	char	*ret;
+	char	*tmp;
 
+	tmp = ft_itoa(cmd_return);
 	ret = insvalue(ft_substr(str, 0, (*i)),
-			ft_itoa(cmd_return), ft_strdup(&str[(*i) + 2]));
+			tmp, ft_strdup(&str[(*i) + 2]));
 	free(str);
+	ft_free(&tmp);
 	return (ret);
 }
 

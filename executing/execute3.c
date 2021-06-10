@@ -55,8 +55,9 @@ int	is_path(char *cmd)
 	int	i;
 
 	i = ft_strlen(cmd);
-	if ((i >= 2 && cmd[0] == '.' && cmd[1] == '/') || (i >= 3 && cmd[0] == '.' && \
-				cmd[1] == '.' && cmd[2] == '/') || (i >= 1 && cmd[0] == '/'))
+	if ((i >= 2 && cmd[0] == '.' && cmd[1] == '/')
+		|| (i >= 3 && cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/')
+		|| (i >= 1 && cmd[0] == '/'))
 		return (1);
 	return (0);
 }
