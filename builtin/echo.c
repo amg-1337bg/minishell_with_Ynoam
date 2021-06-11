@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynoam <ynoam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/05/29 17:12:54 by ynoam            ###   ########.fr       */
+/*   Updated: 2021/06/11 11:55:20 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_echo(char *argv[], int *fd)
 			j = 1;
 			while (argv[i][j] == 'n')
 				j++;
-			if (argv[i][j] == '\0' && ++i && ++flag)
+			if (argv[i][j] == '\0' && ++flag)
 				continue ;
 			if (argv[i][j] != '\0')
 				break ;
