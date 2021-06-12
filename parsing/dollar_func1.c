@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 14:35:52 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/07 15:46:30 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/12 15:54:08 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ char	*join_splited_val(char **str)
 			ret = ft_strjoin(ret, " ");
 			free(tmp);
 		}
-	}
-	if (ft_strlen(ret) == 0)
-	{
-		tmp = ret;
-		ret = ft_strdup(" ");
-		free(tmp);
 	}
 	return (ret);
 }

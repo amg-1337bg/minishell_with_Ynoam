@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 19:38:17 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/10 16:41:18 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/12 12:01:36 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	look_for_args(t_cmd *cmd, char *tmp, int i)
 	if (from != -1)
 		arg = arg_to_head(arg, tmp, from, &i);
 	tmp_arg = ft_lastarg(arg);
-	if (tmp != NULL)
+	if (tmp_arg != NULL)
 	{
 		tmp_arg->next = cmd->args;
 		cmd->args = arg;
