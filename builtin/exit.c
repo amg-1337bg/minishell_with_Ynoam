@@ -47,7 +47,7 @@ int	check(char c, long long int j)
 				|| j == (long long) - 9223372036854775807)));
 }
 
-int	ft_exit(char **ar)
+int	ft_exit(char **ar, int ret)
 {
 	long long int	j;
 	int				err;
@@ -71,6 +71,6 @@ int	ft_exit(char **ar)
 		}
 		exit(j);
 	}
-	exit(0);
+	exit(ret);
 	return (0);
 }

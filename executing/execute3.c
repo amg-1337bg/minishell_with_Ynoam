@@ -21,7 +21,7 @@ void	close_fds(int *fd)
 	free(fd);
 }
 
-int	exec_builtin(t_cmd *cmd, t_env *env)
+int	exec_builtin(t_cmd *cmd, t_env *env, int ret1)
 {
 	int		*fd;
 	int		ret;
@@ -44,7 +44,7 @@ int	exec_builtin(t_cmd *cmd, t_env *env)
 	else if (!ft_strncmp(cmd->cmd, "env", ft_strlen("env") + 1))
 		ret = ft_env(env, fd);
 	else if (!ft_strncmp(cmd->cmd, "exit", ft_strlen("exit") + 1))
-		ret = ft_exit(arg);
+		ret = ft_exit(arg, ret1);
 	close_fds(fd);
 	free(arg);
 	return (ret);

@@ -16,7 +16,7 @@
 # include <limits.h>
 
 int		pwd(int *fd);
-int		ft_exit(char **args);
+int		ft_exit(char **args, int ret);
 int		ft_echo(char *argv[], int *fd);
 int		ft_env(t_env *head, int *fd);
 int		unset(t_env *head, char *argv[]);
