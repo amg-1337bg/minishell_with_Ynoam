@@ -82,15 +82,17 @@ int	exec_pipe(t_cmd *cmd, t_env *env)
 int	execute(t_cmd *cmds, t_env *env, int ret)
 {
 	int	status;
+	int	ret2;
 
 	while (cmds != NULL)
 	{
+		ret2 = ret;
 		clean_replace(cmds, env, ret);
 		change_cmd_args(cmds);
 		if (!(cmds->pipe))
 			ret = create_files(cmds->files);
 		if (!(cmds->pipe) && cmds->cmd && is_builtin(cmds->cmd) && !ret)
-			ret = exec_builtin(cmds, env);
+			ret = exec_builtin(cmds, env, ret2);
 		else if (!(cmds->pipe) && cmds->cmd && !is_builtin(cmds->cmd) && !ret)
 		{
 			if (fork() == 0)

@@ -80,7 +80,7 @@ int	exec_child2(t_cmd *cmd, t_env *env)
 		one = create_files(cmd->files);
 		if (one != 0)
 			exit(one);
-		exit(exec_builtin(cmd, env));
+		exit(exec_builtin(cmd, env, 0));
 	}
 	else if (cmd->cmd && !is_builtin(cmd->cmd))
 	{

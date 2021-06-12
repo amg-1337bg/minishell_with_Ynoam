@@ -6,7 +6,7 @@
 char	**create_args(t_cmd *cmd);
 int		creat_file_or_openit(char *filename, int trunc);
 int		create_files(t_files *files);
-int		exec_builtin(t_cmd *cmd, t_env *env);
+int		exec_builtin(t_cmd *cmd, t_env *env, int ret);
 int		exec_child(int var, int *fd, t_cmd *cmd, t_env *env);
 int		exec_child2(t_cmd *cmd, t_env *env);
 int		exec_normal(t_cmd *cmd, t_env *env);
