@@ -17,7 +17,7 @@ void	ft_echo2(char *argv[], int i, int fd, int flag)
 	while (argv[1] && argv[i])
 	{
 		ft_putstr_fd(argv[i], fd);
-		if (argv[i + 1] != NULL)
+		if (argv[i][0] != ' ' && argv[i + 1] != NULL)
 			ft_putstr_fd(" ", fd);
 		i++;
 	}
