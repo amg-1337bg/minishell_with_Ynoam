@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 21:28:24 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/10 18:33:50 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/12 10:19:30 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ctrl_b(int c)
 
 void	check_cmd_ret(int *cmd_return)
 {
-	if (*cmd_return == 3)
+	if (*cmd_return == 131)
 		write(1, "Quit: 3\n", ft_strlen("Quit: 3\n"));
 	if (g_signal != 1)
 	{

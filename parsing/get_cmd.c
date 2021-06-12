@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 12:21:39 by bamghoug          #+#    #+#             */
-/*   Updated: 2021/06/11 15:43:15 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/12 10:17:17 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_cmd	*fill_cmd_struct(char *line, int *begin, int end)
 	free(tmp);
 	if (ft_strlen(str) == 0)
 	{
+		ft_free(&str);
 		printed_errors(SYNTAX_EROOR);
 		return (NULL);
 	}
