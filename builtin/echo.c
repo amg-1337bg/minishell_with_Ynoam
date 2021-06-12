@@ -6,7 +6,7 @@
 /*   By: bamghoug <bamghoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 11:43:33 by ynoam             #+#    #+#             */
-/*   Updated: 2021/06/11 11:55:20 by bamghoug         ###   ########.fr       */
+/*   Updated: 2021/06/12 16:07:10 by bamghoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_echo2(char *argv[], int i, int fd, int flag)
 	while (argv[1] && argv[i])
 	{
 		ft_putstr_fd(argv[i], fd);
-		if (argv[i][0] != ' ' && argv[i + 1] != NULL)
+		if (argv[i][0] != 0 && argv[i + 1] != NULL && ft_strlen(argv[i + 1]) != 0)
 			ft_putstr_fd(" ", fd);
 		i++;
 	}
