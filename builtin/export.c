@@ -89,7 +89,8 @@ int	thereis_some_args(t_env *head, char *argv[], int j)
 		if ((ft_isalpha(argv[j][i]) || argv[j][i] == '_') && ++i)
 			while (ft_isalnum(argv[j][i]) || argv[j][i] == '_')
 				i++;
-		if ((!ft_isalpha(argv[j][0]) && argv[j][i] != '_') || (argv[j][i] != '=' && argv[j][i] != 0 && argv[j][i] != '+'))
+		if ((!ft_isalpha(argv[j][0]) && argv[j][i] != '_')
+		|| (argv[j][i] != '=' && argv[j][i] != 0 && argv[j][i] != '+'))
 			ret = there_is_an_error(argv[j], 0);
 		else if (argv[j][i] == '=' || argv[j][i] == '+' || argv[j][i] == 0)
 		{
