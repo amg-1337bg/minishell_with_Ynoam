@@ -63,6 +63,11 @@ int	get_args(t_cmd *s_cmd)
 	just_char = -1;
 	while (s_cmd->full[++i] != '\0')
 	{
+		if (s_cmd->full[i] == 92 && s_cmd->full[i + 1] != 92
+			&& s_cmd->full[i + 1] != 34 && s_cmd->full[i + 1] != 39
+			&& s_cmd->full[i + 1] != 60 && s_cmd->full[i + 1] != 62
+			&& s_cmd->full[i + 1] != 32 && s_cmd->full[i + 1] != '|')
+			rm_char(&s_cmd->full, i);
 		if (checker(s_cmd, &i, &from, &just_char) < 0)
 			return (-1);
 	}
@@ -84,7 +89,10 @@ int	cmd_parser(t_cmd **s_cmd, char **line)
 		free(tofree);
 		error = get_args(tmp);
 		if (error != 0)
+		{
+			ft_free(line);
 			return (error);
+		}
 		tmp = tmp->next;
 	}
 	ft_free(line);
