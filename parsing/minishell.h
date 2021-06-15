@@ -20,6 +20,7 @@
 # include <string.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <signal.h>
 # include <sys/errno.h>
 # include <termios.h>

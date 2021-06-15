@@ -78,16 +78,15 @@ int	exec_normal2(t_cmd *cmd, t_env *env)
 		free(fd);
 		return (126);
 	}
-	else
-	{
-		change_stdin_stdout(cmd->files, fd);
-		dup2(fd[0], STDIN_FILENO);
-		dup2(fd[1], STDOUT_FILENO);
-		execve(cmd->cmd, create_args(cmd), create_envp(env, underscor));
-		put_error(strerror(errno), cmd->cmd);
-		free(fd);
-		return (127);
-	}
+	change_stdin_stdout(cmd->files, fd);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	execve(cmd->cmd, create_args(cmd), create_envp(env, underscor));
+	put_error(strerror(errno), cmd->cmd);
+	free(fd);
+	if (errno == 13)
+		return (126);
+	return (127);
 }
 
 int	ft_free_double(char **ptr)

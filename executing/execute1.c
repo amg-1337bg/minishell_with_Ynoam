@@ -52,7 +52,7 @@ void	assign_stdin_stdout(char *stdoutf, char *stdinf, int trunc, int *fd)
 		fd[1] = creat_file_or_openit(stdoutf, O_TRUNC);
 	else if (stdoutf && trunc)
 		fd[1] = creat_file_or_openit(stdoutf, O_APPEND);
-	else if (stdinf)
+	if (stdinf)
 		fd[0] = open_file_for_read(stdinf, 0);
 }
 
