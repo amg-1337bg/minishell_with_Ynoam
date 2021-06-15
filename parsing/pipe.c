@@ -25,7 +25,7 @@ int	pipe_function(t_cmd *s_cmd, int *i, int *from, int just_char)
 			(*i)++;
 		}
 		tmp = ft_strdup(&s_cmd->full[(*i) + 1]);
-		if (ft_strlen(tmp) == 0)
+		if (ft_strlen(tmp) == 0 || (s_cmd->cmd == NULL && s_cmd->files == NULL))
 		{
 			ft_free(&tmp);
 			printed_errors(NO_MULTI);
