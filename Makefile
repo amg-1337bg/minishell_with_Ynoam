@@ -47,7 +47,7 @@ SRC = executing/execute.c \
 	  builtin/pwd.c \
 	  builtin/unset.c \
 	  
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 

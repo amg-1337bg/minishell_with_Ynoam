@@ -25,7 +25,7 @@ int	cd2(t_env *env, char *hna)
 	char	*pwdold;
 
 	pwd = search_env_for_node(env, "PWD");
-	if (pwd)
+	if (pwd && pwd->value)
 		pwdold = ft_strdup(pwd->value);
 	else
 		pwdold = ft_strdup("");
